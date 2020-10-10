@@ -30,7 +30,7 @@ public class PayController {
     @Resource
     private WxPayConfig  wxPayConfig;
 
-    @GetMapping
+    @GetMapping("/create")
     @ApiOperation("发起支付")
     public ModelAndView create(@RequestParam("orderNo") String orderNo, @RequestParam("amount") BigDecimal amount,
                                @RequestParam("payType") BestPayTypeEnum bestPayTypeEnum) {

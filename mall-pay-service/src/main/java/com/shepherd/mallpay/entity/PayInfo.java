@@ -24,7 +24,7 @@ public class PayInfo {
     private Integer userId;
 
     @ApiModelProperty("订单编号")
-    private Long orderNo;
+    private String  orderNo;
 
     @ApiModelProperty("支付平台:1-支付宝,2-微信")
     private Integer payPlatform;
@@ -45,4 +45,7 @@ public class PayInfo {
     @ApiModelProperty("更新时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    @ApiModelProperty("删除标志位")
+    private Integer isDelete;
 }

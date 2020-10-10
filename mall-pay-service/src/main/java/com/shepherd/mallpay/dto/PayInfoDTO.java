@@ -1,5 +1,6 @@
 package com.shepherd.mallpay.dto;
 
+import com.shepherd.mallpay.entity.PayInfo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -11,17 +12,7 @@ import java.math.BigDecimal;
  * @date 2020/10/9 20:27
  */
 @Data
-public class PayInfoDTO {
+public class PayInfoDTO extends PayInfo {
 
-    private Integer userId;
 
-    private String orderNo;
-
-    private Integer payPlatform;
-
-    private String platformNumber;
-
-    private String payStatus;
-
-    private BigDecimal payAmount;
 }

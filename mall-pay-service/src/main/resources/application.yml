@@ -1,5 +1,5 @@
 server:
-  port: 18801
+  port: 18100
 
 spring:
   application:
@@ -31,26 +31,26 @@ eureka:
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*.xml
-  #ÊµÌåÉ¨Ãè£¬¶à¸öpackageÓÃ¶ººÅ»òÕß·ÖºÅ·Ö¸ô
+  #å®ä½“æ‰«æï¼Œå¤šä¸ªpackageç”¨é€—å·æˆ–è€…åˆ†å·åˆ†éš”
   typeAliasesPackage: com.shepherd.springcloudproduct.entity
   global-config:
-    #Ö÷¼üÀàĞÍ  0:"Êı¾İ¿âID×ÔÔö", 1:"ÓÃ»§ÊäÈëID",2:"È«¾ÖÎ¨Ò»ID (Êı×ÖÀàĞÍÎ¨Ò»ID)", 3:"È«¾ÖÎ¨Ò»ID UUID";
+    #ä¸»é”®ç±»å‹  0:"æ•°æ®åº“IDè‡ªå¢", 1:"ç”¨æˆ·è¾“å…¥ID",2:"å…¨å±€å”¯ä¸€ID (æ•°å­—ç±»å‹å”¯ä¸€ID)", 3:"å…¨å±€å”¯ä¸€ID UUID";
     id-type: 2
-    #×Ö¶Î²ßÂÔ 0:"ºöÂÔÅĞ¶Ï",1:"·Ç NULL ÅĞ¶Ï"),2:"·Ç¿ÕÅĞ¶Ï"
+    #å­—æ®µç­–ç•¥ 0:"å¿½ç•¥åˆ¤æ–­",1:"é NULL åˆ¤æ–­"),2:"éç©ºåˆ¤æ–­"
     field-strategy: 2
-    #ÍÕ·åÏÂ»®Ïß×ª»»
+    #é©¼å³°ä¸‹åˆ’çº¿è½¬æ¢
     db-column-underline: true
-    #Ë¢ĞÂmapper µ÷ÊÔÉñÆ÷
+    #åˆ·æ–°mapper è°ƒè¯•ç¥å™¨
     refresh-mapper: true
-    #Êı¾İ¿â´óĞ´ÏÂ»®Ïß×ª»»
+    #æ•°æ®åº“å¤§å†™ä¸‹åˆ’çº¿è½¬æ¢
     #capital-mode: true
-    #ĞòÁĞ½Ó¿ÚÊµÏÖÀàÅäÖÃ
+    #åºåˆ—æ¥å£å®ç°ç±»é…ç½®
     #key-generator: com.baomidou.springboot.xxx
-    #Âß¼­É¾³ıÅäÖÃ£¨ÏÂÃæ3¸öÅäÖÃ£©
+    #é€»è¾‘åˆ é™¤é…ç½®ï¼ˆä¸‹é¢3ä¸ªé…ç½®ï¼‰
     logic-delete-value: 0
     logic-not-delete-value: 1
-    #×Ô¶¨ÒåSQL×¢ÈëÆ÷
+    #è‡ªå®šä¹‰SQLæ³¨å…¥å™¨
     #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
-    #×Ô¶¨ÒåÌî³ä²ßÂÔ½Ó¿ÚÊµÏÖ
+    #è‡ªå®šä¹‰å¡«å……ç­–ç•¥æ¥å£å®ç°
     #meta-object-handler: com.baomidou.springboot.xxx
 
