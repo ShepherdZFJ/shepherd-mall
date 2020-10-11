@@ -52,6 +52,7 @@ public class PayController {
     }
 
     @PostMapping("/notify")
+    @ApiOperation("异步通知")
     @ResponseBody
     public String asyncNotify(@RequestBody String notifyData) {
         return payService.asyncNotify(notifyData);

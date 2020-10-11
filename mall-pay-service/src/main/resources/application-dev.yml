@@ -1,0 +1,85 @@
+server:
+  port: 18100
+
+spring:
+  application:
+    name: mall-pay-service
+  web:
+    base-path: /mall/pay/api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: zfj126289.,
+    url: jdbc:mysql://47.114.179.146:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  redis:
+    host: localhost
+    port: 6379
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  freemarker:
+    suffix: .ftl
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://47.114.179.146:8001/eureka/
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.shepherd.springcloudproduct.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 2
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置
+    #key-generator: com.baomidou.springboot.xxx
+    #逻辑删除配置（下面3个配置）
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    #自定义SQL注入器
+    #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+    #自定义填充策略接口实现
+    #meta-object-handler: com.baomidou.springboot.xxx
+
+aliyun-sms:
+  accessKeyId: LTAI4GHpv2y35PBVWUt42fJ6
+  accessSecret: VoF8212psWmcsb424bKVeg7eMZkKzA
+  signName: shepherd
+  templateCode: SMS_193518103
+  expireTime: 10
+
+wx:
+  appId: wxd898fcb01713c658
+  mchId: 1483469312
+  mchKey: 098F6BCD4621D373CADE4E832627B4F6
+  notifyUrl: http://shepherd.natapp1.cc/api/mall/pay/notify
+  returnUrl: http://127.0.0.1
+
+alipay:
+  appId: 2021001162650119
+  privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCVqmwnDnQQ/aoJo9CWElw2glSuOLMPChCEW/ZW3yiwVyZHzkTvhTLZ/gV+4V9j+2NbsS9PTxsvnvUtZ8fOz+rOTIiYspuVCZzbZBR18Zt9c6FmlHGXQVe2+3x+NNcBqk86qIyHxCHrhG8fm4YkVky2XiVNBjbL8fWbD/RbdRw2V983GFC2xsM0HWmIrSYkQ9PfWieoMAq6b3Pd7yETtn1MKNBPEIknZXLixrD6y9GZtOWTY24iw8agp4VmccRWe5DdpnpCyFQVBLK7CRIsWhVQrccdxk7E0gqC6JJKSTlpKijn5pSKPRSAfwvBgC0qhTz/sGnoItaI62kN1fXNHo4BAgMBAAECggEASzcis14oJoHU+pNBOKpxfVNyizwjgONl+Z7d5jqwkC68JkobiuQ98iAfUuygq/aisGoThKAU4ZHZVcBaQi1rq9H6tALO/c+e7QMW5U9O/XUnIA5qJ8HG+0bYAfU8OLIGr0wVlAWVpm8gCZp3h7t3Qg9+X39H+qbW797Mx0nLq+MomTXFnQbx+Rrrx4GWezbGvc76rRTKW4EBoDx1aGfhVll5kn4+cEsCeeFTqE8ni5MAUAm44Cq0NsINeWakWbAw4IN30Srxscs238eTcS3O6TQPjWB/7yyN6KmhDhga9uyStut7bl4tQFlQkwxk85zzLljozRE9jLfa7/7eT1EHgQKBgQDH5mlye93OFqMv6Zf4ZpSKC/OIG3ch13jFv2dwBUyWilqfF9Tbn32u+hNn/4lqxSa3y/poKwt9OO0WWFfydCuMuK0gbjNVkg0dn405eFkc1nFeRjrjWezLf7E/nxnFcNpBjEYKvWkwG5B45TS5Vjdlg/+XgcUQo0VRDKiMFVyGDQKBgQC/qvub3GvbTz8dbzlCaPP7wLO5YrEkNITpLoaHS38nYIg9L5YVAwNKPprt35EfzFPihB1HjdwRrfG9/5SlLFXHczn0YHffAtXv7kpDVoklkQiLZ06glcQAets4HpWrsR5FOXEDeW4ithbsDn+fWykKMoio0P2+sy2G7+CCC3V+xQKBgEkn2Y88JYA2aKIwKp2NbO7YUNeOtZp88IXt9jzYs56kI2X1osB9LdHLUy7MJc4dOH4q+AkHN70sCBgVXJouSYHGVBV6Pu8h9ArTSSuvD22uTO7jZMmvLymKIaPW5eeL1VQHsdpcVxJ0A/s6ZoEtPDi6hd88bpIYLlXq/APIDYRBAoGAE37GvOG8rr/uwYWwo0qdlnvRTAf30KDu6/DpihVpx42QDfkrINP/n6uigpN85WkZFy8s8zxAqCOzNQosCmjqCLF1sZ+mUa6uKAtqzlKc/I81+Uf2vWq+VvYoGhsyShZn586h6iKNy0YOKtCGtqTFFd5x/AnV5XHALbt0cIXN26kCgYBjyWSqqlUqe7ExmfuyDgZqUBEaBuBO3bkFpYmPc7ejhGb49ik3Icxoyk2dfI5Wc3Nq2DbKdLre0S6vpAZg/UZOntQd3URoWciNui8iI4ADybiiaNV+KlVwN1gv4M2GazTBVrIPekFG4PYnKYZltHmv+7JFHMaOy1Dqo+cJI3muhA==
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwz+yM8C8eP+OySMA1HCsaTy9buSi5G1D9/7vc5LfWPwUeeXzWqDeRvt5LsuGFhIkicMniT8IFKswfK+aZhQuwXY6knVYIkDX6axWEhqosIH1ROMW9BiN2Q0+B0X7q7x7OdiYmDpNseH3afYv8gJNpy3ftpHZgoshnZZOqpcQ6Eu4WNmB7376bbmREzFCD2vPwqWvo1AtcqbRHMEs1tgT3PTEot1T49CslGQG0xxLwmOaXvuNA3NrZqaS+8IHU4BOJnr2x9jM+tQPIna46bL/U6g0cpNZssXJ+ddQiBO8+/QFV3kgJ7FKGX5F1NJJG5PbBu65N8kyoMTlKyYBItJu+QIDAQAB
+  notifyUrl: http://shepherd.natapp1.cc/api/mall/pay/notify
+  returnUrl: http://127.0.0.1
+
+
+
+
+
+
+
