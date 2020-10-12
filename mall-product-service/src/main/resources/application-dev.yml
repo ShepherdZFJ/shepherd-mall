@@ -22,6 +22,7 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
 
 eureka:
   client:
@@ -60,6 +61,7 @@ aliyun-sms:
   signName: shepherd
   templateCode: SMS_193518103
   expireTime: 10
+
 
 
 
