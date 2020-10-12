@@ -1,9 +1,11 @@
 package com.shepherd.mallproduct.api.vo;
 
+import com.shepherd.mallproduct.dto.CategoryDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author fjZheng
@@ -21,4 +23,5 @@ public class CategoryVO {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
+    private List<CategoryDTO> categoryDTOList;
 }

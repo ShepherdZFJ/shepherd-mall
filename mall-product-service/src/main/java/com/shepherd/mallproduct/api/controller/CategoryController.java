@@ -30,9 +30,22 @@ public class CategoryController {
     }
 
     @GetMapping
-    @ApiOperation("获取商品列表")
+    @ApiOperation("获取商品类目列表")
     public List<CategoryDTO> getCategoryList() {
         List<CategoryDTO> categoryList = categoryService.getCategoryList();
         return categoryList;
+    }
+
+    @PutMapping
+    @ApiOperation("更新类目")
+    public void updateCategory(@RequestBody CategoryVO categoryVO) {
+        CategoryDTO categoryDTO = MallBeanUtil.copy(categoryVO, CategoryDTO.class);
+        categoryService.updateCategory(categoryDTO);
+    }
+
+    @PutMapping("/batch")
+    @ApiOperation("批量更新类目")
+    public void updateCategoryBatch(@RequestBody CategoryVO categoryVO) {
+        categoryService.updateCategory(categoryVO.getCategoryDTOList());
     }
 }
