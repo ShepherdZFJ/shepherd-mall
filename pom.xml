@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>org.example</groupId>
+    <groupId>com.shepherd</groupId>
     <artifactId>shepherd-mall</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -20,6 +20,7 @@
         <module>mall-pay-service</module>
         <module>mall-common</module>
         <module>mall-product-service</module>
+        <module>mall-swagger</module>
     </modules>
 
     <dependencies>
