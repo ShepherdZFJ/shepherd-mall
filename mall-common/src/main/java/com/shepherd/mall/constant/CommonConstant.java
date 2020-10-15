@@ -15,4 +15,12 @@ public interface CommonConstant {
 
     Integer DEFAULT_PAGE_NO = 1;
 
+    Integer PRODUCT_ON_SALE = 1;
+
+    Integer PRODUCT_SALE_OUT = 0;
+
+    Integer CATEGORY_AVAILABLE = 1;
+
+    Integer CATEGORY_ABANDON = 0;
+
 }
