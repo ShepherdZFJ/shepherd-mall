@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author fjZheng
@@ -27,4 +28,5 @@ public class ProductVO {
     private Date createTime;
     private Date updateTime;
     private Integer isDelete;
+    private List<Long> productIds;
 }

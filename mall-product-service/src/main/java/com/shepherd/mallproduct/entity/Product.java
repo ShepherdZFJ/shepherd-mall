@@ -43,7 +43,7 @@ public class Product {
     @ApiModelProperty("商品库存")
     private Integer stock;
 
-    @ApiModelProperty("商品状态.1-在售 2-下架 3-删除")
+    @ApiModelProperty("商品状态.1-在售 0-下架")
     private Integer status;
 
     @ApiModelProperty("创建时间")

@@ -24,4 +24,5 @@ public class CategoryVO {
     private Date updateTime;
     private Integer isDelete;
     private List<CategoryDTO> categoryDTOList;
+    private List<Long> categoryIds;
 }

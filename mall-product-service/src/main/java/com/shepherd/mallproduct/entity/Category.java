@@ -24,7 +24,7 @@ public class Category {
     @ApiModelProperty("类目名称")
     private String name;
 
-    @ApiModelProperty("类别状态1-正常,2-已废弃")
+    @ApiModelProperty("类别状态1-正常,0-已废弃")
     private Integer status;
 
     @ApiModelProperty("排序编号,同类展示顺序,数值相等则自然排序")

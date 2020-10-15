@@ -48,4 +48,10 @@ public class CategoryController {
     public void updateCategoryBatch(@RequestBody CategoryVO categoryVO) {
         categoryService.updateCategory(categoryVO.getCategoryDTOList());
     }
+
+    @DeleteMapping
+    @ApiOperation("删除类目(批量)")
+    public void delBatch(@RequestBody CategoryVO categoryVO) {
+        categoryService.delBatch(categoryVO.getCategoryIds());
+    }
 }

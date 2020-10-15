@@ -22,9 +22,9 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+    #设置返回json数据null字段不显示
     default-property-inclusion: non_null
 
-eureka:
   client:
     service-url:
       defaultZone: http://47.114.179.146:8001/eureka/
@@ -62,7 +62,18 @@ aliyun-sms:
   templateCode: SMS_193518103
   expireTime: 10
 
+#logging:
+#  level:
+#    com.shepherd.mallproduct.dao: debug
 
+#swagger
+swagger-web:
+  api-title: "Shepherd-mall Restful Apis"
+  api-description: "Shepherd-mall swagger-ui"
+  contact-name: "shepherd"
+  contact-url:  "https://github.com/ICoder0"
+  contact-email: "1059959730@qq.com"
+  scan-package: "com.shepherd.mallproduct.api.controller"
 
 
 

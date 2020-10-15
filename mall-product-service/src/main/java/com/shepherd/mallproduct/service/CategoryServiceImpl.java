@@ -65,9 +65,10 @@ public class CategoryServiceImpl implements CategoryService {
             return false;
         }
         UpdateWrapper<Category> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("is_delete", CommonConstant.NOT_DEL);
         updateWrapper.in("id", categoryIds);
         updateWrapper.set("is_delete", CommonConstant.DEL);
+        updateWrapper.set("update_time", new Date());
+        int update = categoryDAO.update(new Category(), updateWrapper);
         return true;
     }
 

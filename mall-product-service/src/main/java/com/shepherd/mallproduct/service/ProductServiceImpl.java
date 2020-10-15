@@ -1,6 +1,7 @@
 package com.shepherd.mallproduct.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shepherd.mall.constant.CommonConstant;
@@ -15,8 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,18 +39,38 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long addProduct(ProductDTO productDTO) {
-        return null;
+        Product product = MallBeanUtil.copy(productDTO, Product.class);
+        product.setCreateTime(new Date());
+        product.setUpdateTime(new Date());
+        product.setIsDelete(CommonConstant.NOT_DEL);
+        product.setStatus(CommonConstant.PRODUCT_ON_SALE);
+        int insert = productDAO.insert(product);
+        return product.getId();
     }
 
     @Override
     public Boolean delBatch(List<Long> productIds) {
-
-        return null;
+        if (CollectionUtils.isEmpty(productIds)) {
+            return false;
+        }
+        UpdateWrapper<Product> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", productIds);
+        updateWrapper.set("is_delete", CommonConstant.DEL);
+        updateWrapper.set("update_time",new Date());
+        int update = productDAO.update(new Product(), updateWrapper);
+        return true;
     }
 
     @Override
     public Boolean updateProduct(ProductDTO productDTO) {
-        return null;
+        if (productDTO == null) {
+            return false;
+        }
+        Product product = MallBeanUtil.copy(productDTO, Product.class);
+        product.setUpdateTime(new Date());
+        productDAO.updateById(product);
+
+        return true;
     }
 
     @Override
@@ -67,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
             queryWrapper.like("name", query.getName());
         }
         queryWrapper.eq("is_delete", CommonConstant.NOT_DEL);
-        IPage<Product> page = productDAO.selectPage(new Page<>(query.getPageNo(),query.getPageSize()), queryWrapper);
+        IPage<Product> page = productDAO.selectPage(new Page<Product>(query.getPageNo(),query.getPageSize()), queryWrapper);
         List<Product> records = page.getRecords();
         Page<ProductDTO> dtoPage = new Page<>();
         dtoPage.setTotal(page.getTotal());
