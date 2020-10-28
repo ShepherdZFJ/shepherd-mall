@@ -40,5 +40,12 @@ public interface ProductService {
      */
     IPage<ProductDTO> getProductList(ProductQuery query);
 
+    /**
+     * 根据id获取商品详情
+     * @param productId
+     * @return
+     */
+    ProductDTO getProductDetail(Long productId);
+
 
 }

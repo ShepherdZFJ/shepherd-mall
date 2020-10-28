@@ -48,4 +48,9 @@ public class ProductController {
     public void delBatch(@RequestBody ProductVO productVO) {
         productService.delBatch(productVO.getProductIds());
     }
+    @GetMapping("/{productId}")
+    public ProductVO getProductDetail(@PathVariable("productId") Long productId) {
+        ProductDTO productDTO = productService.getProductDetail(productId);
+        return MallBeanUtil.copy(productDTO, ProductVO.class);
+    }
 }

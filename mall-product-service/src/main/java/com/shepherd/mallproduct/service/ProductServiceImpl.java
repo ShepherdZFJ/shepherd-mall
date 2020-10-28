@@ -101,6 +101,12 @@ public class ProductServiceImpl implements ProductService {
         return dtoPage;
     }
 
+    @Override
+    public ProductDTO getProductDetail(Long productId) {
+        Product product = productDAO.selectById(productId);
+        return MallBeanUtil.copy(product, ProductDTO.class);
+    }
+
 
     private ProductDTO toProductDTO(Product product) {
         if (product == null) {
