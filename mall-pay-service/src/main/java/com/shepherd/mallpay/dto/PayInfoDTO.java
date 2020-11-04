@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class PayInfoDTO extends PayInfo {
+    private Long payInfoId;
 
 
 }

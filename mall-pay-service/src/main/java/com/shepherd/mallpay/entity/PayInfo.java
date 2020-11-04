@@ -18,10 +18,10 @@ import java.util.Date;
 public class PayInfo {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty("主键")
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty("用户id")
-    private Integer userId;
+    private String userId;
 
     @ApiModelProperty("订单编号")
     private String  orderNo;

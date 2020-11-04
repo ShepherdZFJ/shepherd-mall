@@ -4,9 +4,11 @@ import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.shepherd.mallpay.api.service.PayService;
+import com.shepherd.mallpay.dto.PayInfoDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +26,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/api/mall/pay")
 @Api("支付相关接口")
+@Slf4j
 public class PayController {
     @Resource
     private PayService payService;
@@ -56,6 +59,13 @@ public class PayController {
     @ResponseBody
     public String asyncNotify(@RequestBody String notifyData) {
         return payService.asyncNotify(notifyData);
+    }
+
+    @GetMapping
+    @ApiOperation("根据订单号查询支付记录")
+    public PayInfoDTO queryByOrderId(@RequestParam String orderId) {
+        log.info("查询支付记录...");
+        return payService.queryByOrderId(orderId);
     }
 
 

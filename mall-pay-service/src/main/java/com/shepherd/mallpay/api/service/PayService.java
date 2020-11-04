@@ -2,6 +2,7 @@ package com.shepherd.mallpay.api.service;
 
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
+import com.shepherd.mallpay.dto.PayInfoDTO;
 
 import java.math.BigDecimal;
 
@@ -27,5 +28,5 @@ public interface PayService {
      * @param orderId
      * @return
      */
-    void queryByOrderId(String orderId);
+    PayInfoDTO queryByOrderId(String orderId);
 }

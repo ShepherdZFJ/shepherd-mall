@@ -1,5 +1,7 @@
 package com.shepherd.mallpay.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
 import com.lly835.bestpay.config.WxPayConfig;
@@ -101,7 +103,8 @@ public class PayServiceImpl implements PayService {
         }
 
         //TODO pay发送MQ消息，mall接受MQ消息
-        amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, new Gson().toJson(payInfo));
+        //String s = new Gson().toJson(payInfo);
+        amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, JSONObject.toJSONString(payInfo));
 
         if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
             //4. 告诉微信不要再通知了
@@ -118,7 +121,21 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public void queryByOrderId(String orderId) {
+    public PayInfoDTO queryByOrderId(String orderId) {
+        LambdaQueryWrapper<PayInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(PayInfo::getOrderNo, orderId);
+        lambdaQueryWrapper.eq(PayInfo::getIsDelete, CommonConstant.NOT_DEL);
+        PayInfo payInfo = payInfoDAO.selectOne(lambdaQueryWrapper);
+        return toPayInfoDTO(payInfo);
 
+    }
+
+    private PayInfoDTO toPayInfoDTO(PayInfo payInfo) {
+        if (payInfo == null) {
+            return null;
+        }
+        PayInfoDTO payInfoDTO = MallBeanUtil.copy(payInfo, PayInfoDTO.class);
+        payInfoDTO.setPayInfoId(payInfo.getId());
+        return payInfoDTO;
     }
 }
