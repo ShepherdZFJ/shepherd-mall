@@ -24,7 +24,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     #设置返回json数据null字段不显示
     default-property-inclusion: non_null
-
+eureka:
   client:
     service-url:
       defaultZone: http://47.114.179.146:8001/eureka/
