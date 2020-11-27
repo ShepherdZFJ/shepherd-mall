@@ -1,5 +1,6 @@
 package com.shepherd.mallproduct.api.controller;
 
+import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.CategoryService;
 import com.shepherd.mallproduct.api.vo.CategoryVO;
@@ -17,6 +18,7 @@ import java.util.List;
  * @date 2020/10/11 23:40
  */
 @RestController
+@ResponseResultBody
 @RequestMapping("/api/mall/category")
 @Api("商品类目相关接口")
 public class CategoryController {

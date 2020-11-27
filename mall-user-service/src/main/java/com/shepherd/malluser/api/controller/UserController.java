@@ -1,5 +1,6 @@
 package com.shepherd.malluser.api.controller;
 
+import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.malluser.api.service.UserService;
 import com.shepherd.malluser.api.vo.LoginVO;
@@ -20,6 +21,7 @@ import java.util.List;
  * @date 2020/11/17 23:21
  */
 @RestController
+@ResponseResultBody
 @RequestMapping("/api/mall/user")
 @Api("用户相关接口")
 public class UserController {

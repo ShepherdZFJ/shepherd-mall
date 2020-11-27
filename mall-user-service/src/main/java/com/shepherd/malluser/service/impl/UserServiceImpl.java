@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     private static final String TICKET = "ticket";
 
     private static final String TOKEN = "token";
-    private static final String VERIFICATION = "red-book-code-";
+    private static final String VERIFICATION = "shepherd-mall-code-";
 
     @Resource
     private UserDAO userDAO;
@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
-        CommonRequest request1 = new CommonRequest();
         request.setSysMethod(MethodType.POST);
         request.setSysDomain("dysmsapi.aliyuncs.com");
         request.setSysVersion("2017-05-25");

@@ -1,6 +1,7 @@
 package com.shepherd.mallproduct.api.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.ProductService;
 import com.shepherd.mallproduct.api.vo.ProductVO;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
  * @date 2020/10/10 16:31
  */
 @RestController
+@ResponseResultBody
 @RequestMapping("/api/mall/product")
 @Api("商品相关接口")
 public class ProductController {
