@@ -22,6 +22,10 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     #设置返回json数据null字段不显示
     default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 10MB
 eureka:
   client:
     service-url:
@@ -68,7 +72,10 @@ swagger-web:
   contact-name: "shepherd"
   contact-url:  "https://github.com/ICoder0"
   contact-email: "1059959730@qq.com"
-  scan-package: "com.shepherd.mallproduct.api.controller"
+  scan-package: "com.shepherd.mallbase.api.controller"
+
+
+
 
 
 

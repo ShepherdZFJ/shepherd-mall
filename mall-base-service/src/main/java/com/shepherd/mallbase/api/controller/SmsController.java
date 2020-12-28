@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 @RestController
 @ResponseResultBody
 @RequestMapping("/api/mall/base/sms")
-@Api()
+@Api("短信相关接口")
 public class SmsController {
     @Resource
     private SmsService smsService;
