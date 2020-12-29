@@ -1,13 +1,16 @@
 package com.shepherd.mallbase.api.controller;
 
 import com.shepherd.mall.annotation.ResponseResultBody;
+import com.shepherd.mallbase.api.service.FileService;
 import com.shepherd.mallbase.dto.FastDFSFile;
 import com.shepherd.mallbase.util.FastDFSClient;
 import io.swagger.annotations.Api;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
@@ -29,6 +32,8 @@ import java.io.IOException;
 // 域名不同 也是跨域  http://www.jd.com  ---> http://www.taobao.com
 //协议一直,端口一致,域名一致就不是跨域  http://www.jd.com:80 --->http://www.jd.com:80 不是跨域
 public class FileController {
+    @Resource
+    private FileService fileService;
 
     /**
      * 返回 图片的全路径
@@ -36,7 +41,7 @@ public class FileController {
      * @param file 页面的文件对象
      * @return
      */
-    @PostMapping("/upload")
+    @PostMapping()
     public String upload(@RequestParam(value = "file") MultipartFile file) {
         try {
             //1. 创建图片文件对象(封装)
@@ -63,5 +68,16 @@ public class FileController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @PostMapping("/oss")
+    public String uploadOSS(@RequestParam(value = "file") MultipartFile file) {
+        String url = fileService.uploadFileToOSS(file);
+        return url;
+    }
+
+    @DeleteMapping("/oss/{fileName}")
+    public void deleteOSSFile(@PathVariable("fileName") String fileName) {
+        fileService.deleteOSSFile(fileName);
     }
 }

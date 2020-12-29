@@ -64,6 +64,14 @@ aliyun-sms:
   templateCode: SMS_193518103
   expireTime: 10
 
+aliyun-oss:
+  endpoint: http://oss-cn-hangzhou.aliyuncs.com
+  accessKeyId: LTAI4GHpv2y35PBVWUt42fJ6
+  accessKeySecret: VoF8212psWmcsb424bKVeg7eMZkKzA
+  bucketName: shepherd-mall
+  maxUploadSize: 1048576000
+  maxInMemorySize: 4096
+
 
 #swagger
 swagger-web:
