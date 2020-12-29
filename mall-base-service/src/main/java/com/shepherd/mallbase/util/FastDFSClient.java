@@ -51,12 +51,12 @@ public class FastDFSClient {
     public static InputStream downFile(String groupName, String remoteFileName) {
         ByteArrayInputStream byteArrayInputStream = null;
         try {
-            //3.创建trackerclient对象
+            //3.创建tracker client对象
             TrackerClient trackerClient = new TrackerClient();
-            //4.创建trackerserver 对象
+            //4.创建tracker server 对象
             TrackerServer trackerServer = trackerClient.getConnection();
-            //5.创建stroageserver 对象
-            //6.创建storageclient 对象
+            //5.创建storage server 对象
+            //6.创建storage client 对象
             StorageClient storageClient = new StorageClient(trackerServer, null);
             //7.根据组名 和 文件名 下载图片
 
@@ -84,12 +84,12 @@ public class FastDFSClient {
 
     public static void deleteFile(String groupName, String remoteFileName) {
         try {
-            //3.创建trackerclient对象
+            //3.创建tracker client对象
             TrackerClient trackerClient = new TrackerClient();
-            //4.创建trackerserver 对象
+            //4.创建tracker server 对象
             TrackerServer trackerServer = trackerClient.getConnection();
-            //5.创建stroageserver 对象
-            //6.创建storageclient 对象
+            //5.创建storage server 对象
+            //6.创建storage client 对象
             StorageClient storageClient = new StorageClient(trackerServer, null);
             int i = storageClient.delete_file(groupName, remoteFileName);
             if (i == 0) {
@@ -107,10 +107,10 @@ public class FastDFSClient {
     public static StorageServer getStorages(String groupName) {
         try {
             TrackerClient trackerClient = new TrackerClient();
-            //4.创建trackerserver 对象
+            //4.创建tracker server 对象
             TrackerServer trackerServer = trackerClient.getConnection();
 
-            //参数1 指定traqckerserver 对象
+            //参数1 指定tracker server 对象
             //参数2 指定组名
             StorageServer group1 = trackerClient.getStoreStorage(trackerServer, groupName);
             return group1;
@@ -125,7 +125,7 @@ public class FastDFSClient {
     public static FileInfo getFile(String groupName, String remoteFileName) {
         try {
             TrackerClient trackerClient = new TrackerClient();
-            //4.创建trackerserver 对象
+            //4.创建tracker server 对象
             TrackerServer trackerServer = trackerClient.getConnection();
 
             StorageClient storageClient = new StorageClient(trackerServer, null);
@@ -144,9 +144,9 @@ public class FastDFSClient {
     //根据文件名和组名 获取组信息的数组信息
     public static ServerInfo[] getServerInfo(String groupName, String remoteFileName){
         try {
-            //3.创建trackerclient对象
+            //3.创建tracker client对象
             TrackerClient trackerClient = new TrackerClient();
-            //4.创建trackerserver 对象
+            //4.创建tracker server 对象
             TrackerServer trackerServer = trackerClient.getConnection();
 
             ServerInfo[] group1s = trackerClient.getFetchStorages(trackerServer, groupName, remoteFileName);
@@ -162,9 +162,9 @@ public class FastDFSClient {
     //http://192.168.211.132:8080
     public static String getTrackerUrl(){
         try {
-            //3.创建trackerclient对象
+            //3.创建tracker client对象
             TrackerClient trackerClient = new TrackerClient();
-            //4.创建trackerserver 对象
+            //4.创建tracker server 对象
             TrackerServer trackerServer = trackerClient.getConnection();
             //tracker 的ip的信息
             String hostString = trackerServer.getInetSocketAddress().getHostString();
