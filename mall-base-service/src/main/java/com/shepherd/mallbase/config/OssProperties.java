@@ -1,6 +1,8 @@
 package com.shepherd.mallbase.config;
 
+import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSClientBuilder;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +27,8 @@ public class OssProperties {
     private Integer maxInMemorySize;
 
     @Bean
-    public OSSClient aliyunOSSClient(){
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    public OSS ossClient(){
+        OSS ossClient  = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         return ossClient;
     }
 }
