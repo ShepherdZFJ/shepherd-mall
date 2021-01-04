@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.CategoryService;
+import com.shepherd.mallproduct.cache.CompositeCache;
 import com.shepherd.mallproduct.dao.CategoryDAO;
 import com.shepherd.mallproduct.dto.CategoryDTO;
 import com.shepherd.mallproduct.entity.Category;
@@ -16,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,8 +31,18 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
     @Resource
     private CategoryDAO categoryDAO;
+    @Resource
+    private CompositeCache compositeCache;
 
 
+    @Override
+    public List<CategoryDTO> test() {
+        List<CategoryDTO> categoryDTOList = compositeCache.get("category_cache", () -> getCategoryList());
+        if (CollectionUtils.isEmpty(categoryDTOList)) {
+            categoryDTOList = getCategoryList();
+        }
+        return categoryDTOList;
+    }
 
 
     @Override
@@ -107,6 +115,7 @@ public class CategoryServiceImpl implements CategoryService {
         getIds(categoryDTOList, categoryId, ids);
         return ids;
     }
+
 
     private List<Long> getIds(List<CategoryDTO>categoryDTOList, Long categoryId, List<Long> ids) {
         if (CollectionUtils.isEmpty(categoryDTOList)) {

@@ -2,7 +2,6 @@ package com.shepherd.mallproduct.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.springframework.cache.caffeine.CaffeineCache;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @date 2020/12/30 11:12
  */
-public class CaffeineCache {
+public class CacheTest {
 
     public static  void test() throws InterruptedException {
         Cache<Object, Object> cache = Caffeine.newBuilder().maximumSize(1)
@@ -27,9 +26,7 @@ public class CaffeineCache {
         Object o2 = cache.get("2", key -> "hello2");
         System.out.println(o);
         System.out.println(o2);
-        o.hashCode()
 
-        CaffeineCache
     }
 
     public static void main(String[] args) throws InterruptedException {
