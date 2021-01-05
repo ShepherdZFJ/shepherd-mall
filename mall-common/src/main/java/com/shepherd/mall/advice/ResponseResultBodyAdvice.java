@@ -66,7 +66,7 @@ public class ResponseResultBodyAdvice implements ResponseBodyAdvice<Object> {
      */
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ResponseVO<?>> exceptionHandler(Exception ex, WebRequest request) {
-        log.error("ExceptionHandler: {}", ex.getMessage());
+        log.error("ExceptionHandler: {}", ex);
         HttpHeaders headers = new HttpHeaders();
         if (ex instanceof BusinessException) {
             ((BusinessException) ex).setResponseStatusEnum(ResponseStatusEnum.BAD_REQUEST);
