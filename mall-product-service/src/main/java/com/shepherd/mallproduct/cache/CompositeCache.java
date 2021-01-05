@@ -107,11 +107,11 @@ public class CompositeCache extends AbstractValueAdaptingCache {
         Assert.notNull(key, "key不可为空");
         ValueWrapper value = caffeineCache.get(key);
         if (Objects.nonNull(value)) {
-            log.debug("查询caffeine 一级缓存 key:{}, 返回值是:{}", key, value);
+            log.info("查询caffeine 一级缓存 key:{}, 返回值是:{}", key, value);
             return value;
         }
-        value = Optional.ofNullable(redisCache.get(key)).orElseGet(null);
-        log.debug("查询redis 二级缓存 key:{}, 返回值是:{}", key, value);
-        return value;
+        value = Optional.ofNullable(redisCache.get(key)).orElse(null);
+        log.info("查询redis 二级缓存 key:{}, 返回值是:{}", key, value);
+        return value.get();
     }
 }

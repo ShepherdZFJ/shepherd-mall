@@ -12,6 +12,7 @@ import com.shepherd.mallproduct.dto.CategoryDTO;
 import com.shepherd.mallproduct.entity.Category;
 import com.shepherd.mallproduct.query.CategoryQuery;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -36,13 +37,18 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public List<CategoryDTO> test() {
-        List<CategoryDTO> categoryDTOList = compositeCache.get("category_cache", () -> getCategoryList());
-        if (CollectionUtils.isEmpty(categoryDTOList)) {
-            categoryDTOList = getCategoryList();
+    public String test() {
+        String str = compositeCache.get("category_cache", () -> method());
+        if (StringUtils.isBlank(str)) {
+            str = method();
         }
-        return categoryDTOList;
+        return str;
     }
+
+    public String method() {
+        return "hello category ,mall";
+    }
+
 
 
     @Override

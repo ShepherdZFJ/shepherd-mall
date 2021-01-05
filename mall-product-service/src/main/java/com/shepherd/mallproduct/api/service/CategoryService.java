@@ -61,6 +61,6 @@ public interface CategoryService {
      */
     List<Long> getCategoryIds(Long categoryId);
 
-    List<CategoryDTO> test();
+    String test();
 
 }

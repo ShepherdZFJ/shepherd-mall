@@ -34,8 +34,14 @@ public class CategoryController {
     @GetMapping
     @ApiOperation("获取商品类目列表")
     public List<CategoryDTO> getCategoryList() {
-        List<CategoryDTO> categoryList = categoryService.test();
+        List<CategoryDTO> categoryList = categoryService.getCategoryList();
         return categoryList;
+    }
+
+    @GetMapping("/test")
+    @ApiOperation("获取商品类目列表")
+    public String test() {
+         return categoryService.test();
     }
 
     @PutMapping
