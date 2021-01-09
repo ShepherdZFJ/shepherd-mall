@@ -66,6 +66,9 @@ public class CompositeCache extends AbstractValueAdaptingCache {
     public void put(@NonNull Object key, Object value) {
         Assert.notNull(key, "key不可为空");
         caffeineCache.put(key, value);
+        /*
+        注意：redis缓存的对象object必须序列化 implements Serializable, 不然缓存对象不成功。
+         */
         redisCache.put(key, value);
 
     }
@@ -108,10 +111,13 @@ public class CompositeCache extends AbstractValueAdaptingCache {
         ValueWrapper value = caffeineCache.get(key);
         if (Objects.nonNull(value)) {
             log.info("查询caffeine 一级缓存 key:{}, 返回值是:{}", key, value);
-            return value;
+            return value.get();
         }
         value = Optional.ofNullable(redisCache.get(key)).orElse(null);
-        log.info("查询redis 二级缓存 key:{}, 返回值是:{}", key, value);
-        return value.get();
+        if (Objects.nonNull(value)) {
+            log.info("查询redis 二级缓存 key:{}, 返回值是:{}", key, value);
+            return value.get();
+        }
+        return null;
     }
 }

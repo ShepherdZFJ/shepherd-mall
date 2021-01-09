@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @date 2020/10/10 16:01
  */
 @Data
-public class Category {
+public class Category implements Serializable {
     @TableId(type= IdType.AUTO)
     @ApiModelProperty("主键")
     private Long id;

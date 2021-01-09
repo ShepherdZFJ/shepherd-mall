@@ -53,6 +53,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> getCategoryList() {
+        List<CategoryDTO> categoryDTOList = compositeCache.get("category_cache", () -> getCategoryTree());
+        if (CollectionUtils.isEmpty(categoryDTOList)) {
+            categoryDTOList = getCategoryTree();
+        }
+        return categoryDTOList;
+    }
+
+    List<CategoryDTO> getCategoryTree() {
         List<CategoryDTO> categoryDTOList = getList();
         List<CategoryDTO> list = new ArrayList<>();
         listToTree(categoryDTOList, list);
