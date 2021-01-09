@@ -13,6 +13,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.cache.RedisCache;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -106,9 +107,11 @@ public class CompositeCacheManager implements CacheManager {
     }
 
     @Bean
-    RedisCache redisCache(@Autowired RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheEx redisCacheEx = new RedisCacheEx(REDIS_CACHE_NAME,
-                RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory), defaultCacheConfig());
+    RedisCache redisCache (@Autowired RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
+        RedisCacheConfiguration redisCacheConfiguration = defaultCacheConfig();
+        redisCacheConfiguration = redisCacheConfiguration.entryTtl(Duration.of(cacheAccessExpireTime, ChronoUnit.valueOf(cacheAccessExpireUnit)));
+        RedisCacheEx redisCacheEx = new RedisCacheEx(REDIS_CACHE_NAME, redisCacheWriter, redisCacheConfiguration);
         return redisCacheEx;
     }
 
