@@ -22,6 +22,7 @@
         <module>mall-product-service</module>
         <module>mall-swagger</module>
         <module>mall-user-service</module>
+        <module>mall-advertise-service</module>
     </modules>
 
     <dependencies>
