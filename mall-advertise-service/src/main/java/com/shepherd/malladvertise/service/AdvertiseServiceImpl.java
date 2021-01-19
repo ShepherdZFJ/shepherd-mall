@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fjZheng
@@ -29,8 +30,9 @@ public class AdvertiseServiceImpl implements AdvertiseService {
         LambdaQueryWrapper<Advertise> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Advertise::getIsDelete, CommonConstant.NOT_DEL);
         queryWrapper.eq(Advertise::getType, type);
-        List<Advertise> advertises = advertiseDAO.selectList(queryWrapper);
-        return null;
+        List<AdvertiseDTO> advertiseDTOList = advertiseDAO.selectList(queryWrapper).stream().map(advertise ->
+                toAdvertiseDTO(advertise)).collect(Collectors.toList());
+        return advertiseDTOList;
     }
 
     AdvertiseDTO toAdvertiseDTO(Advertise advertise) {
