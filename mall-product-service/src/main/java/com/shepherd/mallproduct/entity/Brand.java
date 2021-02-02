@@ -36,7 +36,7 @@ public class Brand {
     private String letter;
 
     @ApiModelProperty("删除标志位")
-    private String isDelete;
+    private Integer isDelete;
 
     @ApiModelProperty("创建时间")
     private Date createTime;

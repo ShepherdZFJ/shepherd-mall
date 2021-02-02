@@ -2,6 +2,8 @@ package com.shepherd.mallproduct.api.service;
 
 import com.shepherd.mallproduct.dto.BrandDTO;
 
+import java.util.List;
+
 /**
  * @author fjZheng
  * @version 1.0
@@ -10,4 +12,6 @@ import com.shepherd.mallproduct.dto.BrandDTO;
 public interface BrandService {
 
     void addBrand(BrandDTO brandDTO);
+
+    List<BrandDTO> getBrandList(Long categoryId);
 }
