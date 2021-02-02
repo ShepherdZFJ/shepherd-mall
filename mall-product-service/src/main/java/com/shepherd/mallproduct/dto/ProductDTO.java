@@ -1,7 +1,10 @@
 package com.shepherd.mallproduct.dto;
 
+import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.entity.ProductSpu;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author fjZheng
@@ -10,5 +13,10 @@ import lombok.Data;
  */
 @Data
 public class ProductDTO extends ProductSpu {
-    private Long productId;
+    private Long productSpuId;
+    private List<Long> productSpuIds;
+//    private List<String> subImageList;
+//    private List<Object> specItemList;
+//    private List<Object> paramItemList;
+    private List<ProductSku> skuList;
 }

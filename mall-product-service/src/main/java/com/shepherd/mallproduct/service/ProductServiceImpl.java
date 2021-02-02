@@ -8,6 +8,7 @@ import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.CategoryService;
 import com.shepherd.mallproduct.api.service.ProductService;
+import com.shepherd.mallproduct.dao.ProductSkuDAO;
 import com.shepherd.mallproduct.dao.ProductSpuDAO;
 import com.shepherd.mallproduct.dto.ProductDTO;
 import com.shepherd.mallproduct.entity.ProductSpu;
@@ -15,6 +16,7 @@ import com.shepherd.mallproduct.query.ProductQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -33,10 +35,13 @@ public class ProductServiceImpl implements ProductService {
     @Resource
     private ProductSpuDAO productSpuDAO;
     @Resource
+    private ProductSkuDAO productSkuDAO;
+    @Resource
     private CategoryService categoryService;
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long addProduct(ProductDTO productDTO) {
         ProductSpu productSpu = MallBeanUtil.copy(productDTO, ProductSpu.class);
         productSpu.setCreateTime(new Date());
@@ -44,6 +49,19 @@ public class ProductServiceImpl implements ProductService {
         productSpu.setIsDelete(CommonConstant.NOT_DEL);
         productSpu.setStatus(CommonConstant.PRODUCT_ON_SALE);
         int insert = productSpuDAO.insert(productSpu);
+        if (insert > 0) {
+            if (!CollectionUtils.isEmpty(productDTO.getSkuList()))
+            {
+                productDTO.getSkuList().forEach(productSku -> {
+                    productSku.setProductSpuId(productSpu.getId());
+                    productSku.setCreateTime(new Date());
+                    productSku.setUpdateTime(new Date());
+                    productSku.setIsDelete(CommonConstant.NOT_DEL);
+                    productSku.setStatus(CommonConstant.PRODUCT_ON_SALE);
+                    productSkuDAO.insert(productSku);
+                });
+            }
+        }
         return productSpu.getId();
     }
 
@@ -112,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
         ProductDTO productDTO = MallBeanUtil.copy(productSpu, ProductDTO.class);
-        productDTO.setProductId(productSpu.getId());
+        productDTO.setProductSpuId(productSpu.getId());
         return productDTO;
     }
 }

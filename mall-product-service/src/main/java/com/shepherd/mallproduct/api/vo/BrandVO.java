@@ -3,6 +3,8 @@ package com.shepherd.mallproduct.api.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author fjZheng
  * @version 1.0
@@ -17,4 +19,5 @@ public class BrandVO {
     private String image;
     private String description;
     private String letter;
+    private List<Long> brandIds;
 }

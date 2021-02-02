@@ -1,5 +1,6 @@
 package com.shepherd.mallproduct.api.vo;
 
+import com.shepherd.mallproduct.entity.ProductSku;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,18 +16,16 @@ import java.util.List;
 @Data
 public class ProductVO {
 
-    private Long productId;
     private Long categoryId;
+    private Long brandId;
     private String name;
     private String subtitle;
     private String mainImage;
     private String subImages;
     private String detail;
-    private BigDecimal price;
-    private Integer stock;
-    private Integer status;
-    private Date createTime;
-    private Date updateTime;
-    private Integer isDelete;
-    private List<Long> productIds;
+    private String specItems;
+    private String paramItems;
+    private Long productSpuId;
+    private List<Long> productSpuIds;
+    private List<ProductSku> skuList;
 }

@@ -48,7 +48,7 @@ public class ProductController {
     @DeleteMapping
     @ApiOperation("删除商品(批量)")
     public void delBatch(@RequestBody ProductVO productVO) {
-        productService.delBatch(productVO.getProductIds());
+        productService.delBatch(productVO.getProductSpuIds());
     }
     @GetMapping("/{productId}")
     public ProductVO getProductDetail(@PathVariable("productId") Long productId) {
