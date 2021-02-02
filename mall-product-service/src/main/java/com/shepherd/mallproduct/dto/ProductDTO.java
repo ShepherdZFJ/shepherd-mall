@@ -1,6 +1,6 @@
 package com.shepherd.mallproduct.dto;
 
-import com.shepherd.mallproduct.entity.Product;
+import com.shepherd.mallproduct.entity.ProductSpu;
 import lombok.Data;
 
 /**
@@ -9,6 +9,6 @@ import lombok.Data;
  * @date 2020/10/10 16:32
  */
 @Data
-public class ProductDTO extends Product {
+public class ProductDTO extends ProductSpu {
     private Long productId;
 }
