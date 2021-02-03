@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @ResponseResultBody
-@RequestMapping("/api/mall/product/brand")
+@RequestMapping("/api/mall/brand")
 @Api("品牌相关接口")
 public class BrandController {
 
@@ -37,6 +37,12 @@ public class BrandController {
     @ApiOperation("根据分类id查询品牌")
     public List<BrandDTO> getBrandList(@PathVariable("categoryId") Long categoryId) {
         return brandService.getBrandList(categoryId);
+    }
+
+    @GetMapping("/{brandId}")
+    @ApiOperation("获取品牌详情")
+    public BrandDTO getBandDetail(@PathVariable("brandId") Long brandId) {
+        return brandService.getBrandDetail(brandId);
     }
 
     @PutMapping

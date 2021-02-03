@@ -2,6 +2,8 @@ package com.shepherd.mallproduct.api.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mallproduct.dto.ProductDTO;
+import com.shepherd.mallproduct.dto.ProductParamDTO;
+import com.shepherd.mallproduct.dto.ProductSpecDTO;
 import com.shepherd.mallproduct.query.ProductQuery;
 
 import java.util.List;
@@ -21,10 +23,10 @@ public interface ProductService {
 
     /**
      * 批量删除商品
-     * @param productIds
+     * @param productSpuIds
      * @return
      */
-    Boolean delBatch(List<Long> productIds);
+    Boolean delBatch(List<Long> productSpuIds);
 
     /**
      *更新商品
@@ -46,6 +48,10 @@ public interface ProductService {
      * @return
      */
     ProductDTO getProductDetail(Long productId);
+
+    List<ProductSpecDTO> getProductSpecList(Long categoryId);
+
+    List<ProductParamDTO> getProductParamList(Long categoryId);
 
 
 }

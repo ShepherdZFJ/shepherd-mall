@@ -6,12 +6,16 @@ import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.ProductService;
 import com.shepherd.mallproduct.api.vo.ProductVO;
 import com.shepherd.mallproduct.dto.ProductDTO;
+import com.shepherd.mallproduct.dto.ProductParamDTO;
+import com.shepherd.mallproduct.dto.ProductSpecDTO;
+import com.shepherd.mallproduct.entity.ProductSpec;
 import com.shepherd.mallproduct.query.ProductQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author fjZheng
@@ -50,9 +54,59 @@ public class ProductController {
     public void delBatch(@RequestBody ProductVO productVO) {
         productService.delBatch(productVO.getProductSpuIds());
     }
-    @GetMapping("/{productId}")
-    public ProductVO getProductDetail(@PathVariable("productId") Long productId) {
-        ProductDTO productDTO = productService.getProductDetail(productId);
-        return MallBeanUtil.copy(productDTO, ProductVO.class);
+
+    @GetMapping("/{productSpuId}")
+    public ProductDTO getProductDetail(@PathVariable("productSpuId") Long productSpuId) {
+        return  productService.getProductDetail(productSpuId);
+
     }
+
+    @GetMapping("/category/{categoryId}/spec")
+    @ApiOperation("根据分类id获取商品规格列表")
+    public List<ProductSpecDTO> getProductSpecList(@PathVariable("categoryId") Long categoryId) {
+        return productService.getProductSpecList(categoryId);
+    }
+
+    @GetMapping("/category/{categoryId}/param")
+    @ApiOperation("根据分类id获取商品参数列表")
+    public List<ProductParamDTO> getProductParamList(@PathVariable("categoryId") Long categoryId) {
+        return productService.getProductParamList(categoryId);
+    }
+
+    @PostMapping("/spec")
+    @ApiOperation("添加商品规格")
+    public void addProductSpec(@RequestBody ProductSpecDTO productSpecDTO) {
+        //todo
+    }
+
+    @PutMapping("/spec")
+    @ApiOperation("更新商品规格")
+    public void updateProductSpec(@RequestBody ProductSpecDTO productSpecDTO) {
+        //todo
+    }
+
+    @DeleteMapping("/spec")
+    @ApiOperation("删除商品规格")
+    public void delProductSpec(@RequestBody ProductSpecDTO productSpecDTO) {
+        //todo
+    }
+
+    @PostMapping("/param")
+    @ApiOperation("添加商品参数")
+    public void addProductParam(@RequestBody ProductParamDTO ProductParamDTO) {
+        //todo
+    }
+
+    @PutMapping("/param")
+    @ApiOperation("更新商品参数")
+    public void updateProductParam(@RequestBody ProductParamDTO ProductParamDTO) {
+        //todo
+    }
+
+    @DeleteMapping("/param")
+    @ApiOperation("删除商品参数")
+    public void delProductParam(@RequestBody ProductParamDTO ProductParamDTO) {
+        //todo
+    }
+
 }

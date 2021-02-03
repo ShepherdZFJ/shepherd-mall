@@ -30,7 +30,7 @@ public class ProductSpec {
     private String options;
 
     @ApiModelProperty("删除标志位")
-    private String is_delete;
+    private String isDelete;
 
     @ApiModelProperty("创建时间")
     private Date createTime;

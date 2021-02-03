@@ -130,6 +130,12 @@ public class CategoryServiceImpl implements CategoryService {
         return ids;
     }
 
+    @Override
+    public CategoryDTO getCategoryDetail(Long categoryId) {
+        Category category = categoryDAO.selectById(categoryId);
+        return toCategoryDTO(category);
+    }
+
 
     private List<Long> getIds(List<CategoryDTO>categoryDTOList, Long categoryId, List<Long> ids) {
         if (CollectionUtils.isEmpty(categoryDTOList)) {

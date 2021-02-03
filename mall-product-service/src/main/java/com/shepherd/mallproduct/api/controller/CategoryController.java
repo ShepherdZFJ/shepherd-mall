@@ -62,4 +62,10 @@ public class CategoryController {
     public void delBatch(@RequestBody CategoryVO categoryVO) {
         categoryService.delBatch(categoryVO.getCategoryIds());
     }
+
+    @GetMapping("/{categoryId}")
+    @ApiOperation("获取类目详情")
+    public CategoryDTO getCategoryDetail(@PathVariable("categoryId") Long categoryId) {
+        return categoryService.getCategoryDetail(categoryId);
+    }
 }

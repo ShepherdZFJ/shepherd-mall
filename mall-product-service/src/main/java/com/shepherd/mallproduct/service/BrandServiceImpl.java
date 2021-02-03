@@ -43,6 +43,12 @@ public class BrandServiceImpl implements BrandService {
         return brandDTOList;
     }
 
+    @Override
+    public BrandDTO getBrandDetail(Long brandId) {
+        Brand brand = brandDAO.selectById(brandId);
+        return toBrandDTO(brand);
+    }
+
     BrandDTO toBrandDTO(Brand brand) {
         if (brand == null) {
             return null;
