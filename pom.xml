@@ -23,6 +23,7 @@
         <module>mall-swagger</module>
         <module>mall-user-service</module>
         <module>mall-advertise-service</module>
+        <module>mall-search-service</module>
     </modules>
 
     <dependencies>
