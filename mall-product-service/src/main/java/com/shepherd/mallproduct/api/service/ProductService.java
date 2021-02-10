@@ -1,9 +1,11 @@
 package com.shepherd.mallproduct.api.service;
 
+import cn.hutool.core.getter.ListTypeGetter;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mallproduct.dto.ProductDTO;
 import com.shepherd.mallproduct.dto.ProductParamDTO;
 import com.shepherd.mallproduct.dto.ProductSpecDTO;
+import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.query.ProductQuery;
 
 import java.util.List;
@@ -52,6 +54,8 @@ public interface ProductService {
     List<ProductSpecDTO> getProductSpecList(Long categoryId);
 
     List<ProductParamDTO> getProductParamList(Long categoryId);
+
+    List<ProductSku> getProductSku();
 
 
 }

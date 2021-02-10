@@ -8,6 +8,7 @@ import com.shepherd.mallproduct.api.vo.ProductVO;
 import com.shepherd.mallproduct.dto.ProductDTO;
 import com.shepherd.mallproduct.dto.ProductParamDTO;
 import com.shepherd.mallproduct.dto.ProductSpecDTO;
+import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.entity.ProductSpec;
 import com.shepherd.mallproduct.query.ProductQuery;
 import io.swagger.annotations.Api;
@@ -107,6 +108,12 @@ public class ProductController {
     @ApiOperation("删除商品参数")
     public void delProductParam(@RequestBody ProductParamDTO ProductParamDTO) {
         //todo
+    }
+
+    @GetMapping("/sku/list")
+    @ApiOperation("获取商品sku列表")
+    public List<ProductSku> getSku() {
+        return productService.getProductSku();
     }
 
 }

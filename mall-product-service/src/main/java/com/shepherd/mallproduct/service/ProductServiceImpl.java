@@ -219,6 +219,14 @@ public class ProductServiceImpl implements ProductService {
         return productParamDTOList;
     }
 
+    @Override
+    public List<ProductSku> getProductSku() {
+        LambdaQueryWrapper<ProductSku> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
+        List<ProductSku> productSkuList = productSkuDAO.selectList(queryWrapper);
+        return productSkuList;
+    }
+
     private ProductSpecDTO toProductSpecDTO(ProductSpec productSpec) {
         if (productSpec == null) {
             return null;
