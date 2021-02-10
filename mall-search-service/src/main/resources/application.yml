@@ -1,0 +1,55 @@
+server:
+  port: 18500
+spring:
+  application:
+    name: mall-search-service
+#  data:
+#    elasticsearch:
+#      client:
+#        reactive:
+#          endpoints: 192.168.153.131:9200
+#          connection-timeout: 10000 #链接到es的超时时间，毫秒为单位，默认10秒（10000毫秒）
+#          socket-timeout: 10000 #读取和写入的超时时间，单位为毫秒，默认5秒（5000毫秒）
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.153.131:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+  elasticsearch:
+    rest:
+      uris: http://192.168.153.131:9200
+eureka:
+  client:
+    service-url:
+      defaultZone: http://47.114.179.146:8001/eureka/
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+#超时配置
+ribbon:
+  ReadTimeout: 300000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+
+micro-server:
+  mall-product: mall-product-service
+
+mall-product-server: http://192.168.10.241:18200
+
+#swagger
+swagger-web:
+  api-title: "Shepherd-mall Restful Apis"
+  api-description: "Shepherd-mall swagger-ui"
+  contact-name: "shepherd"
+  contact-url:  "https://github.com/ICoder0"
+  contact-email: "1059959730@qq.com"
+  scan-package: "com.shepherd.mallsearch.api.controller"
