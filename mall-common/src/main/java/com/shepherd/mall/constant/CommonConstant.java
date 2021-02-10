@@ -40,4 +40,6 @@ public interface CommonConstant {
 
     Integer NOT_FIRST_LOGIN = 0;
 
+    Long DEFAULT_SALE_COUNT = 0L;
+
 }

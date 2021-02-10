@@ -3,19 +3,25 @@ package com.shepherd.mall.vo;
 import com.shepherd.mall.enums.ResponseStatusEnum;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author fjZheng
  * @version 1.0
  * @date 2020/11/20 20:54
  */
 @Data
-public class ResponseVO<T> {
+public class ResponseVO<T> implements Serializable {
 
     private Integer code;
 
     private String msg;
 
     private T data;
+
+    public ResponseVO() {
+
+    }
 
     public ResponseVO(Integer code, String msg) {
         this.code = code;
