@@ -26,4 +26,6 @@ public interface UserService {
 
     void retrievePassword(UserDTO userDTO);
 
+    UserDTO loadUserByUsername(String name);
+
 }

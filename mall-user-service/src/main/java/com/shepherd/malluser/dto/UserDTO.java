@@ -15,4 +15,6 @@ public class UserDTO extends User {
     private Integer firstLogin;
     private String ticket;
     private String token;
+    private String username;
+    private String clientId;
 }

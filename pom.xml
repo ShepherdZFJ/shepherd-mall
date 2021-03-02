@@ -24,6 +24,8 @@
         <module>mall-user-service</module>
         <module>mall-advertise-service</module>
         <module>mall-search-service</module>
+        <module>mall-auth</module>
+        <module>mall-base-service</module>
     </modules>
 
     <dependencies>

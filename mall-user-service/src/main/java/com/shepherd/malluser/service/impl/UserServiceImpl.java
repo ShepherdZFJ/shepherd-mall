@@ -1,5 +1,6 @@
 package com.shepherd.malluser.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
@@ -12,6 +13,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shepherd.mall.base.CasProperties;
 import com.shepherd.mall.constant.CommonConstant;
@@ -27,6 +29,7 @@ import com.shepherd.malluser.enums.ErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -216,6 +219,17 @@ public class UserServiceImpl implements UserService {
         update(userDTO);
     }
 
+    @Override
+    public UserDTO loadUserByUsername(String name) {
+        final LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getNickname, name);
+        User user = userDAO.selectOne(userLambdaQueryWrapper);
+        UserDTO userDTO = new UserDTO();
+        MallBeanUtil.copy(user, userDTO);
+        userDTO.setUsername(user.getNickname());
+        userDTO.setClientId("mall-user");
+        return userDTO;
+    }
 
     private UserDTO loginByLocal(UserDTO userDTO, HttpServletRequest request, HttpServletResponse response) {
         //判断手机号是否登录过
