@@ -12,10 +12,12 @@ import org.springframework.http.HttpStatus;
 @ToString
 @Getter
 public enum ResponseStatusEnum {
-
+    FORBIDDEN(HttpStatus.FORBIDDEN, 403, "Forbidden"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 401, "Unauthorized"),
     SUCCESS(HttpStatus.OK, 200, "OK"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, 400, "Bad Request"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "Internal Server Error");
+
 
     /** 返回的HTTP状态码,  符合http请求 */
     private HttpStatus httpStatus;

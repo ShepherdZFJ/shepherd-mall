@@ -5,6 +5,7 @@ import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.malluser.api.service.UserService;
 import com.shepherd.malluser.api.vo.LoginVO;
 import com.shepherd.malluser.api.vo.UserVO;
+import com.shepherd.malluser.dto.TokenResponse;
 import com.shepherd.malluser.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,13 +44,10 @@ public class UserController {
 
     }
 
-    @ResponseResultBody
     @PostMapping("/login")
     @ApiOperation("用户登录")
-    public LoginVO login(@RequestBody UserVO userVO, HttpServletRequest request, HttpServletResponse response) {
-        UserDTO userDTO = MallBeanUtil.copy(userVO, UserDTO.class);
-        UserDTO userDTO1 = userService.login(userDTO, request, response);
-        return MallBeanUtil.copy(userDTO1, LoginVO.class);
+    public TokenResponse login(@RequestBody UserVO userVO) {
+        return userService.login(userVO);
     }
 
     @ResponseResultBody

@@ -1,5 +1,7 @@
 package com.shepherd.malluser.api.service;
 
+import com.shepherd.malluser.api.vo.UserVO;
+import com.shepherd.malluser.dto.TokenResponse;
 import com.shepherd.malluser.dto.UserDTO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,7 @@ import java.util.List;
 public interface UserService {
     String getCode(String phoneNumber);
 
-    UserDTO login(UserDTO userDTO, HttpServletRequest request, HttpServletResponse response);
+    TokenResponse login(UserVO userVO);
 
     void update(UserDTO userDTO);
 

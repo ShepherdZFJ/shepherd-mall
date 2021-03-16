@@ -29,9 +29,11 @@ public class UserVO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     private String code;
-    private Integer type;
+    private Integer type;//0 -> password  1 -> phone + code
     private Integer firstLogin;
     private Integer count;
     private String ticket;
     private String token;
+
+    private String username;
 }
