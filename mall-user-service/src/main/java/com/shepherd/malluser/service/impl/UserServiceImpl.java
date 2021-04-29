@@ -1,6 +1,8 @@
 package com.shepherd.malluser.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -12,6 +14,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shepherd.mall.base.CasProperties;
 import com.shepherd.mall.constant.CommonConstant;
@@ -19,14 +22,20 @@ import com.shepherd.mall.exception.BusinessException;
 import com.shepherd.mall.utils.CookieBaseSessionUtil;
 import com.shepherd.mall.utils.MD5Util;
 import com.shepherd.mall.utils.MallBeanUtil;
+import com.shepherd.malluser.api.service.AuthService;
 import com.shepherd.malluser.api.service.UserService;
+import com.shepherd.malluser.api.vo.UserVO;
+import com.shepherd.malluser.constant.Constant;
 import com.shepherd.malluser.dao.UserDAO;
+import com.shepherd.malluser.dto.TokenResponse;
 import com.shepherd.malluser.dto.UserDTO;
 import com.shepherd.malluser.entity.User;
 import com.shepherd.malluser.enums.ErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -64,6 +73,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private AuthService authService;
 
     @Value("${aliyun-sms.accessKeyId}")
     private String accessKeyId;
@@ -112,13 +124,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserDTO login(UserDTO userDTO, HttpServletRequest request, HttpServletResponse response) {
-        if (Objects.equals(userDTO.getType(), CommonConstant.PHONE_LOCAL_LOGIN)) {
-            return loginByLocal(userDTO, request, response);
-        } else if (Objects.equals(userDTO.getType(), CommonConstant.PHONE_MESSAGE_LOGIN)) {
-            return loginByPhoneAndCode(userDTO, request, response);
-        } else if (Objects.equals(userDTO.getType(), CommonConstant.USER_PASSWORD_LOGIN)) {
-            return loginByUserAndPassword(userDTO, request, response);
+    public TokenResponse login(UserVO userVO) {
+        if (Objects.equals(userVO.getType(), Constant.PASSWORD_TYPE)) {
+            String username = userVO.getUsername();
+            String password = userVO.getPassword();
+            Map<String, String> params = new HashMap<>();
+            params.put("grant_type", Constant.GRANT_PASSWORD);
+            params.put("username", username);
+            params.put("password", password);
+            params.put("client_id", Constant.CLIENT_ID);
+            params.put("client_secret", Constant.CLIENT_SECRET);
+            params.put("scope", "all");
+            return authService.getToken(params);
+        } else if (Objects.equals(userVO.getType(), Constant.PHONE_TYPE)) {
+
         }
         return null;
 
@@ -216,6 +235,17 @@ public class UserServiceImpl implements UserService {
         update(userDTO);
     }
 
+    @Override
+    public UserDTO loadUserByUsername(String name) {
+        final LambdaQueryWrapper<User> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getNickname, name);
+        User user = userDAO.selectOne(userLambdaQueryWrapper);
+        UserDTO userDTO = new UserDTO();
+        MallBeanUtil.copy(user, userDTO);
+        userDTO.setUsername(user.getNickname());
+        userDTO.setClientId("mall-user");
+        return userDTO;
+    }
 
     private UserDTO loginByLocal(UserDTO userDTO, HttpServletRequest request, HttpServletResponse response) {
         //判断手机号是否登录过

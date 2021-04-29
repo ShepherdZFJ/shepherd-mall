@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: red-book-user-service
+    name: mall-user-service
   profiles:
     active: dev
   datasource:
