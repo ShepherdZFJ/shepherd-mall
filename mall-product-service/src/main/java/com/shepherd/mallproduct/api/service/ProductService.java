@@ -57,5 +57,11 @@ public interface ProductService {
 
     List<ProductSku> getProductSku();
 
+    /**
+     * 上架商品到ES中
+     * @param spuId
+     */
+    void upProductSpu(Long spuId);
+
 
 }

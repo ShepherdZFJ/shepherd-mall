@@ -10,10 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @EnableEurekaClient
-//@MapperScan(basePackages = "com.shepherd.mallsearch.dao")
 @ComponentScan(basePackages = {"com.shepherd"})
 @EnableFeignClients(basePackages = "com.shepherd.mallsearch")
-@SpringBootApplication()
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class MallSearchServiceApplication {
 
     public static void main(String[] args) {

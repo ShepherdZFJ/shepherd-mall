@@ -15,6 +15,10 @@
     <artifactId>shepherd-mall</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <elasticsearch.version>7.4.2</elasticsearch.version>
+    </properties>
+
     <!-- 声明子模块 -->
     <modules>
         <module>mall-pay-service</module>
@@ -114,6 +118,23 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>1.1.16</version>
+            </dependency>
+
+            <!-- 重写覆盖 spring-boot-dependencies 中的依赖版本  -->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+                <version>${elasticsearch.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

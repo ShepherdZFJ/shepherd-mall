@@ -43,19 +43,13 @@ public class ProductSku {
     private Integer weight;
 
     @ApiModelProperty("商品spu主键")
-    private Long productSpuId;
+    private Long spuId;
 
     @ApiModelProperty("所属类目id")
     private Long categoryId;
 
-    @ApiModelProperty("所属类目名称")
-    private String categoryName;
-
     @ApiModelProperty("所属品牌id")
     private Long brandId;
-
-    @ApiModelProperty("所属品牌名称")
-    private String brandName;
 
     @ApiModelProperty("商品sku规格")
     private String spec;

@@ -87,14 +87,14 @@ public class ProductServiceImpl implements ProductService {
     void addProductSku(ProductSpu productSpu, List<ProductSku> productSkuList) {
         if (!CollectionUtils.isEmpty(productSkuList))
         {
-            CategoryDTO categoryDTO = categoryService.getCategoryDetail(productSpu.getCategoryId());
-            BrandDTO brandDTO = brandService.getBrandDetail(productSpu.getBrandId());
+//            CategoryDTO categoryDTO = categoryService.getCategoryDetail(productSpu.getCategoryId());
+//            BrandDTO brandDTO = brandService.getBrandDetail(productSpu.getBrandId());
             productSkuList.forEach(productSku -> {
-                productSku.setProductSpuId(productSpu.getId());
+                productSku.setSpuId(productSpu.getId());
                 productSku.setBrandId(productSpu.getBrandId());
-                productSku.setBrandName(brandDTO == null ? null : brandDTO.getName());
+                //productSku.setBrandName(brandDTO == null ? null : brandDTO.getName());
                 productSku.setCategoryId(productSpu.getCategoryId());
-                productSku.setCategoryName(categoryDTO == null ? null : categoryDTO.getName());
+                //productSku.setCategoryName(categoryDTO == null ? null : categoryDTO.getName());
                 productSku.setCreateTime(new Date());
                 productSku.setUpdateTime(new Date());
                 productSku.setIsDelete(CommonConstant.NOT_DEL);
@@ -161,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
 
     void delProductSku(List<Long> productSpuIds) {
         LambdaUpdateWrapper<ProductSku> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.in(ProductSku::getProductSpuId, productSpuIds);
+        updateWrapper.in(ProductSku::getSpuId, productSpuIds);
         updateWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
         updateWrapper.set(ProductSku::getIsDelete, CommonConstant.DEL);
         updateWrapper.set(ProductSku::getUpdateTime, new Date());
@@ -227,6 +227,17 @@ public class ProductServiceImpl implements ProductService {
         return productSkuList;
     }
 
+    @Override
+    public void upProductSpu(Long spuId) {
+        LambdaQueryWrapper<ProductSku> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductSku::getSpuId, spuId);
+        queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
+        List<ProductSkuDTO> productSkuDTOS = productSkuDAO.selectList(queryWrapper).stream().map(productSku -> toProductSkuDTO(productSku)).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(productSkuDTOS)) {
+
+        }
+    }
+
     private ProductSpecDTO toProductSpecDTO(ProductSpec productSpec) {
         if (productSpec == null) {
             return null;
@@ -253,10 +264,19 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = MallBeanUtil.copy(productSpu, ProductDTO.class);
         productDTO.setProductSpuId(productSpu.getId());
         LambdaQueryWrapper<ProductSku> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ProductSku::getProductSpuId, productDTO.getProductSpuId());
+        queryWrapper.eq(ProductSku::getSpuId, productDTO.getProductSpuId());
         queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
         List<ProductSku> skuList = productSkuDAO.selectList(queryWrapper);
         productDTO.setSkuList(skuList);
         return productDTO;
+    }
+
+    private ProductSkuDTO toProductSkuDTO(ProductSku productSku) {
+        if (productSku == null) {
+            return null;
+        }
+        ProductSkuDTO productSkuDTO = MallBeanUtil.copy(productSku, ProductSkuDTO.class);
+        productSkuDTO.setSkuId(productSku.getId());
+        return productSkuDTO;
     }
 }
