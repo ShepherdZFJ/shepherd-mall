@@ -38,7 +38,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Boolean addProductToEsBatch(List<ProductSku> productSkuList) {
-        if (!CollectionUtils.isEmpty(productSkuList)) {
+        if (CollectionUtils.isEmpty(productSkuList)) {
             throw new BusinessException(ErrorCodeEnum.UP_PRODUCT_IS_EMPTY.getCode(), ErrorCodeEnum.UP_PRODUCT_IS_EMPTY.getMessage());
         }
         try {

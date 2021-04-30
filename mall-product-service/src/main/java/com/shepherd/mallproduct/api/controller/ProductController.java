@@ -3,6 +3,7 @@ package com.shepherd.mallproduct.api.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
+import com.shepherd.mall.vo.ResponseVO;
 import com.shepherd.mallproduct.api.service.ProductService;
 import com.shepherd.mallproduct.api.vo.ProductVO;
 import com.shepherd.mallproduct.dto.ProductDTO;
@@ -114,6 +115,13 @@ public class ProductController {
     @ApiOperation("获取商品sku列表")
     public List<ProductSku> getSku() {
         return productService.getProductSku();
+    }
+
+    @PutMapping("/{spuId}/up")
+    @ApiOperation("获取商品sku列表")
+    public ResponseVO upProductSpu(@PathVariable("spuId") Long spuId) {
+        productService.upProductSpu(spuId);
+        return ResponseVO.success();
     }
 
 }

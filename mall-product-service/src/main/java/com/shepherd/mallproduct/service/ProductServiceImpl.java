@@ -1,6 +1,7 @@
 package com.shepherd.mallproduct.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.utils.MallBeanUtil;
+import com.shepherd.mall.vo.ResponseVO;
 import com.shepherd.mallproduct.api.service.BrandService;
 import com.shepherd.mallproduct.api.service.CategoryService;
 import com.shepherd.mallproduct.api.service.ProductService;
@@ -22,6 +24,7 @@ import com.shepherd.mallproduct.entity.ProductParam;
 import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.entity.ProductSpec;
 import com.shepherd.mallproduct.entity.ProductSpu;
+import com.shepherd.mallproduct.feign.SearchService;
 import com.shepherd.mallproduct.query.ProductQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +58,8 @@ public class ProductServiceImpl implements ProductService {
     private CategoryService categoryService;
     @Resource
     private BrandService brandService;
+    @Resource
+    private SearchService searchService;
 
 
     @Override
@@ -234,6 +239,15 @@ public class ProductServiceImpl implements ProductService {
         queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
         List<ProductSkuDTO> productSkuDTOS = productSkuDAO.selectList(queryWrapper).stream().map(productSku -> toProductSkuDTO(productSku)).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(productSkuDTOS)) {
+            productSkuDTOS.forEach(productSkuDTO -> {
+                String spec = productSkuDTO.getSpec();
+                Map map = JSONObject.parseObject(spec, Map.class);
+                productSkuDTO.setSpecMap(map);
+            });
+            ResponseVO responseVO = searchService.addProductToEs(productSkuDTOS);
+            if (responseVO.getCode() == 200) {
+                log.info("商品成功上架到es中了，可以修改商品的状态了");
+            }
 
         }
     }
