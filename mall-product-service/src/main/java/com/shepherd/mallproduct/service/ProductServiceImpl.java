@@ -15,6 +15,7 @@ import com.shepherd.mall.vo.ResponseVO;
 import com.shepherd.mallproduct.api.service.BrandService;
 import com.shepherd.mallproduct.api.service.CategoryService;
 import com.shepherd.mallproduct.api.service.ProductService;
+import com.shepherd.mallproduct.constant.ProductConstant;
 import com.shepherd.mallproduct.dao.ProductParamDAO;
 import com.shepherd.mallproduct.dao.ProductSkuDAO;
 import com.shepherd.mallproduct.dao.ProductSpecDAO;
@@ -247,6 +248,11 @@ public class ProductServiceImpl implements ProductService {
             ResponseVO responseVO = searchService.addProductToEs(productSkuDTOS);
             if (responseVO.getCode() == 200) {
                 log.info("商品成功上架到es中了，可以修改商品的状态了");
+                LambdaUpdateWrapper<ProductSpu> updateWrapper = new LambdaUpdateWrapper<>();
+                updateWrapper.eq(ProductSpu::getId, spuId);
+                updateWrapper.eq(ProductSpu::getIsDelete, CommonConstant.NOT_DEL);
+                updateWrapper.set(ProductSpu::getStatus, ProductConstant.PRODUCT_UP);
+                int update = productSpuDAO.update(new ProductSpu(), updateWrapper);
             }
 
         }

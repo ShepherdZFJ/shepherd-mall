@@ -29,6 +29,13 @@ eureka:
     service-url:
       defaultZone: http://47.114.179.146:8001/eureka/
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
+
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*.xml
