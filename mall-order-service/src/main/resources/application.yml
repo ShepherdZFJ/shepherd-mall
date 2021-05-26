@@ -1,0 +1,15 @@
+server:
+  port: 18809
+
+spring:
+  application:
+    name: mall-product-service
+  profiles:
+    active: dev
+  web:
+    base-path: /api/mall/product
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://121.5.132.33:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
