@@ -9,25 +9,25 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: zfj126289.,
-    url: jdbc:mysql://47.114.179.146:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
+    password: root
+    url: jdbc:mysql://10.10.0.18:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+#  rabbitmq:
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
   redis:
-    host: 127.0.0.1
+    host: 10.10.0.18
     port: 6379
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     #设置返回json数据null字段不显示
     default-property-inclusion: non_null
-eureka:
-  client:
-    service-url:
-      defaultZone: http://47.114.179.146:8001/eureka/
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
 
 feign:
   client:

@@ -18,12 +18,10 @@ spring:
   elasticsearch:
     rest:
       uris: http://192.168.106.128:9200
-eureka:
-  client:
-    service-url:
-      defaultZone: http://47.114.179.146:8001/eureka/
-  instance:
-    prefer-ip-address: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
 feign:
   hystrix:
     enabled: true
