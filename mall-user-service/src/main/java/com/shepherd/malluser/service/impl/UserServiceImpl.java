@@ -137,6 +137,7 @@ public class UserServiceImpl implements UserService {
             params.put("scope", "all");
             return authService.getToken(params);
         } else if (Objects.equals(userVO.getType(), Constant.PHONE_TYPE)) {
+            //如果是手机配合验证码进行登录
 
         }
         return null;
