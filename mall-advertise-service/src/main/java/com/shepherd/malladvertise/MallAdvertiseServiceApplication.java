@@ -4,11 +4,10 @@ import com.xpand.starter.canal.annotation.EnableCanalClient;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@EnableEurekaClient
+
 //启用canal
 @EnableCanalClient
 @MapperScan(basePackages = "com.shepherd.malladvertise.dao")

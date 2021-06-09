@@ -10,6 +10,12 @@ import java.util.List;
  * @date 2021/2/9 16:03
  */
 public interface SearchService {
+    /**
+     * 批量上架商品到es中
+     * @param productSkuList
+     * @return
+     */
+    Boolean addProductToEsBatch(List<ProductSku> productSkuList);
 
-    List<ProductSku> getSku();
+
 }

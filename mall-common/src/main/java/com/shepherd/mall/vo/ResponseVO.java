@@ -3,6 +3,7 @@ package com.shepherd.mall.vo;
 import com.shepherd.mall.enums.ResponseStatusEnum;
 import lombok.Data;
 
+import javax.xml.ws.Response;
 import java.io.Serializable;
 
 /**
@@ -79,5 +80,9 @@ public class ResponseVO<T> implements Serializable {
             return new ResponseVO<T>(ResponseStatusEnum.INTERNAL_SERVER_ERROR, null);
         }
         return new ResponseVO<T>(resultStatus, data);
+    }
+
+    public static <T>ResponseVO<T> failure(Integer code, String msg) {
+        return new ResponseVO<T>(code, msg);
     }
 }

@@ -1,6 +1,7 @@
 package com.shepherd.mallproduct.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -10,9 +11,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.utils.MallBeanUtil;
+import com.shepherd.mall.vo.ResponseVO;
 import com.shepherd.mallproduct.api.service.BrandService;
 import com.shepherd.mallproduct.api.service.CategoryService;
 import com.shepherd.mallproduct.api.service.ProductService;
+import com.shepherd.mallproduct.constant.ProductConstant;
 import com.shepherd.mallproduct.dao.ProductParamDAO;
 import com.shepherd.mallproduct.dao.ProductSkuDAO;
 import com.shepherd.mallproduct.dao.ProductSpecDAO;
@@ -22,6 +25,7 @@ import com.shepherd.mallproduct.entity.ProductParam;
 import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.entity.ProductSpec;
 import com.shepherd.mallproduct.entity.ProductSpu;
+import com.shepherd.mallproduct.feign.SearchService;
 import com.shepherd.mallproduct.query.ProductQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +59,8 @@ public class ProductServiceImpl implements ProductService {
     private CategoryService categoryService;
     @Resource
     private BrandService brandService;
+    @Resource
+    private SearchService searchService;
 
 
     @Override
@@ -87,14 +93,14 @@ public class ProductServiceImpl implements ProductService {
     void addProductSku(ProductSpu productSpu, List<ProductSku> productSkuList) {
         if (!CollectionUtils.isEmpty(productSkuList))
         {
-            CategoryDTO categoryDTO = categoryService.getCategoryDetail(productSpu.getCategoryId());
-            BrandDTO brandDTO = brandService.getBrandDetail(productSpu.getBrandId());
+//            CategoryDTO categoryDTO = categoryService.getCategoryDetail(productSpu.getCategoryId());
+//            BrandDTO brandDTO = brandService.getBrandDetail(productSpu.getBrandId());
             productSkuList.forEach(productSku -> {
-                productSku.setProductSpuId(productSpu.getId());
+                productSku.setSpuId(productSpu.getId());
                 productSku.setBrandId(productSpu.getBrandId());
-                productSku.setBrandName(brandDTO == null ? null : brandDTO.getName());
+                //productSku.setBrandName(brandDTO == null ? null : brandDTO.getName());
                 productSku.setCategoryId(productSpu.getCategoryId());
-                productSku.setCategoryName(categoryDTO == null ? null : categoryDTO.getName());
+                //productSku.setCategoryName(categoryDTO == null ? null : categoryDTO.getName());
                 productSku.setCreateTime(new Date());
                 productSku.setUpdateTime(new Date());
                 productSku.setIsDelete(CommonConstant.NOT_DEL);
@@ -161,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
 
     void delProductSku(List<Long> productSpuIds) {
         LambdaUpdateWrapper<ProductSku> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.in(ProductSku::getProductSpuId, productSpuIds);
+        updateWrapper.in(ProductSku::getSpuId, productSpuIds);
         updateWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
         updateWrapper.set(ProductSku::getIsDelete, CommonConstant.DEL);
         updateWrapper.set(ProductSku::getUpdateTime, new Date());
@@ -227,6 +233,31 @@ public class ProductServiceImpl implements ProductService {
         return productSkuList;
     }
 
+    @Override
+    public void upProductSpu(Long spuId) {
+        LambdaQueryWrapper<ProductSku> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ProductSku::getSpuId, spuId);
+        queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
+        List<ProductSkuDTO> productSkuDTOS = productSkuDAO.selectList(queryWrapper).stream().map(productSku -> toProductSkuDTO(productSku)).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(productSkuDTOS)) {
+            productSkuDTOS.forEach(productSkuDTO -> {
+                String spec = productSkuDTO.getSpec();
+                Map map = JSONObject.parseObject(spec, Map.class);
+                productSkuDTO.setSpecMap(map);
+            });
+            ResponseVO responseVO = searchService.addProductToEs(productSkuDTOS);
+            if (responseVO.getCode() == 200) {
+                log.info("商品成功上架到es中了，可以修改商品的状态了");
+                LambdaUpdateWrapper<ProductSpu> updateWrapper = new LambdaUpdateWrapper<>();
+                updateWrapper.eq(ProductSpu::getId, spuId);
+                updateWrapper.eq(ProductSpu::getIsDelete, CommonConstant.NOT_DEL);
+                updateWrapper.set(ProductSpu::getStatus, ProductConstant.PRODUCT_UP);
+                int update = productSpuDAO.update(new ProductSpu(), updateWrapper);
+            }
+
+        }
+    }
+
     private ProductSpecDTO toProductSpecDTO(ProductSpec productSpec) {
         if (productSpec == null) {
             return null;
@@ -253,10 +284,19 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = MallBeanUtil.copy(productSpu, ProductDTO.class);
         productDTO.setProductSpuId(productSpu.getId());
         LambdaQueryWrapper<ProductSku> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ProductSku::getProductSpuId, productDTO.getProductSpuId());
+        queryWrapper.eq(ProductSku::getSpuId, productDTO.getProductSpuId());
         queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
         List<ProductSku> skuList = productSkuDAO.selectList(queryWrapper);
         productDTO.setSkuList(skuList);
         return productDTO;
+    }
+
+    private ProductSkuDTO toProductSkuDTO(ProductSku productSku) {
+        if (productSku == null) {
+            return null;
+        }
+        ProductSkuDTO productSkuDTO = MallBeanUtil.copy(productSku, ProductSkuDTO.class);
+        productSkuDTO.setSkuId(productSku.getId());
+        return productSkuDTO;
     }
 }
