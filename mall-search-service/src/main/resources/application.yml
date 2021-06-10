@@ -51,3 +51,10 @@ swagger-web:
   contact-url:  "https://github.com/ICoder0"
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.mallsearch.api.controller"
+
+#注意：这里写成user.name获取的本机电脑的名字shepherdmy，这里填写的meiying无效
+search:
+  user:
+    name: meiying
+    age: 25
+
