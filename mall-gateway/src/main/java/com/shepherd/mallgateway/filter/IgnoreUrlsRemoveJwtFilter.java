@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  * 白名单路径访问时需要移除JWT请求头
- * Created by macro on 2020/7/24.
  */
 @Component
 public class IgnoreUrlsRemoveJwtFilter implements WebFilter {

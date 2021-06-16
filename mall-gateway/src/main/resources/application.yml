@@ -1,6 +1,8 @@
 server:
   port: 18500
 spring:
+  application:
+    name: mall-gateway-service
   cloud:
     gateway:
       discovery:
@@ -38,6 +40,9 @@ spring:
             - Path=/mall-demo/**
           filters:
             - StripPrefix=1
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
   security:
     oauth2:
       resourceserver:
@@ -53,27 +58,6 @@ secure:
   ignore:
     urls: #配置白名单路径
       - "/doc.html"
-      - "/swagger-resources/**"
-      - "/swagger/**"
-      - "/**/v2/api-docs"
-      - "/**/*.js"
-      - "/**/*.css"
-      - "/**/*.png"
-      - "/**/*.ico"
-      - "/webjars/springfox-swagger-ui/**"
-      - "/actuator/**"
-      - "/mall-auth/oauth/token"
-      - "/mall-auth/rsa/publicKey"
-      - "/mall-search/**"
-      - "/mall-portal/sso/login"
-      - "/mall-portal/sso/register"
-      - "/mall-portal/sso/getAuthCode"
-      - "/mall-portal/home/**"
-      - "/mall-portal/product/**"
-      - "/mall-portal/brand/**"
-      - "/mall-admin/admin/login"
-      - "/mall-admin/admin/register"
-      - "/mall-admin/minio/upload"
 management: #开启SpringBoot Admin的监控
   endpoints:
     web:
