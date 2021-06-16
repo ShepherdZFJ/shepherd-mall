@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: mall-search-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.10.0.14:8848
+        #file-extension表示nacos的配置中心的配置文件后缀，不设置时默认为properties，
+        #注意不能设置为yml，应该nacos配置中心没有yml这个格式，导致不能配置中心的文件没有用
+        file-extension: yaml
+        namespace: 00908414-c284-45b9-9fc4-69eee62d0d9d
+  profiles:
+    active: test
