@@ -51,17 +51,17 @@
 			<artifactId>spring-cloud-starter-gateway</artifactId>
 			<version>2.2.5.RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>com.shepherd</groupId>
-			<artifactId>mall-base-service</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-web</artifactId>
-				</exclusion>
-			</exclusions>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.shepherd</groupId>-->
+<!--			<artifactId>mall-base-service</artifactId>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>org.springframework.boot</groupId>-->
+<!--					<artifactId>spring-boot-starter-web</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--			<version>1.0-SNAPSHOT</version>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>com.shepherd</groupId>
 			<artifactId>mall-common</artifactId>
@@ -83,7 +83,10 @@
 				<configuration>
 					<excludes>
 						<exclude>
-							<groupId>org.projectlombok</groupId>
+							<groupId>o<exclusion>
+								<groupId>org.springframework.boot</groupId>
+								<artifactId>spring-boot-starter-web</artifactId>
+							</exclusion>rg.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
