@@ -1,5 +1,6 @@
 package com.shepherd.mallproduct.api.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.CategoryService;
@@ -38,11 +39,6 @@ public class CategoryController {
         return categoryList;
     }
 
-    @GetMapping("/test")
-    @ApiOperation("获取商品类目列表")
-    public String test() {
-         return categoryService.test();
-    }
 
     @PutMapping
     @ApiOperation("更新类目")
@@ -67,5 +63,11 @@ public class CategoryController {
     @ApiOperation("获取类目详情")
     public CategoryDTO getCategoryDetail(@PathVariable("categoryId") Long categoryId) {
         return categoryService.getCategoryDetail(categoryId);
+    }
+
+    @GetMapping("/test")
+    @ApiOperation("test")
+    public List<CategoryDTO> test() {
+        return categoryService.test();
     }
 }

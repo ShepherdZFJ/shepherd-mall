@@ -1,5 +1,7 @@
 package com.shepherd.mallproduct.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -13,12 +15,18 @@ import com.shepherd.mallproduct.entity.Category;
 import com.shepherd.mallproduct.query.CategoryQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 
@@ -34,20 +42,81 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryDAO categoryDAO;
     @Resource
     private CompositeCache compositeCache;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    private Lock lock = new ReentrantLock();
+
+    private final static String CATEGORY_CACHE = "category_cache";
+
+    /**
+     * 缓存失效的问题三大常见问题：
+     * 1.缓存穿透：查询一个不存在的key，这样缓存就永远不命中，去数据库查询。解决方案：缓存空数据，或者使用布隆过滤器
+     * 2.缓存击穿：大量并发进来同时查询一个正好过期的数据。解决方案：加锁 ? 默认是无加锁的;使用sync = true来解决击穿问题
+     * 3.缓存雪崩：大量的key同时过期。解决：加随机时间。加上过期时间
+     */
 
 
+    /**
+     * 缓存经典场景伪代码：
+     * value = cache.load(key);//从缓存加载数据
+     *     If(value == null){
+     *        value = db.load(key);//从数据库加载数据
+     *        cache.put(key,value);//保存到 cache 中
+     *     }
+     *     return value;
+     * @return
+     */
     @Override
-    public String test() {
-        String str = compositeCache.get("category_cache", () -> method());
-        if (StringUtils.isBlank(str)) {
-            str = method();
+    public List<CategoryDTO> test() {
+        //解决单机模式下缓存击穿的问题：通过加单机版的并发锁：加本地锁：synchronized, juc的lock
+        String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+        if (StringUtils.isBlank(categoryJson)) {
+            List<CategoryDTO> categoryDTOList = getCategoryTreeWithLock();
+            categoryJson = JSON.toJSONString(categoryDTOList);
+            stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, categoryJson, 5, TimeUnit.MINUTES);
+            return categoryDTOList;
         }
-        return str;
+        log.info("<=======通过redis缓存查询商品分类数据=======>");
+        return JSONObject.parseArray(categoryJson, CategoryDTO.class);
     }
 
-    public String method() {
-        return "hello category ,mall";
+    List<CategoryDTO> getCategoryTreeWithSynchronized() {
+        synchronized (this) {
+            String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+            if (StringUtils.isBlank(categoryJson)) {
+                List<CategoryDTO> categoryDTOList = getList();
+                List<CategoryDTO> list = new ArrayList<>();
+                listToTree(categoryDTOList, list);
+                categoryJson = JSON.toJSONString(categoryDTOList);
+                stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, categoryJson, 5, TimeUnit.MINUTES);
+            }
+            return JSONObject.parseArray(categoryJson, CategoryDTO.class);
+        }
     }
+
+    List<CategoryDTO> getCategoryTreeWithLock() {
+        lock.lock();
+        try {
+            String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+            if (StringUtils.isBlank(categoryJson)) {
+                List<CategoryDTO> categoryDTOList = getList();
+                List<CategoryDTO> list = new ArrayList<>();
+                listToTree(categoryDTOList, list);
+                categoryJson = JSON.toJSONString(categoryDTOList);
+                stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, categoryJson, 5, TimeUnit.MINUTES);
+            }
+            return JSONObject.parseArray(categoryJson, CategoryDTO.class);
+        } catch (Exception e) {
+            log.error("发生异常：", e);
+        } finally {
+          lock.unlock();
+        }
+        return null;
+    }
+
+
+
 
 
 
@@ -67,6 +136,7 @@ public class CategoryServiceImpl implements CategoryService {
         return list;
     }
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long addCategory(CategoryDTO categoryDTO) {
@@ -77,7 +147,6 @@ public class CategoryServiceImpl implements CategoryService {
         category.setStatus(1);
         int insert = categoryDAO.insert(category);
         return category.getId();
-
     }
 
     @Override
@@ -158,6 +227,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     //只获取类目列表，不转树结构
     private List<CategoryDTO> getList() {
+        log.info("<=======通过数据库查询商品分类数据=======>");
         QueryWrapper<Category>queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_delete", CommonConstant.NOT_DEL);
         List<Category> categoryList = categoryDAO.selectList(queryWrapper);

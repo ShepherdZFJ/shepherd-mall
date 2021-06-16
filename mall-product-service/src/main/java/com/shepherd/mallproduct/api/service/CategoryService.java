@@ -1,5 +1,6 @@
 package com.shepherd.mallproduct.api.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mallproduct.dto.CategoryDTO;
 import com.shepherd.mallproduct.dto.ProductDTO;
@@ -63,6 +64,6 @@ public interface CategoryService {
 
     CategoryDTO getCategoryDetail(Long categoryId);
 
-    String test();
+    List<CategoryDTO> test();
 
 }
