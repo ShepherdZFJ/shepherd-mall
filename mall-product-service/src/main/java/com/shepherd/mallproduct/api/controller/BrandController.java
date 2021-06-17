@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @ResponseResultBody
-@RequestMapping("/api/mall/brand")
+@RequestMapping("/api/mall/product/brand")
 @Api("品牌相关接口")
 public class BrandController {
 

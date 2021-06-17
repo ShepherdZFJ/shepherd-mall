@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @ResponseResultBody
-@RequestMapping("/api/mall/category")
+@RequestMapping("/api/mall/product/category")
 @Api("商品类目相关接口")
 public class CategoryController {
     @Resource

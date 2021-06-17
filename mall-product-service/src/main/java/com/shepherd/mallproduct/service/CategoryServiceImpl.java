@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -72,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
         //解决单机模式下缓存击穿的问题：通过加单机版的并发锁：加本地锁：synchronized, juc的lock
         String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
         if (StringUtils.isBlank(categoryJson)) {
-            List<CategoryDTO> categoryDTOList = getCategoryTreeWithLock();
+            List<CategoryDTO> categoryDTOList = getCategoryTreeWithRedisLock();
             categoryJson = JSON.toJSONString(categoryDTOList);
             stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, categoryJson, 5, TimeUnit.MINUTES);
             return categoryDTOList;
@@ -81,6 +82,10 @@ public class CategoryServiceImpl implements CategoryService {
         return JSONObject.parseArray(categoryJson, CategoryDTO.class);
     }
 
+    /**
+     * 使用synchronized关键字加锁
+     * @return
+     */
     List<CategoryDTO> getCategoryTreeWithSynchronized() {
         synchronized (this) {
             String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
@@ -95,6 +100,10 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * 使用JUC加锁
+     * @return
+     */
     List<CategoryDTO> getCategoryTreeWithLock() {
         lock.lock();
         try {
@@ -113,6 +122,59 @@ public class CategoryServiceImpl implements CategoryService {
           lock.unlock();
         }
         return null;
+    }
+
+    /**
+     * 使用redis实现分布式锁，使用命令set key value [EX seconds] [NX|XX]，但有如下问题：
+     * 1、加锁和设置过期时间必须是原子性的，不然有可能加锁之后还没有执行到设置过期时间代码时服务不可用，锁一直不释放，造成死锁
+     * 2、主动删除key，即解锁需要注意：如果在key设置的过期时间之前删除key那么没问题，测试业务执行完正常解锁，但是如果删除key在过期之后就有问题了，
+     * 此时当前线程的锁已经因为过期自动解锁，另外的请求线程拿到锁，所以这时候删除的不是当前线程的锁，
+     * 解决方案：利用CAS原理，删除之前先比较value值是不是之前存放进去的，这里为了保证每次的value都不一样，使用uuid生成value，但是这时候有一种情况就是
+     * 你去拿value的时候锁没有过期，此时拿到value和传入的一样，但是当你刚刚获取完value之后锁就过期了，其他请求线程拿到锁，然后你再根据传入的值
+     * 和获取的value值去删除锁，这时候删除的是其他请求线程的锁，造成问题，所以利用CAS原理值比较和删除锁必须是原子性操作
+     * @return
+     */
+    List<CategoryDTO> getCategoryTreeWithRedisLock() {
+
+        //1、占分布式锁。去redis占坑 设置过期时间必须和加锁是同步的，保证原子性（避免死锁）
+        String uuid = UUID.randomUUID().toString();
+        Boolean lock = stringRedisTemplate.opsForValue().setIfAbsent("lock", uuid, 300, TimeUnit.SECONDS);
+        if (lock) {
+            log.info("获取分布式锁成功...");
+            List<CategoryDTO> categoryDTOList = null;
+            try {
+                String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+                if (StringUtils.isBlank(categoryJson)) {
+                    //加锁成功...，并且redis还没有数据库，执行业务
+                    categoryDTOList = getCategoryTree();
+                } else {
+                    categoryDTOList = JSON.parseArray(categoryJson, CategoryDTO.class);
+                }
+            } finally {
+                // lua 脚本解锁
+                String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+                // 删除锁
+                stringRedisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Collections.singletonList("lock"), uuid);
+            }
+            //先去redis查询下保证当前的锁是自己的
+            //获取值对比，对比成功删除=原子性 lua脚本解锁
+            // String lockValue = stringRedisTemplate.opsForValue().get("lock");
+            // if (uuid.equals(lockValue)) {
+            //     //删除我自己的锁
+            //     stringRedisTemplate.delete("lock");
+            // }
+            return categoryDTOList;
+        } else {
+            log.info("获取分布式锁失败...等待重试...");
+            //加锁失败...重试机制
+            //休眠一百毫秒
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                log.error("redis分布式锁发生错误", e);
+            }
+            return getCategoryTreeWithRedisLock();     //自旋的方式
+        }
     }
 
 
