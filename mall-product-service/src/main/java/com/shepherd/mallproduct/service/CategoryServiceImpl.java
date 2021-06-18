@@ -16,6 +16,9 @@ import com.shepherd.mallproduct.entity.Category;
 import com.shepherd.mallproduct.query.CategoryQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.RedisClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -46,6 +49,8 @@ public class CategoryServiceImpl implements CategoryService {
     private CompositeCache compositeCache;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private RedissonClient redissonClient;
 
     private Lock lock = new ReentrantLock();
 
@@ -74,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
         //解决单机模式下缓存击穿的问题：通过加单机版的并发锁：加本地锁：synchronized, juc的lock
         String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
         if (StringUtils.isBlank(categoryJson)) {
-            List<CategoryDTO> categoryDTOList = getCategoryTreeWithRedisLock();
+            List<CategoryDTO> categoryDTOList = getCategoryTreeWithRedissonLock();
             categoryJson = JSON.toJSONString(categoryDTOList);
             stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, categoryJson, 5, TimeUnit.MINUTES);
             return categoryDTOList;
@@ -204,6 +209,34 @@ public class CategoryServiceImpl implements CategoryService {
             return categoryDTOList;
         }
         throw new BusinessException("获取数据超时，请重试");
+    }
+
+    /**
+     * 通过redisson实现分布式锁
+     * @return
+     */
+    List<CategoryDTO> getCategoryTreeWithRedissonLock() {
+        // 1. 获取一把锁
+        RLock rLock = redissonClient.getLock("category-lock");
+        // 2. 加锁, 阻塞式等待
+        rLock.lock();
+        try {
+            String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+            if (StringUtils.isBlank(categoryJson)) {
+                List<CategoryDTO> categoryDTOList = getList();
+                List<CategoryDTO> list = new ArrayList<>();
+                listToTree(categoryDTOList, list);
+                categoryJson = JSON.toJSONString(categoryDTOList);
+                stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, categoryJson, 5, TimeUnit.MINUTES);
+            }
+            return JSONObject.parseArray(categoryJson, CategoryDTO.class);
+        } catch (Exception e) {
+            throw new BusinessException("redisson分布式锁发生错误");
+        } finally {
+            // 3. 解锁 假设解锁代码没有运行，Redisson 会出现死锁吗？（不会）
+            rLock.unlock();
+        }
+
     }
 
 
