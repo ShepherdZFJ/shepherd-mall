@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mall.constant.CommonConstant;
+import com.shepherd.mall.exception.BusinessException;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.CategoryService;
 import com.shepherd.mallproduct.cache.CompositeCache;
@@ -147,6 +148,7 @@ public class CategoryServiceImpl implements CategoryService {
                 if (StringUtils.isBlank(categoryJson)) {
                     //加锁成功...，并且redis还没有数据库，执行业务
                     categoryDTOList = getCategoryTree();
+                    stringRedisTemplate.opsForValue().set(CATEGORY_CACHE, JSON.toJSONString(categoryDTOList), 5, TimeUnit.MINUTES);
                 } else {
                     categoryDTOList = JSON.parseArray(categoryJson, CategoryDTO.class);
                 }
@@ -167,15 +169,44 @@ public class CategoryServiceImpl implements CategoryService {
         } else {
             log.info("获取分布式锁失败...等待重试...");
             //加锁失败...重试机制
-            //休眠一百毫秒
             try {
-                TimeUnit.MILLISECONDS.sleep(100);
+                TimeUnit.MILLISECONDS.sleep(10);
             } catch (InterruptedException e) {
                 log.error("redis分布式锁发生错误", e);
             }
-            return getCategoryTreeWithRedisLock();     //自旋的方式
+            return tryAgainWithTime();
         }
     }
+
+    List<CategoryDTO> tryAgainWithTime() {
+        long startTime = System.currentTimeMillis();
+        while(true) {
+            long endTime = System.currentTimeMillis();
+            if (endTime - startTime > 1000) {
+                throw new BusinessException("获取数据超时，请重试");
+            }
+            String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+            if (StringUtils.isBlank(categoryJson)) {
+                continue;
+            }
+           List<CategoryDTO> categoryDTOList = JSON.parseArray(categoryJson, CategoryDTO.class);
+            return categoryDTOList;
+        }
+    }
+
+    List<CategoryDTO> tryAgainWithFor() {
+        for (int i = 0; i < 5; i++) {
+            String categoryJson = stringRedisTemplate.opsForValue().get(CATEGORY_CACHE);
+            if (StringUtils.isBlank(categoryJson)) {
+                continue;
+            }
+            List<CategoryDTO> categoryDTOList = JSON.parseArray(categoryJson, CategoryDTO.class);
+            return categoryDTOList;
+        }
+        throw new BusinessException("获取数据超时，请重试");
+    }
+
+
 
 
 
