@@ -1,6 +1,9 @@
 package com.shepherd.mallsearch.api.service;
 
+import com.shepherd.mall.vo.PageInfo;
+import com.shepherd.mallsearch.api.VO.SearchResult;
 import com.shepherd.mallsearch.dto.ProductSku;
+import com.shepherd.mallsearch.param.SearchParam;
 
 import java.util.List;
 
@@ -17,5 +20,6 @@ public interface SearchService {
      */
     Boolean addProductToEsBatch(List<ProductSku> productSkuList);
 
+    SearchResult searchProduct(SearchParam param);
 
 }

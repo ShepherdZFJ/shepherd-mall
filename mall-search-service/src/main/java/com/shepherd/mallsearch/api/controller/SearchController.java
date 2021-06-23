@@ -3,8 +3,10 @@ package com.shepherd.mallsearch.api.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.shepherd.mall.enums.ResponseStatusEnum;
 import com.shepherd.mall.vo.ResponseVO;
+import com.shepherd.mallsearch.api.VO.SearchResult;
 import com.shepherd.mallsearch.api.service.SearchService;
 import com.shepherd.mallsearch.dto.ProductSku;
+import com.shepherd.mallsearch.param.SearchParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +46,17 @@ public class SearchController {
         return ResponseVO.failure(ResponseStatusEnum.BAD_REQUEST.getCode(), "商品上架发生异常");
     }
 
+    @ApiOperation("批量上架商品到es中")
+    @PostMapping()
+    public ResponseVO searchProduct(@RequestBody SearchParam param) {
+        SearchResult result = searchService.searchProduct(param);
+        return ResponseVO.success(result);
+    }
+
+
+
+
+    
     @ApiOperation("测试nacos配置中心功能")
     @GetMapping("/nacos/config/test")
     public JSONObject testNacosConfig() {

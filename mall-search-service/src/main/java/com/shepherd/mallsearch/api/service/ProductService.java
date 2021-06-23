@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2021/2/9 15:47
  */
 
-@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product", url="${mall-product-server}")
+@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product")
 public interface ProductService {
 
 

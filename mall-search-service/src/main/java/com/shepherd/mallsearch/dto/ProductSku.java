@@ -56,4 +56,5 @@ public class ProductSku {
      * 热度
      */
     private Long hotScore;
+    private String brandImg;
 }
