@@ -18,6 +18,15 @@ public class ProductSkuDTO extends ProductSku {
     private String brandName;
     private String categoryName;
     private Map<String, Object> specMap;
+    /**
+     * 是否有库存
+     */
+    private Boolean hasStock;
+    /**
+     * 热度
+     */
+    private Long hotScore;
+    private String brandImg;
 
 
 }

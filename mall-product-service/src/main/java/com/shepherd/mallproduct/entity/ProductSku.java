@@ -37,7 +37,7 @@ public class ProductSku {
     private String mainImage;
 
     @ApiModelProperty("商品sku子图列表")
-    private String subImages;
+    private String subImage;
 
     @ApiModelProperty("商品重量")
     private Integer weight;

@@ -16,4 +16,6 @@ public interface BrandService {
     List<BrandDTO> getBrandList(Long categoryId);
 
     BrandDTO getBrandDetail(Long brandId);
+
+    List<BrandDTO> getBrandList(List<Long> brandIds);
 }

@@ -9,8 +9,10 @@ import com.shepherd.mallproduct.dao.BrandDAO;
 import com.shepherd.mallproduct.dto.BrandDTO;
 import com.shepherd.mallproduct.entity.Brand;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +49,17 @@ public class BrandServiceImpl implements BrandService {
     public BrandDTO getBrandDetail(Long brandId) {
         Brand brand = brandDAO.selectById(brandId);
         return toBrandDTO(brand);
+    }
+
+    @Override
+    public List<BrandDTO> getBrandList(List<Long> brandIds) {
+        if (CollectionUtils.isEmpty(brandIds)) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<Brand> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Brand::getId, brandIds);
+        List<BrandDTO> brandDTOList = brandDAO.selectList(queryWrapper).stream().map(brand -> toBrandDTO(brand)).collect(Collectors.toList());
+        return brandDTOList;
     }
 
     BrandDTO toBrandDTO(Brand brand) {

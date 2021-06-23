@@ -37,6 +37,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -240,10 +241,21 @@ public class ProductServiceImpl implements ProductService {
         queryWrapper.eq(ProductSku::getIsDelete, CommonConstant.NOT_DEL);
         List<ProductSkuDTO> productSkuDTOS = productSkuDAO.selectList(queryWrapper).stream().map(productSku -> toProductSkuDTO(productSku)).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(productSkuDTOS)) {
+            List<Long> categoryIds = productSkuDTOS.stream().map(ProductSkuDTO::getCategoryId).collect(Collectors.toList());
+            List<Long> brandIds = productSkuDTOS.stream().map(ProductSkuDTO::getBrandId).collect(Collectors.toList());
+            List<CategoryDTO> categoryList = categoryService.getCategoryList(categoryIds);
+            List<BrandDTO> brandList = brandService.getBrandList(brandIds);
             productSkuDTOS.forEach(productSkuDTO -> {
                 String spec = productSkuDTO.getSpec();
                 Map map = JSONObject.parseObject(spec, Map.class);
                 productSkuDTO.setSpecMap(map);
+                productSkuDTO.setHasStock(productSkuDTO.getStock()>0);
+                productSkuDTO.setHotScore(0l);
+                CategoryDTO category= categoryList.stream().filter(categoryDTO -> Objects.equals(categoryDTO.getId(), productSkuDTO.getCategoryId())).findFirst().orElse(null);
+                productSkuDTO.setCategoryName(category == null ? null : category.getName());
+                BrandDTO brand = brandList.stream().filter(brandDTO -> Objects.equals(brandDTO.getId(), productSkuDTO.getBrandId())).findFirst().orElse(null);
+                productSkuDTO.setBrandName(brand == null ? null : brand.getName());
+                productSkuDTO.setBrandImg(brand == null ? null : brand.getImage());
             });
             ResponseVO responseVO = searchService.addProductToEs(productSkuDTOS);
             if (responseVO.getCode() == 200) {
@@ -253,6 +265,8 @@ public class ProductServiceImpl implements ProductService {
                 updateWrapper.eq(ProductSpu::getIsDelete, CommonConstant.NOT_DEL);
                 updateWrapper.set(ProductSpu::getStatus, ProductConstant.PRODUCT_UP);
                 int update = productSpuDAO.update(new ProductSpu(), updateWrapper);
+            }else {
+                //todo: 调用search服务失败处理机制，重试或者抛出异常;接口幂等性
             }
 
         }

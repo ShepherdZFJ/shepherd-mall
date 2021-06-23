@@ -2,6 +2,7 @@ package com.shepherd.mallproduct.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -329,6 +330,17 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO getCategoryDetail(Long categoryId) {
         Category category = categoryDAO.selectById(categoryId);
         return toCategoryDTO(category);
+    }
+
+    @Override
+    public List<CategoryDTO> getCategoryList(List<Long> categoryIds) {
+        if (CollectionUtils.isEmpty(categoryIds)) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Category::getId, categoryIds);
+        List<CategoryDTO> categoryDTOList = categoryDAO.selectList(queryWrapper).stream().map(category -> toCategoryDTO(category)).collect(Collectors.toList());
+        return categoryDTOList;
     }
 
 

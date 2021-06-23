@@ -64,6 +64,8 @@ public interface CategoryService {
 
     CategoryDTO getCategoryDetail(Long categoryId);
 
+    List<CategoryDTO> getCategoryList(List<Long> categoryIds);
+
     List<CategoryDTO> test();
 
 }
