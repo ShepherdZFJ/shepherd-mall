@@ -126,8 +126,33 @@ public class SearchServiceImpl implements SearchService {
     private SearchResult buildPageInfo(SearchResponse response, SearchParam param) {
 
         SearchResult result = new SearchResult();
+        result.setProduct(getProductSkuList(response, param));
+        result.setSpecs(getSpec(response));
+        result.setBrands(getBrands(response));
+        result.setCategoryList(getCategoryList(response));
 
-        //1、返回的所有查询到的商品
+        //分页信息-页码
+        result.setPageNo(param.getPageNo());
+        result.setPageSize(param.getPageSize());
+        //分页信息、总记录数
+        SearchHits hits = response.getHits();
+        long total = hits.getTotalHits().value;
+        result.setTotal(total);
+        //分页信息-总页码-计算
+        int totalPages = (int) total % param.getPageSize() == 0 ?
+                (int) total / param.getPageSize() : ((int) total / param.getPageSize() + 1);
+        result.setPages(totalPages);
+        return result;
+
+    }
+
+    /**
+     * 返回所有查询到的商品，如果有关键字搜索，那么商品名称包含关键字需高亮显示处理
+     * @param response
+     * @param param
+     * @return
+     */
+    List<ProductSku> getProductSkuList(SearchResponse response, SearchParam param) {
         SearchHits hits = response.getHits();
 
         List<ProductSku> productSkuList = new ArrayList<>();
@@ -147,9 +172,17 @@ public class SearchServiceImpl implements SearchService {
                 productSkuList.add(productSku);
             }
         }
-        result.setProduct(productSkuList);
+        return productSkuList;
+    }
 
-        //2.返回查询到所有规格参数
+    /**
+     * 返回查询到的所有规格参数，这里的实现方式就是查询时根据spec字段构造聚合查询，然后拿到结构之后对每一个spec进行转换提炼，
+     * 最终得到相同规格属性的所有可选值。
+     * @param response
+     * @return
+     */
+    List<SpecVO> getSpec(SearchResponse response) {
+        List<SpecVO> specs = new ArrayList<>();
         Map<String, Set<String>> specMap = new HashMap<>();
         Set<String> specSet  = new HashSet<>();
         ParsedStringTerms specAgg = response.getAggregations().get("spec_agg");
@@ -169,7 +202,6 @@ public class SearchServiceImpl implements SearchService {
             });
 
         });
-        List<SpecVO> specs = new ArrayList<>();
         specMap.forEach((key, value) -> {
             SpecVO spec = new SpecVO();
             spec.setSpecName(key);
@@ -177,10 +209,15 @@ public class SearchServiceImpl implements SearchService {
             spec.setSpecValues(list);
             specs.add(spec);
         });
-        result.setSpecs(specs);
+        return specs;
+    }
 
-
-        //3、当前商品涉及到的所有品牌信息
+    /**
+     * 当前查询到的商品涉及到的所有品牌信息
+     * @param response
+     * @return
+     */
+    List<BrandVO> getBrands(SearchResponse response) {
         List<BrandVO> brands = new ArrayList<>();
         //获取到品牌的聚合
         ParsedLongTerms brandAgg = response.getAggregations().get("brand_agg");
@@ -203,11 +240,15 @@ public class SearchServiceImpl implements SearchService {
 
             brands.add(brandVO);
         }
-        result.setBrands(brands);
+        return brands;
+    }
 
-
-//        //4、当前商品涉及到的所有分类信息
-        //获取到分类的聚合
+    /**
+     * 当前商品涉及到的所有分类信息
+     * @param response
+     * @return
+     */
+    List<CategoryVO> getCategoryList(SearchResponse response) {
         List<CategoryVO> categoryList = new ArrayList<>();
         ParsedLongTerms categoryAgg = response.getAggregations().get("category_agg");
         for (Terms.Bucket bucket : categoryAgg.getBuckets()) {
@@ -221,66 +262,7 @@ public class SearchServiceImpl implements SearchService {
             categoryVO.setCategoryName(catalogName);
             categoryList.add(categoryVO);
         }
-
-        result.setCategoryList(categoryList);
-
-//        //===============以上可以从聚合信息中获取====================//
-
-        //5、分页信息-页码
-        result.setPageNo(param.getPageNo());
-        result.setPageSize(param.getPageSize());
-        //5、1分页信息、总记录数
-        long total = hits.getTotalHits().value;
-        result.setTotal(total);
-
-        //5、2分页信息-总页码-计算
-        int totalPages = (int) total % param.getPageSize() == 0 ?
-                (int) total / param.getPageSize() : ((int) total / param.getPageSize() + 1);
-        result.setPages(totalPages);
-
-        return result;
-//
-//        List<Integer> pageNavs = new ArrayList<>();
-//        for (int i = 1; i <= totalPages; i++) {
-//            pageNavs.add(i);
-//        }
-//        result.setPageNavs(pageNavs);
-//
-//        //6、构建面包屑导航
-//        if (param.getAttrs() != null && param.getAttrs().size() > 0) {
-//            List<PageInfo.NavVo> collect = param.getAttrs().stream().map(attr -> {
-//                //1、分析每一个attrs传过来的参数值
-//                PageInfo.NavVo navVo = new PageInfo.NavVo();
-//                String[] s = attr.split("_");
-//                navVo.setNavValue(s[1]);
-//                R r = productFeignService.attrInfo(Long.parseLong(s[0]));
-//                if (r.getCode() == 0) {
-//                    AttrResponseVo data = r.getData("attr", new TypeReference<AttrResponseVo>() {
-//                    });
-//                    navVo.setNavName(data.getAttrName());
-//                } else {
-//                    navVo.setNavName(s[0]);
-//                }
-//
-//                //2、取消了这个面包屑以后，我们要跳转到哪个地方，将请求的地址url里面的当前置空
-//                //拿到所有的查询条件，去掉当前
-//                String encode = null;
-//                try {
-//                    encode = URLEncoder.encode(attr, "UTF-8");
-//                    encode.replace("+", "%20");  //浏览器对空格的编码和Java不一样，差异化处理
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                String replace = param.get_queryString().replace("&attrs=" + attr, "");
-//                navVo.setLink("http://search.gulimall.com/list.html?" + replace);
-//
-//                return navVo;
-//            }).collect(Collectors.toList());
-//
-//            result.setNavs(collect);
-//        }
-//
-//        return result;
+        return categoryList;
     }
 
 
@@ -377,8 +359,6 @@ public class SearchServiceImpl implements SearchService {
             searchSourceBuilder.highlighter(highlightBuilder);
         }
 
-        System.out.println("构建的DSL语句" + searchSourceBuilder.toString());
-
         /**
          * 聚合分析
          */
@@ -399,10 +379,11 @@ public class SearchServiceImpl implements SearchService {
         searchSourceBuilder.aggregation(category_agg);
 
         TermsAggregationBuilder spec_agg = AggregationBuilders.terms("spec_agg");
+        //这里的size要尽量大一点，这样才能拿到所有商品的spec聚合之后信息，才能提炼出所有规格属性和对应的可选项
         spec_agg.field("spec").size(10000);
         searchSourceBuilder.aggregation(spec_agg);
 
-        log.debug("构建的DSL语句 {}", searchSourceBuilder.toString());
+        log.info("构建的DSL语句 {}", searchSourceBuilder.toString());
 
         SearchRequest searchRequest = new SearchRequest(new String[]{PRODUCT_INDEX}, searchSourceBuilder);
         return searchRequest;
