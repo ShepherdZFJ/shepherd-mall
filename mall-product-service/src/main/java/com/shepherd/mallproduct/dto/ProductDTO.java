@@ -15,8 +15,5 @@ import java.util.List;
 public class ProductDTO extends ProductSpu {
     private Long productSpuId;
     private List<Long> productSpuIds;
-//    private List<String> subImageList;
-//    private List<Object> specItemList;
-//    private List<Object> paramItemList;
     private List<ProductSku> skuList;
 }

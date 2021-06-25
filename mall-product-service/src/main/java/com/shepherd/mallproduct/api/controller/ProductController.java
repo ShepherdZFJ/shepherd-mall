@@ -9,6 +9,7 @@ import com.shepherd.mallproduct.api.vo.ProductVO;
 import com.shepherd.mallproduct.dto.ProductDTO;
 import com.shepherd.mallproduct.dto.ProductParamDTO;
 import com.shepherd.mallproduct.dto.ProductSpecDTO;
+import com.shepherd.mallproduct.dto.SkuInfo;
 import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.entity.ProductSpec;
 import com.shepherd.mallproduct.query.ProductQuery;
@@ -122,6 +123,13 @@ public class ProductController {
     public ResponseVO upProductSpu(@PathVariable("spuId") Long spuId) {
         productService.upProductSpu(spuId);
         return ResponseVO.success();
+    }
+
+    @GetMapping("/sku/{skuId}")
+    public SkuInfo getSkuInfo(@PathVariable("skuId") Long skuId) {
+        SkuInfo skuInfo = productService.getSkuDetail(skuId);
+        return skuInfo;
+
     }
 
 }

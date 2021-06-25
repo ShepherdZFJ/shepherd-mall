@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mall.vo.ResponseVO;
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +64,16 @@ public class ProductServiceImpl implements ProductService {
     private BrandService brandService;
     @Resource
     private SearchService searchService;
+
+    private static ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+            .setNameFormat("product-pool-%d").build();
+
+    private static ExecutorService fixedThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors()*2,
+            Runtime.getRuntime().availableProcessors() * 40,
+            0L,
+            TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<Runnable>(Runtime.getRuntime().availableProcessors() * 20),
+            namedThreadFactory);
 
 
     @Override
@@ -270,6 +282,43 @@ public class ProductServiceImpl implements ProductService {
             }
 
         }
+    }
+
+    /**
+     * 使用completableFuture执行多线程任务安排，提高速度，completableFuture可以让某些异步线程任务串行化顺序执行
+     * 如果不要求某些异步任务串行化顺序执行，那么也可以JUC里面另一个countDownLatch实现
+     * @param skuId
+     * @return
+     */
+    @Override
+    public SkuInfo getSkuDetail(Long skuId) {
+        SkuInfo skuInfo = new SkuInfo();
+        CompletableFuture<ProductSku> skuFuture = CompletableFuture.supplyAsync(() -> {
+            ProductSku sku = productSkuDAO.selectById(skuId);
+            skuInfo.setSku(sku);
+            return sku;
+        }, fixedThreadPool);
+        CompletableFuture<ProductSpu> spuFuture = skuFuture.thenApplyAsync(sku -> {
+            ProductSpu spu = productSpuDAO.selectById(sku.getSpuId());
+            skuInfo.setSpu(spu);
+            return spu;
+        }, fixedThreadPool);
+        CompletableFuture<BrandDTO> brandFuture = skuFuture.thenApplyAsync(sku -> {
+            BrandDTO brandDTO = brandService.getBrandDetail(sku.getBrandId());
+            skuInfo.setBrand(brandDTO);
+            return brandDTO;
+        }, fixedThreadPool);
+        CompletableFuture<CategoryDTO> categoryFuture = skuFuture.thenApplyAsync(sku -> {
+            CategoryDTO categoryDTO = categoryService.getCategoryDetail(sku.getCategoryId());
+            skuInfo.setCategory(categoryDTO);
+            return categoryDTO;
+        }, fixedThreadPool);
+        try {
+            CompletableFuture.allOf(skuFuture, spuFuture, brandFuture, categoryFuture).get();
+        } catch (Exception e) {
+           log.error("<=======等候所有任务执行过程报错：======>", e);
+        }
+        return skuInfo;
     }
 
     private ProductSpecDTO toProductSpecDTO(ProductSpec productSpec) {

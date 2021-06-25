@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.shepherd.mallproduct.dto.ProductDTO;
 import com.shepherd.mallproduct.dto.ProductParamDTO;
 import com.shepherd.mallproduct.dto.ProductSpecDTO;
+import com.shepherd.mallproduct.dto.SkuInfo;
 import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.query.ProductQuery;
 
@@ -62,6 +63,8 @@ public interface ProductService {
      * @param spuId
      */
     void upProductSpu(Long spuId);
+
+    SkuInfo getSkuDetail(Long skuId);
 
 
 }
