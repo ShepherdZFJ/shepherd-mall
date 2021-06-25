@@ -1,4 +1,4 @@
-package com.shepherd.mallsearch.api.VO;
+package com.shepherd.mallsearch.api.vo;
 
 import lombok.Data;
 
