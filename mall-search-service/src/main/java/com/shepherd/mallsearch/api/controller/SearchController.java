@@ -3,7 +3,7 @@ package com.shepherd.mallsearch.api.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.shepherd.mall.enums.ResponseStatusEnum;
 import com.shepherd.mall.vo.ResponseVO;
-import com.shepherd.mallsearch.api.VO.SearchResult;
+import com.shepherd.mallsearch.api.vo.SearchResult;
 import com.shepherd.mallsearch.api.service.SearchService;
 import com.shepherd.mallsearch.dto.ProductSku;
 import com.shepherd.mallsearch.param.SearchParam;

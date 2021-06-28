@@ -1,7 +1,6 @@
 package com.shepherd.mallsearch.api.service;
 
-import com.shepherd.mall.vo.PageInfo;
-import com.shepherd.mallsearch.api.VO.SearchResult;
+import com.shepherd.mallsearch.api.vo.SearchResult;
 import com.shepherd.mallsearch.dto.ProductSku;
 import com.shepherd.mallsearch.param.SearchParam;
 
