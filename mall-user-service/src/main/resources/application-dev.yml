@@ -27,6 +27,10 @@ spring:
     nacos:
       discovery:
         server-addr: 10.10.0.14:8848
+  thymeleaf:
+    cache: false
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/templates/
 
 #mybatis
 mybatis-plus:
@@ -69,6 +73,11 @@ swagger-web:
   contact-url:  "https://github.com/ICoder0"
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.malluser.api.controller"
+
+
+
+
+
 
 
 
