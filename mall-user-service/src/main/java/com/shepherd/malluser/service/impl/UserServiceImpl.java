@@ -16,6 +16,7 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.shepherd.mall.base.CasProperties;
 import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.exception.BusinessException;
@@ -246,6 +247,15 @@ public class UserServiceImpl implements UserService {
         userDTO.setUsername(user.getNickname());
         userDTO.setClientId("mall-user");
         return userDTO;
+    }
+
+    @Override
+    public UserDTO getUserInfoByPhoneNumber(String phoneNumber) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getPhone, phoneNumber);
+        queryWrapper.eq(User::getIsDelete, CommonConstant.NOT_DEL);
+        User user = userDAO.selectOne(queryWrapper);
+        return toUserDTO(user);
     }
 
     private UserDTO loginByLocal(UserDTO userDTO, HttpServletRequest request, HttpServletResponse response) {

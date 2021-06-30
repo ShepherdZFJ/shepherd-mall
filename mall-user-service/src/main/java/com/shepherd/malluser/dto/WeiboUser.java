@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 2021/6/28 16:25
  */
 @Data
-public class SocialUser {
+public class WeiboUser {
 
     private String access_token;
 

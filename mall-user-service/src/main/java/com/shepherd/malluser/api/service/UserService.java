@@ -30,4 +30,6 @@ public interface UserService {
 
     UserDTO loadUserByUsername(String name);
 
+    UserDTO getUserInfoByPhoneNumber(String phoneNumber);
+
 }

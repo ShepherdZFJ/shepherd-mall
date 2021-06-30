@@ -3,7 +3,6 @@ package com.shepherd.malluser.api.controller;
 import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.malluser.api.service.UserService;
-import com.shepherd.malluser.api.vo.LoginVO;
 import com.shepherd.malluser.api.vo.UserVO;
 import com.shepherd.malluser.dto.TokenResponse;
 import com.shepherd.malluser.dto.UserDTO;
