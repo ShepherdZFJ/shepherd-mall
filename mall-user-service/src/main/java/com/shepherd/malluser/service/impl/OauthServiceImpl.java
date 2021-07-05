@@ -3,10 +3,9 @@ package com.shepherd.malluser.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.shepherd.mall.exception.BusinessException;
-import com.shepherd.mall.utils.HttpUtils;
+import com.shepherd.mall.utils.HttpUtil;
 import com.shepherd.malluser.api.service.OauthService;
 import com.shepherd.malluser.api.service.UserService;
 import com.shepherd.malluser.api.vo.LoginResponseVO;
@@ -19,7 +18,6 @@ import com.shepherd.malluser.entity.ThirdOauth;
 import com.shepherd.malluser.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -68,7 +66,7 @@ public class OauthServiceImpl implements OauthService {
         //1、根据用户授权返回的code换取access_token
         HttpResponse response = null;
         try {
-            response = HttpUtils.doPost("https://api.weibo.com", "/oauth2/access_token", "post", new HashMap<>(), map, new HashMap<>());
+            response = HttpUtil.doPost("https://api.weibo.com", "/oauth2/access_token", "post", new HashMap<>(), map, new HashMap<>());
         } catch (Exception e) {
             log.error("根据code调用微博获取access_token接口失败", e);
             throw new BusinessException("根据code调用微博获取access_token接口失败");
@@ -140,7 +138,7 @@ public class OauthServiceImpl implements OauthService {
             query.put("uid", oauth.getOutId().toString());
             HttpResponse response = null;
             try {
-                response = HttpUtils.doGet("https://api.weibo.com", "/2/users/show.json", "get", new HashMap<>(), query);
+                response = HttpUtil.doGet("https://api.weibo.com", "/2/users/show.json", "get", new HashMap<>(), query);
             } catch (Exception e) {
                 e.printStackTrace();
             }
