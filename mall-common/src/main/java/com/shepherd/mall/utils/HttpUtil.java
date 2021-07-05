@@ -35,7 +35,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2021/6/28 16:32
  */
-public class HttpUtils {
+public class HttpUtil {
 
     /**
      * get
