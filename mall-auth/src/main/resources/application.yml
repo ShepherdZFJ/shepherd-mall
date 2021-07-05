@@ -3,19 +3,30 @@ server:
 
 spring:
   application:
-    name: red-book-auth-service
+    name: mall-auth-service
   profiles:
     active: dev
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: 123456
-    url: jdbc:mysql://localhost:3306/mall?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8001/eureka/
+  spring:
+    application:
+      name: mall-auth-service
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: root
+      url: jdbc:mysql://10.10.0.18:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    jackson:
+      time-zone: GMT+8
+      date-format: yyyy-MM-dd HH:mm:ss
+      #设置返回json数据null字段不显示
+      default-property-inclusion: non_null
+    redis:
+      host: 10.10.0.18
+      port: 6379
+      timeout: 300ms # 连接超时时间（毫秒）
+    cloud:
+      nacos:
+        discovery:
+          server-addr: 10.10.0.14:8848
 feign:
   okhttp:
     enabled: true

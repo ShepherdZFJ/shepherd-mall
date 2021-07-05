@@ -7,29 +7,21 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: zfj126289.,
-    url: jdbc:mysql://47.114.179.146:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    password: root
+    url: jdbc:mysql://10.10.0.18:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     #设置返回json数据null字段不显示
     default-property-inclusion: non_null
   redis:
-    host: 39.102.83.104 # Redis服务器地址
-    database: 0 # Redis数据库索引（默认为0）
-    port: 6699 # Redis服务器连接端口
-    password: # Redis服务器连接密码（默认为空）
+    host: 10.10.0.18
+    port: 6379
     timeout: 300ms # 连接超时时间（毫秒）
-  rabbitmq:
-    host: 39.102.83.104
-    port: 15672
-    virtual-host: /mall
-    username: guest
-    password: guest
-eureka:
-  client:
-    service-url:
-      defaultZone: http://47.114.179.146:8001/eureka/
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
 
 #mybatis
 mybatis-plus:
