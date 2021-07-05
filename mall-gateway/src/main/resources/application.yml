@@ -14,36 +14,10 @@ spring:
           uri: lb://mall-auth-service
           predicates:
             - Path=/api/mall/auth/**
-          filters:
-            - StripPrefix=1
-        - id: mall-admin
-          uri: lb://mall-admin
-          predicates:
-            - Path=/mall-admin/**
-          filters:
-            - StripPrefix=1
         - id: mall-user-service
-          uri: lb://mall-user-servicel
+          uri: lb://mall-user-service
           predicates:
             - Path=/api/mall/user/**
-          filters:
-            - StripPrefix=1
-        - id: mall-search
-          uri: lb://mall-search
-          predicates:
-            - Path=/mall-search/**
-          filters:
-            - StripPrefix=1
-        - id: mall-demo
-          uri: lb://mall-demo
-          predicates:
-            - Path=/mall-demo/**
-          filters:
-            - StripPrefix=1
-        - id: mall-product
-          uri: lb://mall-product-service
-          predicates:
-            - Path=/api/mall/product/**
 #          filters:
 #            - StripPrefix=1
     nacos:
