@@ -20,7 +20,7 @@ public class ApplicationListenerConfig implements ApplicationListener<ContextRef
     private QuartzBindOperationConfig quartzBindOperationConfig;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        quartzBindOperationConfig.scheduleBind();
+//        quartzBindOperationConfig.scheduleBind();
     }
 
 }

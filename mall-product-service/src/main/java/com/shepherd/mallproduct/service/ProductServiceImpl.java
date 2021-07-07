@@ -321,6 +321,12 @@ public class ProductServiceImpl implements ProductService {
         return skuInfo;
     }
 
+    @Override
+    public ProductSkuDTO getProductSku(Long skuId) {
+        ProductSku productSku = productSkuDAO.selectById(skuId);
+        return toProductSkuDTO(productSku);
+    }
+
     private ProductSpecDTO toProductSpecDTO(ProductSpec productSpec) {
         if (productSpec == null) {
             return null;
@@ -360,6 +366,9 @@ public class ProductServiceImpl implements ProductService {
         }
         ProductSkuDTO productSkuDTO = MallBeanUtil.copy(productSku, ProductSkuDTO.class);
         productSkuDTO.setSkuId(productSku.getId());
+        if(StringUtils.isNotBlank(productSku.getSpec())) {
+            productSkuDTO.setSpecMap(JSON.parseObject(productSku.getSpec(), Map.class));
+        }
         return productSkuDTO;
     }
 }

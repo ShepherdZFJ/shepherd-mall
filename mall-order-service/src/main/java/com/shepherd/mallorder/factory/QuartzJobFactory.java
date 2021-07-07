@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @date 2021/5/20 18:36
  */
 @Component
-public   class QuartzJobFactory  extends SpringBeanJobFactory {
+public class QuartzJobFactory  extends SpringBeanJobFactory {
     @Autowired
     private AutowireCapableBeanFactory capableBeanFactory;
 

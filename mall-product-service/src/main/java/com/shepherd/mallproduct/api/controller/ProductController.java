@@ -6,10 +6,7 @@ import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mall.vo.ResponseVO;
 import com.shepherd.mallproduct.api.service.ProductService;
 import com.shepherd.mallproduct.api.vo.ProductVO;
-import com.shepherd.mallproduct.dto.ProductDTO;
-import com.shepherd.mallproduct.dto.ProductParamDTO;
-import com.shepherd.mallproduct.dto.ProductSpecDTO;
-import com.shepherd.mallproduct.dto.SkuInfo;
+import com.shepherd.mallproduct.dto.*;
 import com.shepherd.mallproduct.entity.ProductSku;
 import com.shepherd.mallproduct.entity.ProductSpec;
 import com.shepherd.mallproduct.query.ProductQuery;
@@ -125,11 +122,18 @@ public class ProductController {
         return ResponseVO.success();
     }
 
-    @GetMapping("/sku/{skuId}")
+    @GetMapping("/{skuId}")
+    @ApiOperation("查询商品详情")
     public SkuInfo getSkuInfo(@PathVariable("skuId") Long skuId) {
         SkuInfo skuInfo = productService.getSkuDetail(skuId);
         return skuInfo;
+    }
 
+    @GetMapping("/sku/{skuId}")
+    @ApiOperation("查询商品sku信息")
+    public ProductSkuDTO getProductSku(@PathVariable("skuId") Long skuId) {
+        ProductSkuDTO productSku = productService.getProductSku(skuId);
+        return productSku;
     }
 
 }

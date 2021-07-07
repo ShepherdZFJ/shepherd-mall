@@ -54,12 +54,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- swagger -->
-        <!--        <dependency>-->
-        <!--            <groupId>io.swagger</groupId>-->
-        <!--            <artifactId>swagger-annotations</artifactId>-->
-        <!--            <version>1.5.22</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -80,11 +74,6 @@
             <version>1.1</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-quartz</artifactId>-->
-<!--        </dependency>-->
-
         <!--quartz依赖 -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -98,6 +87,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>2.2.3.RELEASE</version>
         </dependency>
     </dependencies>
 
