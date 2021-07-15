@@ -18,6 +18,14 @@ spring:
           uri: lb://mall-user-service
           predicates:
             - Path=/api/mall/user/**
+        - id: mall-search
+          uri: lb://mall-search
+          predicates:
+            - Path=/mall-search/**
+        - id: mall-product
+          uri: lb://mall-product-service
+          predicates:
+            - Path=/api/mall/product/**
 #          filters:
 #            - StripPrefix=1
     nacos:

@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: mall-user-service
-  cloud:
-    nacos:
-      config:
-        server-addr: 10.10.0.14:8848
