@@ -12,7 +12,7 @@ import lombok.Data;
 public class LoginVO {
 
     @ApiModelProperty("用户ID")
-    private String userId;
+    private Long userId;
 
     @ApiModelProperty("ticket，有效时间20s")
     private String ticket;
