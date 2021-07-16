@@ -70,10 +70,10 @@ public class UserController {
         //1.生成令牌
         String token = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(loginVO), null);
         //2.设置cookie中
-        Cookie cookie = new Cookie("Authorization", token);
+        Cookie cookie = new Cookie("authorization", token);
         response.addCookie(cookie);
         //3.设置头文件中
-        response.setHeader("Authorization", token);
+        //response.setHeader("Authorization", token);
         return token;
     }
 
@@ -95,7 +95,7 @@ public class UserController {
     @ResponseResultBody
     @GetMapping
     @ApiOperation("获取用户列表")
-    public List<UserDTO> getList() {
+    public List<UserDTO> getList(HttpServletRequest request) {
         return userService.getList();
     }
 
