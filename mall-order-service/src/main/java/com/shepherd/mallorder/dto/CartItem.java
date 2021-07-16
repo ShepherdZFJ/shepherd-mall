@@ -2,6 +2,7 @@ package com.shepherd.mallorder.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @date 2021/7/1 16:24
  */
 @Data
-public class CartItem {
+public class CartItem implements Serializable {
     private Long skuId;
 
     private Integer isCheck ;

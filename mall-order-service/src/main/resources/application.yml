@@ -15,6 +15,11 @@ spring:
     nacos:
       discovery:
         server-addr: 10.10.0.14:8848
+  rabbitmq:
+    host: 10.10.0.18
+    port: 5672
+    username: guest
+    password: guest
 
 
 micro-server:
@@ -58,3 +63,7 @@ swagger-web:
   contact-url:  "https://github.com/ICoder0"
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.mallorder.api.controller"
+
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN
