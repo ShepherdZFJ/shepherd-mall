@@ -64,7 +64,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         //获取请求的URI
         String path = request.getURI().getPath();
 
-        //如果是登录、goods等开放的微服务[这里的goods部分开放],则直接放行,这里不做完整演示，完整演示需要设计一套权限系统
+        //如果是登录、放行
         if (path.startsWith("/api/mall/user/login")) {
             //放行
             Mono<Void> filter = chain.filter(exchange);
@@ -100,6 +100,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
 
         //放行
+        //按照相关规范。微服务之间请求的携带信息一般都放在header里面
+        request.mutate().header(AUTHORIZE_TOKEN, token);
         return chain.filter(exchange);
     }
 

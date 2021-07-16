@@ -26,6 +26,12 @@ spring:
           uri: lb://mall-product-service
           predicates:
             - Path=/api/mall/product/**
+        - id: mall-order
+          uri: lb://mall-order-service
+          predicates:
+            - Path=/api/mall/order/**
+            - Path=/api/mall/cart/**
+
 #          filters:
 #            - StripPrefix=1
     nacos:
@@ -55,3 +61,9 @@ management: #开启SpringBoot Admin的监控
   endpoint:
     health:
       show-details: always
+
+
+
+logging:
+  level:
+    com.alibaba.nacos.client.*: WARN
