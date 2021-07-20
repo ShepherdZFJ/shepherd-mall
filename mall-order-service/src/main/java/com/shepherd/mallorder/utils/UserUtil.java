@@ -1,10 +1,7 @@
-package com.shepherd.mallorder.Utils;
+package com.shepherd.mallorder.utils;
 
 import com.shepherd.mall.vo.LoginVO;
 import com.shepherd.mallorder.interceptor.AuthInterceptor;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * @author fjzheng

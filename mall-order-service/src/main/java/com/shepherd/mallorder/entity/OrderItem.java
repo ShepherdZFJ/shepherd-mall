@@ -5,7 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Date;
+
 
 /**
  * @author fjzheng
@@ -19,6 +20,7 @@ public class OrderItem {
     private Long id;
     private Long orderId;
     private String orderNo;
+    private Long spuId;
     private Long skuId;
     private String name;
     private String image;
@@ -30,4 +32,6 @@ public class OrderItem {
     private BigDecimal payAmount;
     private Integer isDelete;
     private Integer isReturn;
+    private Date createTime;
+    private Date updateTime;
 }

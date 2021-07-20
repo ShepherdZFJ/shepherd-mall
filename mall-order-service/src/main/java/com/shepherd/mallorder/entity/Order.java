@@ -29,7 +29,7 @@ public class Order {
     private Date updateTime;
     private Date payTime;
     private Date deliveryTime;
-    private Date finishTime;
+    private Date endTime;
     private Date closeTime;
     private String deliveryCompanyName;
     private String deliveryNo;

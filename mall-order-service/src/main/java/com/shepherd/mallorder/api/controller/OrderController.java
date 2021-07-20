@@ -1,7 +1,7 @@
 package com.shepherd.mallorder.api.controller;
 
 import com.shepherd.mall.vo.LoginVO;
-import com.shepherd.mallorder.Utils.UserUtil;
+import com.shepherd.mallorder.utils.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
