@@ -29,8 +29,8 @@ spring:
         - id: mall-order
           uri: lb://mall-order-service
           predicates:
-            - Path=/api/mall/order/**
-            - Path=/api/mall/cart/**
+            - Path=/api/mall/order/**, /api/mall/cart/**
+
 
 #          filters:
 #            - StripPrefix=1
