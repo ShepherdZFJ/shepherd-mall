@@ -327,6 +327,15 @@ public class ProductServiceImpl implements ProductService {
         return toProductSkuDTO(productSku);
     }
 
+    @Override
+    public List<ProductSkuDTO> getSkuPrice(List<Long> skuIds) {
+        QueryWrapper<ProductSku> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "price");
+        queryWrapper.in("id", skuIds);
+        List<ProductSkuDTO> productSkuDTOList = productSkuDAO.selectList(queryWrapper).parallelStream().map(productSku -> toProductSkuDTO(productSku)).collect(Collectors.toList());
+        return productSkuDTOList;
+    }
+
     private ProductSpecDTO toProductSpecDTO(ProductSpec productSpec) {
         if (productSpec == null) {
             return null;

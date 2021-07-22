@@ -136,4 +136,11 @@ public class ProductController {
         return productSku;
     }
 
+    @GetMapping("/sku/price")
+    @ApiOperation("批量查询商品的最新价格")
+    public List<ProductSkuDTO> getSkuPrice(ProductVO productVO) {
+        List<ProductSkuDTO> productSkuDTOList = productService.getSkuPrice(productVO.getSkuIds());
+        return productSkuDTOList;
+    }
+
 }

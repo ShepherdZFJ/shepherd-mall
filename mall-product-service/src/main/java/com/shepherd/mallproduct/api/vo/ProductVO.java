@@ -28,4 +28,5 @@ public class ProductVO {
     private Long productSpuId;
     private List<Long> productSpuIds;
     private List<ProductSku> skuList;
+    private List<Long> skuIds;
 }

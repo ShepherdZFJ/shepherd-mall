@@ -65,5 +65,7 @@ public interface ProductService {
 
     ProductSkuDTO getProductSku(Long skuId);
 
+    List<ProductSkuDTO> getSkuPrice(List<Long> skuIds);
+
 
 }
