@@ -9,7 +9,9 @@ import com.shepherd.malluser.api.vo.LoginVO;
 import com.shepherd.malluser.api.vo.UserVO;
 import com.shepherd.malluser.dto.TokenResponse;
 import com.shepherd.malluser.dto.UserDTO;
+import com.shepherd.malluser.utils.UserUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/mall/user")
 @Api(tags = "用户相关接口")
+@ResponseResultBody
 public class UserController {
     private static final String AUTHORIZE_TOKEN = "authorization";
     @Resource
@@ -109,9 +112,17 @@ public class UserController {
     }
 
     @ApiOperation("根据用户名查询用户")
-    @GetMapping("loadUser")
+    @GetMapping("/loadUser")
     public UserDTO loadUserByUsername(@RequestParam String username) {
         return userService.loadUserByUsername(username);
+    }
+
+    @ApiOperation("查询用户积分")
+    @GetMapping("/loadUser")
+    public Integer getUserIntegration() {
+        Long userId = UserUtil.currentUser().getUserId();
+        Integer integration = userService.getUserIntegration(userId);
+        return integration;
     }
 
 

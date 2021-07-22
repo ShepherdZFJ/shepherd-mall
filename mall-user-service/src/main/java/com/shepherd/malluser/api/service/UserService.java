@@ -32,4 +32,6 @@ public interface UserService {
 
     UserDTO getUserInfoByPhoneNumber(String phoneNumber);
 
+    Integer getUserIntegration(Long userId);
+
 }

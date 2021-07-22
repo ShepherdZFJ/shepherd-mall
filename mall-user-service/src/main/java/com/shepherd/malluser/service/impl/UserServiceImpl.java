@@ -258,6 +258,12 @@ public class UserServiceImpl implements UserService {
         return toUserDTO(user);
     }
 
+    @Override
+    public Integer getUserIntegration(Long userId) {
+        User user = userDAO.selectById(userId);
+        return user.getIntegration() == null ? 0:user.getIntegration();
+    }
+
     private UserDTO loginByLocal(UserDTO userDTO, HttpServletRequest request, HttpServletResponse response) {
         //判断手机号是否登录过
         UserDTO userDTO1 = findUserByPhoneNumber(userDTO.getPhone());
