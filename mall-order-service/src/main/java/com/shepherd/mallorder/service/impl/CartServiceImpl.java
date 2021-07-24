@@ -7,6 +7,7 @@ import com.shepherd.mall.exception.BusinessException;
 import com.shepherd.mall.utils.NumberUtil;
 import com.shepherd.mall.vo.ResponseVO;
 import com.shepherd.mallorder.Constant.CartConstant;
+import com.shepherd.mallorder.SkuQuery;
 import com.shepherd.mallorder.api.service.CartService;
 import com.shepherd.mallorder.api.vo.CartVO;
 import com.shepherd.mallorder.dto.CartDTO;
@@ -130,6 +131,27 @@ public class CartServiceImpl implements CartService {
         BigDecimal totalAmount = cartItemList.stream().map(CartItem::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         cart.setTotalAmount(totalAmount);
         return cart;
+    }
+
+    @Override
+    public List<CartItem> getCheckCartItemList(Long userId) {
+        List<CartItem> cartItemList = getCartItemList(userId);
+        List<CartItem> checkItemList = cartItemList.parallelStream().filter(cartItem -> Objects.equals(cartItem.getIsCheck(),
+                CartConstant.IS_CHECK)).collect(Collectors.toList());
+        List<Long> skuIds = checkItemList.parallelStream().map(CartItem::getSkuId).collect(Collectors.toList());
+        SkuQuery query = new SkuQuery();
+        query.setSkuIds(skuIds);
+        ResponseVO<List<ProductSku>> responseVO = productService.getSkuPrice(query);
+        List<ProductSku> skuList = responseVO.getData();
+        cartItemList.forEach(cartItem -> {
+            //设置最新价格
+            ProductSku sku = skuList.parallelStream().filter(productSku -> Objects.equals(productSku.getSkuId(),
+                    cartItem.getSkuId())).findFirst().orElse(null);
+            if (sku != null) {
+                cartItem.setPrice(sku.getPrice());
+            }
+        });
+        return checkItemList;
     }
 
     private BoundHashOperations<String, Object, Object> getCartHash(Long userId) {

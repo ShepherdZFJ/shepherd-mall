@@ -18,4 +18,6 @@ public interface CartService {
     void deleteCartItemBatch(List<Long> skuIds, Long userId);
 
     CartDTO getCart(Long userId);
+
+    List<CartItem> getCheckCartItemList(Long userId);
 }
