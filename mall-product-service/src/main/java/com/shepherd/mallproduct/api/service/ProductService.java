@@ -16,6 +16,7 @@ import java.util.List;
 public interface ProductService {
     /**
      * 添加商品
+     *
      * @param productDTO
      * @return
      */
@@ -23,13 +24,15 @@ public interface ProductService {
 
     /**
      * 批量删除商品
+     *
      * @param productSpuIds
      * @return
      */
     Boolean delBatch(List<Long> productSpuIds);
 
     /**
-     *更新商品
+     * 更新商品
+     *
      * @param productDTO
      * @return
      */
@@ -37,6 +40,7 @@ public interface ProductService {
 
     /**
      * 分页查询商品列表
+     *
      * @param query
      * @return
      */
@@ -44,6 +48,7 @@ public interface ProductService {
 
     /**
      * 根据id获取商品详情
+     *
      * @param productId
      * @return
      */
@@ -57,6 +62,7 @@ public interface ProductService {
 
     /**
      * 上架商品到ES中
+     *
      * @param spuId
      */
     void upProductSpu(Long spuId);

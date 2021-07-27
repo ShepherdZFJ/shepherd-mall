@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     private static ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
             .setNameFormat("product-pool-%d").build();
 
-    private static ExecutorService fixedThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors()*2,
+    private static ExecutorService fixedThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() * 2,
             Runtime.getRuntime().availableProcessors() * 40,
             0L,
             TimeUnit.MILLISECONDS,
@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
         productSpu.setSaleCount(CommonConstant.DEFAULT_SALE_COUNT);
         int insert = productSpuDAO.insert(productSpu);
         if (insert > 0) {
-           addProductSku(productSpu, productDTO.getSkuList());
+            addProductSku(productSpu, productDTO.getSkuList());
         }
         return productSpu.getId();
     }
@@ -104,8 +104,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     void addProductSku(ProductSpu productSpu, List<ProductSku> productSkuList) {
-        if (!CollectionUtils.isEmpty(productSkuList))
-        {
+        if (!CollectionUtils.isEmpty(productSkuList)) {
 //            CategoryDTO categoryDTO = categoryService.getCategoryDetail(productSpu.getCategoryId());
 //            BrandDTO brandDTO = brandService.getBrandDetail(productSpu.getBrandId());
             productSkuList.forEach(productSku -> {
@@ -130,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
 //                            // 获取SPU的名称 拼接 即可
 //                            name += " " + map.get(key);
 //                        }
-                    map.forEach((k,v) ->{
+                    map.forEach((k, v) -> {
                         skuName.append(" ").append(v);
                     });
                 }
@@ -149,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
         UpdateWrapper<ProductSpu> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", productSpuIds);
         updateWrapper.set("is_delete", CommonConstant.DEL);
-        updateWrapper.set("update_time",new Date());
+        updateWrapper.set("update_time", new Date());
         int update = productSpuDAO.update(new ProductSpu(), updateWrapper);
         if (update > 0) {
             delProductSku(productSpuIds);
@@ -186,6 +185,7 @@ public class ProductServiceImpl implements ProductService {
         updateWrapper.set(ProductSku::getUpdateTime, new Date());
         productSkuDAO.update(new ProductSku(), updateWrapper);
     }
+
     @Override
     public IPage<ProductDTO> getProductList(ProductQuery query) {
         if (query.getPageNo() == null) {
@@ -203,7 +203,7 @@ public class ProductServiceImpl implements ProductService {
             queryWrapper.like("name", query.getName());
         }
         queryWrapper.eq("is_delete", CommonConstant.NOT_DEL);
-        IPage<ProductSpu> page = productSpuDAO.selectPage(new Page<ProductSpu>(query.getPageNo(),query.getPageSize()), queryWrapper);
+        IPage<ProductSpu> page = productSpuDAO.selectPage(new Page<ProductSpu>(query.getPageNo(), query.getPageSize()), queryWrapper);
         List<ProductSpu> records = page.getRecords();
         Page<ProductDTO> dtoPage = new Page<>();
         dtoPage.setTotal(page.getTotal());
@@ -261,9 +261,9 @@ public class ProductServiceImpl implements ProductService {
                 String spec = productSkuDTO.getSpec();
                 Map map = JSONObject.parseObject(spec, Map.class);
                 productSkuDTO.setSpecMap(map);
-                productSkuDTO.setHasStock(productSkuDTO.getStock()>0);
+                productSkuDTO.setHasStock(productSkuDTO.getStock() > 0);
                 productSkuDTO.setHotScore(0l);
-                CategoryDTO category= categoryList.stream().filter(categoryDTO -> Objects.equals(categoryDTO.getId(), productSkuDTO.getCategoryId())).findFirst().orElse(null);
+                CategoryDTO category = categoryList.stream().filter(categoryDTO -> Objects.equals(categoryDTO.getId(), productSkuDTO.getCategoryId())).findFirst().orElse(null);
                 productSkuDTO.setCategoryName(category == null ? null : category.getName());
                 BrandDTO brand = brandList.stream().filter(brandDTO -> Objects.equals(brandDTO.getId(), productSkuDTO.getBrandId())).findFirst().orElse(null);
                 productSkuDTO.setBrandName(brand == null ? null : brand.getName());
@@ -277,7 +277,7 @@ public class ProductServiceImpl implements ProductService {
                 updateWrapper.eq(ProductSpu::getIsDelete, CommonConstant.NOT_DEL);
                 updateWrapper.set(ProductSpu::getStatus, ProductConstant.PRODUCT_UP);
                 int update = productSpuDAO.update(new ProductSpu(), updateWrapper);
-            }else {
+            } else {
                 //todo: 调用search服务失败处理机制，重试或者抛出异常;接口幂等性
             }
 
@@ -287,6 +287,7 @@ public class ProductServiceImpl implements ProductService {
     /**
      * 使用completableFuture执行多线程任务安排，提高速度，completableFuture可以让某些异步线程任务串行化顺序执行
      * 如果不要求某些异步任务串行化顺序执行，那么也可以JUC里面另一个countDownLatch实现
+     *
      * @param skuId
      * @return
      */
@@ -316,7 +317,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             CompletableFuture.allOf(skuFuture, spuFuture, brandFuture, categoryFuture).get();
         } catch (Exception e) {
-           log.error("<=======等候所有任务执行过程报错：======>", e);
+            log.error("<=======等候所有任务执行过程报错：======>", e);
         }
         return skuInfo;
     }
@@ -375,7 +376,7 @@ public class ProductServiceImpl implements ProductService {
         }
         ProductSkuDTO productSkuDTO = MallBeanUtil.copy(productSku, ProductSkuDTO.class);
         productSkuDTO.setSkuId(productSku.getId());
-        if(StringUtils.isNotBlank(productSku.getSpec())) {
+        if (StringUtils.isNotBlank(productSku.getSpec())) {
             productSkuDTO.setSpecMap(JSON.parseObject(productSku.getSpec(), Map.class));
         }
         return productSkuDTO;

@@ -32,7 +32,7 @@ public class ProductController {
 
     @GetMapping
     @ApiOperation("获取商品列表")
-    public IPage<ProductDTO> getProductList(ProductQuery productQuery){
+    public IPage<ProductDTO> getProductList(ProductQuery productQuery) {
         IPage<ProductDTO> productDTOList = productService.getProductList(productQuery);
         return productDTOList;
     }
@@ -57,7 +57,7 @@ public class ProductController {
 
     @GetMapping("/{productSpuId}")
     public ProductDTO getProductDetail(@PathVariable("productSpuId") Long productSpuId) {
-        return  productService.getProductDetail(productSpuId);
+        return productService.getProductDetail(productSpuId);
 
     }
 
@@ -136,9 +136,9 @@ public class ProductController {
         return productSku;
     }
 
-    @GetMapping("/sku/price")
+    @PostMapping("/sku/price")
     @ApiOperation("批量查询商品的最新价格")
-    public List<ProductSkuDTO> getSkuPrice(ProductVO productVO) {
+    public List<ProductSkuDTO> getSkuPrice(@RequestBody ProductVO productVO) {
         List<ProductSkuDTO> productSkuDTOList = productService.getSkuPrice(productVO.getSkuIds());
         return productSkuDTOList;
     }
