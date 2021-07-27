@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: mall-warehoyse-service
+    name: mall-warehouse-service
   web:
     base-path: /api/mall/warehouse
   datasource:

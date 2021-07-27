@@ -92,7 +92,7 @@ public class WareSkuServiceImpl implements WareSkuService {
         queryWrapper.eq(WareSku::getIsDelete, CommonConstant.NOT_DEL);
         queryWrapper.eq(WareSku::getSkuId, skuId);
         queryWrapper.ge(WareSku::getStock, number);
-        List<Long> wareIds = wareSkuDAO.selectList(queryWrapper).parallelStream().map(WareSku::getId).collect(Collectors.toList());
+        List<Long> wareIds = wareSkuDAO.selectList(queryWrapper).parallelStream().map(WareSku::getWareId).collect(Collectors.toList());
         return wareIds;
 
     }
