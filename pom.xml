@@ -33,6 +33,8 @@
         <module>mall-auth</module>
         <module>mall-base-service</module>
         <module>mall-gateway</module>
+        <module>mall-warehouse</module>
+
     </modules>
 
     <dependencies>
