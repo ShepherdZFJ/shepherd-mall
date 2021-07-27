@@ -2,6 +2,8 @@ package com.shepherd.mallorder.api.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author fjzheng
  * @version 1.0
@@ -12,7 +14,7 @@ public class OrderSumbitVO {
     private Long addressId;
     private Integer payType;
     private String token;
-    private String payAmount;
+    private BigDecimal payAmount;
     private String remark;
 }
 

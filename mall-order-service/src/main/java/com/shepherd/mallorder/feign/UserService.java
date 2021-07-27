@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.0
  * @date 2021/7/20 19:06
  */
-@FeignClient(name="${micro-server.mall-user}",path = "/api/mall/user")
+@FeignClient(name = "${micro-server.mall-user}", path = "/api/mall/user")
 public interface UserService {
 
     @GetMapping("/address")

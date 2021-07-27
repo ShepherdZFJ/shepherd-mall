@@ -41,7 +41,7 @@ public class MallOrderServiceApplicationTests {
 
     @Test
     public void sendMessage() {
-        String msg="hello, shepherd发送的消息";
+        String msg = "hello, shepherd发送的消息";
         rabbitTemplate.convertAndSend("code-direct-exchange", "direct.key", msg);
         log.info("消息发送完成：{}", msg);
     }
@@ -59,14 +59,9 @@ public class MallOrderServiceApplicationTests {
     }
 
 
-
-
-
-
     @Test
     public void contextLoads() {
     }
-
 
 
 }

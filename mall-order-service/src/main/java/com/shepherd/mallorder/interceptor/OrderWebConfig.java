@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 public class OrderWebConfig implements WebMvcConfigurer {
     @Resource
     private AuthInterceptor authInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor);

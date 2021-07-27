@@ -14,4 +14,5 @@ import java.util.List;
 @Data
 public class OrderDTO extends Order {
     private List<OrderItem> orderItemList;
+    private Long orderId;
 }

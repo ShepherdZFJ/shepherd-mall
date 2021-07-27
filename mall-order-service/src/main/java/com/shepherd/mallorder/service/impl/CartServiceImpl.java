@@ -47,7 +47,7 @@ public class CartServiceImpl implements CartService {
     private static ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
             .setNameFormat("cart-pool-%d").build();
 
-    private static ExecutorService fixedThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors()*2,
+    private static ExecutorService fixedThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() * 2,
             Runtime.getRuntime().availableProcessors() * 40,
             0L,
             TimeUnit.MILLISECONDS,
@@ -58,7 +58,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void addCartItem(Long skuId, Integer number, Long userId) {
         BoundHashOperations<String, Object, Object> cartHash = getCartHash(userId);
-        String cartSkuInfo  = (String)cartHash.get(skuId);
+        String cartSkuInfo = (String) cartHash.get(skuId);
         //如果没有就添加数据
         if (StringUtils.isBlank(cartSkuInfo)) {
 
@@ -92,7 +92,7 @@ public class CartServiceImpl implements CartService {
     public void updateCartItem(CartItem cartItem, Long userId) {
         BoundHashOperations<String, Object, Object> cartHash = getCartHash(userId);
         Long skuId = cartItem.getSkuId();
-        String skuInfo = (String)cartHash.get(skuId);
+        String skuInfo = (String) cartHash.get(skuId);
         CartItem item = JSON.parseObject(skuInfo, CartItem.class);
         if (cartItem.getIsCheck() != null) {
             item.setIsCheck(cartItem.getIsCheck());
@@ -150,6 +150,8 @@ public class CartServiceImpl implements CartService {
             if (sku != null) {
                 cartItem.setPrice(sku.getPrice());
             }
+            cartItem.setPayAmount(cartItem.getPrice().multiply(new BigDecimal(cartItem.getNumber().toString())));
+            cartItem.setTotalAmount(cartItem.getPrice().multiply(new BigDecimal(cartItem.getNumber().toString())));
         });
         return checkItemList;
     }
@@ -162,7 +164,7 @@ public class CartServiceImpl implements CartService {
 
     private CartItem getCartItem(Long userId, Long skuId) {
         BoundHashOperations<String, Object, Object> cartHash = getCartHash(userId);
-        String skuInfo = (String)cartHash.get(skuId);
+        String skuInfo = (String) cartHash.get(skuId);
         CartItem cartItem = JSON.parseObject(skuInfo, CartItem.class);
         return cartItem;
     }

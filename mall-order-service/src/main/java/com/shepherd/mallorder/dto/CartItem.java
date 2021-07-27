@@ -15,7 +15,7 @@ import java.util.List;
 public class CartItem implements Serializable {
     private Long skuId;
 
-    private Integer isCheck ;
+    private Integer isCheck;
 
     private String name;
 

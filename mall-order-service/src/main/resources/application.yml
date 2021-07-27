@@ -20,12 +20,15 @@ spring:
     port: 5672
     username: guest
     password: guest
+  redis:
+    host: 10.10.0.18
+    port: 6379
 
 feign:
-#  hystrix:
-#    enabled: true
-#  httpclient:
-#    connection-timeout: 10000
+  #  hystrix:
+  #    enabled: true
+  #  httpclient:
+  #    connection-timeout: 10000
   client:
     config:
       default: # 指定feignclients对应的名称 如果指定的是default 表示全局所有的client 的超时时间设置
@@ -47,6 +50,7 @@ feign:
 micro-server:
   mall-product: mall-product-service
   mall-user: mall-user-service
+  mall-warehouse: mall-warehouse-service
 
 #mybatis
 mybatis-plus:
@@ -83,11 +87,10 @@ swagger-web:
   api-title: "Shepherd-mall Restful Apis"
   api-description: "Shepherd-mall swagger-ui"
   contact-name: "shepherd"
-  contact-url:  "https://github.com/ICoder0"
+  contact-url: "https://github.com/ICoder0"
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.mallorder.api.controller"
 
 logging:
   level:
     com.alibaba.nacos.client.config.impl: WARN
-

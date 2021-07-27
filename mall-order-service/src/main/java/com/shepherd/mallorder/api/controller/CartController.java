@@ -5,6 +5,7 @@ import com.shepherd.mallorder.api.service.CartService;
 import com.shepherd.mallorder.api.vo.CartVO;
 import com.shepherd.mallorder.dto.CartDTO;
 import com.shepherd.mallorder.dto.CartItem;
+import com.shepherd.mallorder.utils.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,8 @@ public class CartController {
     @PostMapping
     @ApiOperation("添加商品到购物车")
     public void addCartItem(@RequestBody CartItem cartItem) {
-        cartService.addCartItem(cartItem.getSkuId(), cartItem.getNumber(), 1l);
+        Long userId = UserUtil.currentUser().getUserId();
+        cartService.addCartItem(cartItem.getSkuId(), cartItem.getNumber(), userId);
     }
 
     @PutMapping
@@ -37,7 +39,7 @@ public class CartController {
 
     @DeleteMapping
     @ApiOperation("删除购物车商品(批量)")
-    public void deleteCartItemBatch(@RequestBody  CartVO cartVO) {
+    public void deleteCartItemBatch(@RequestBody CartVO cartVO) {
         cartService.deleteCartItemBatch(cartVO.getSkuIds(), 1l);
     }
 

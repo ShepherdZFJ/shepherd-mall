@@ -2,6 +2,8 @@ package com.shepherd.mallorder.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author fjzheng
  * @version 1.0
@@ -12,7 +14,7 @@ public class OrderSubmitDTO {
     private Long addressId;
     private Integer payType;
     private String token;
-    private String payAmount;
+    private BigDecimal payAmount;
     private String remark;
     private Long userId;
 }

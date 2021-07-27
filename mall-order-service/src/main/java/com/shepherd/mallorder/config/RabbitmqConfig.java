@@ -15,6 +15,7 @@ public class RabbitmqConfig {
 
     /**
      * 设置MQ发送消息的序列化规则
+     *
      * @return
      */
     @Bean

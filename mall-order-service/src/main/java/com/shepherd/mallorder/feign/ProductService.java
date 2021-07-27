@@ -6,6 +6,8 @@ import com.shepherd.mallorder.dto.ProductSku;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -21,8 +23,8 @@ public interface ProductService {
     @GetMapping("/sku/{skuId}")
     ResponseVO<ProductSku> getSku(@PathVariable("skuId") Long skuId);
 
-    @GetMapping("/sku/price")
-    ResponseVO<List<ProductSku>> getSkuPrice(SkuQuery query);
+    @PostMapping("/sku/price")
+    ResponseVO<List<ProductSku>> getSkuPrice(@RequestBody SkuQuery query);
 
 
 }

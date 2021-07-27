@@ -1,9 +1,11 @@
 package com.shepherd.mallorder.api.controller;
 
+import com.shepherd.mall.annotation.ResponseResultBody;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mall.vo.LoginVO;
 import com.shepherd.mallorder.api.service.OrderService;
 import com.shepherd.mallorder.api.vo.OrderSumbitVO;
+import com.shepherd.mallorder.dto.OrderConfirmDTO;
 import com.shepherd.mallorder.dto.OrderSubmitDTO;
 import com.shepherd.mallorder.utils.UserUtil;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +21,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController
+@ResponseResultBody
 @RequestMapping("/api/mall/order")
 public class OrderController {
     @Resource
@@ -32,9 +35,10 @@ public class OrderController {
 
     @GetMapping("/settlement")
     @ApiOperation("去结算")
-    public void settlement() {
+    public OrderConfirmDTO settlement() {
         Long userId = UserUtil.currentUser().getUserId();
-        orderService.settlement(userId);
+        OrderConfirmDTO orderConfirmDTO = orderService.settlement(userId);
+        return orderConfirmDTO;
 
     }
 

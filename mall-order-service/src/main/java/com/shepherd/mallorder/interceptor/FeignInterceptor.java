@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
+import java.util.Objects;
 
 /**
  * @author fjzheng
@@ -29,8 +30,12 @@ public class FeignInterceptor implements RequestInterceptor {
             if (headerNames != null) {
                 while (headerNames.hasMoreElements()) {
                     String name = headerNames.nextElement();
+                    // 跳过 content-length
+                    if (Objects.equals("content-length", name)){
+                        continue;
+                    }
                     String value = request.getHeader(name);
-                    requestTemplate.header(name,value);
+                    requestTemplate.header(name, value);
                 }
             }
         }

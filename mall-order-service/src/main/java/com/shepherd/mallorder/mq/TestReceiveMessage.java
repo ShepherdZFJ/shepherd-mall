@@ -15,7 +15,7 @@ public class TestReceiveMessage {
 
     @RabbitListener(queues = {"test-queue1"})
     public void receiveMessage(Object msg) {
-      log.info("接收到消息内容：{}", msg);
+        log.info("接收到消息内容：{}", msg);
 
     }
 }
