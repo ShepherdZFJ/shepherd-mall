@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class Address {
-    @TableId(type= IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Long id;
     private Long userId;
     private String name;

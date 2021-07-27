@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 public class UserWebConfig implements WebMvcConfigurer {
     @Resource
     private AuthInterceptor authInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor).excludePathPatterns("/api/mall/user/login");

@@ -22,7 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
     private static final String AUTHORIZE_TOKEN = "authorization";
-    public  static ThreadLocal<LoginVO> localUser = new ThreadLocal<>();
+    public static ThreadLocal<LoginVO> localUser = new ThreadLocal<>();
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //网关服务会把token放在header里面

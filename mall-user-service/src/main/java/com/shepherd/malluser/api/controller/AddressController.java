@@ -7,6 +7,7 @@ import com.shepherd.malluser.dto.AddressDTO;
 import com.shepherd.malluser.utils.UserUtil;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +34,12 @@ public class AddressController {
         Long userId = loginVO.getUserId();
         List<AddressDTO> addressList = addressService.getAddressList(userId);
         return addressList;
+    }
+
+    @GetMapping("/{id}")
+    public AddressDTO getAddressDetail(@PathVariable("id") Long id) {
+        AddressDTO addressDetail = addressService.getAddressDetail(id);
+        return addressDetail;
     }
 
 }

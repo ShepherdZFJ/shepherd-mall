@@ -35,6 +35,12 @@ public class AddressServiceImpl implements AddressService {
         return addressDTOList;
     }
 
+    @Override
+    public AddressDTO getAddressDetail(Long id) {
+        Address address = addressDAO.selectById(id);
+        return toAddressDTO(address);
+    }
+
     AddressDTO toAddressDTO(Address address) {
         if (address == null) {
             return null;

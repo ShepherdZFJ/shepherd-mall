@@ -32,7 +32,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/mall/user")
 @Api(tags = "用户相关接口")
-@ResponseResultBody
+//@ResponseResultBody
 public class UserController {
     private static final String AUTHORIZE_TOKEN = "authorization";
     @Resource
@@ -118,7 +118,8 @@ public class UserController {
     }
 
     @ApiOperation("查询用户积分")
-    @GetMapping("/loadUser")
+    @ResponseResultBody
+    @GetMapping("/integration")
     public Integer getUserIntegration() {
         Long userId = UserUtil.currentUser().getUserId();
         Integer integration = userService.getUserIntegration(userId);

@@ -12,4 +12,6 @@ import java.util.List;
 public interface AddressService {
 
     List<AddressDTO> getAddressList(Long userId);
+
+    AddressDTO getAddressDetail(Long id);
 }

@@ -11,7 +11,7 @@ import com.shepherd.malluser.interceptor.AuthInterceptor;
 public class UserUtil {
 
 
-    public static LoginVO currentUser(){
+    public static LoginVO currentUser() {
         return AuthInterceptor.localUser.get();
     }
 

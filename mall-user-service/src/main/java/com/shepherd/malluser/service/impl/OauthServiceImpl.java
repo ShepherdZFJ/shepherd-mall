@@ -50,9 +50,6 @@ public class OauthServiceImpl implements OauthService {
     private UserDAO userDAO;
 
 
-
-
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoginResponseVO weibo(String code) {
@@ -157,7 +154,7 @@ public class OauthServiceImpl implements OauthService {
 
                 User user = new User();
                 user.setPhone(phoneNumber);
-                user.setUserNo("shepherd_"+String.valueOf(System.currentTimeMillis()));
+                user.setUserNo("shepherd_" + String.valueOf(System.currentTimeMillis()));
                 user.setLastLoginTime(new Date());
                 user.setNickname(name);
                 user.setGender("m".equals(gender) ? 1 : 0);

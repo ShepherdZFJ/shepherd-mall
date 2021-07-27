@@ -30,7 +30,6 @@ public class OAuth2Controller {
     }
 
 
-
     @GetMapping(value = "/weibo/bind/{thirdOauthId}")
     public void bind(@PathVariable("thirdOauthId") Long thirdOauthId, @RequestParam("phoneNumber") String phoneNumber, HttpSession session) {
         oauthService.bind(thirdOauthId, phoneNumber, session);
