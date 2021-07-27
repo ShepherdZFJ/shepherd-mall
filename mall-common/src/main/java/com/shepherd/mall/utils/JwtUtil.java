@@ -26,6 +26,7 @@ public class JwtUtil {
 
     /**
      * 生成令牌
+     *
      * @param id
      * @param subject
      * @param ttlMillis
@@ -63,8 +64,8 @@ public class JwtUtil {
 
         //可以自定义载荷
         Map<String, Object> map = new HashMap<>();
-        map.put("address","余杭");
-        map.put("city","杭州");
+        map.put("address", "余杭");
+        map.put("city", "杭州");
         builder.addClaims(map);
         return builder.compact();
     }

@@ -13,8 +13,8 @@ import javax.validation.constraints.Min;
 public class BaseQuery {
 
     @Min(value = 1)
-    private Integer pageSize=20;
+    private Integer pageSize = 20;
 
     @Min(value = 1)
-    private Integer pageNo=1;
+    private Integer pageNo = 1;
 }

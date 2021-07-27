@@ -12,17 +12,19 @@ import java.util.List;
 @Data
 public class PageInfo<T> {
     private int total;
-    
+
     private int pageNo;
-    
+
     private int pageSize;
-    
+
     private int pages;
 
     private List<T> list;
 
-    public PageInfo(){}
-    public PageInfo(Integer pageNo,Integer pageSize) {
+    public PageInfo() {
+    }
+
+    public PageInfo(Integer pageNo, Integer pageSize) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
     }
@@ -39,7 +41,7 @@ public class PageInfo<T> {
                 i = 1;
             }
             pages = total / pageSize + i;
-        }else if(pageSize == 0){
+        } else if (pageSize == 0) {
             pages = 1;
         } else {
             throw new RuntimeException(String.format("无法计算总页数，每页记录数不合法，size:", pageSize));

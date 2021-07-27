@@ -1,7 +1,6 @@
 package com.shepherd.mall.utils;
 
 
-
 import com.shepherd.mall.base.CasProperties;
 
 import javax.servlet.http.Cookie;

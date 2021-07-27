@@ -75,14 +75,18 @@ public class ResponseResultBodyAdvice implements ResponseBodyAdvice<Object> {
         return this.handleException(ex, headers, request);
     }
 
-    /** 对BusinessException类返回返回结果的处理 */
+    /**
+     * 对BusinessException类返回返回结果的处理
+     */
     protected ResponseEntity<ResponseVO<?>> handleBusinessException(BusinessException ex, HttpHeaders headers, WebRequest request) {
         ResponseVO<?> body = ResponseVO.failure(ex.getResponseStatusEnum(), ex.getMessage());
         HttpStatus status = ex.getResponseStatusEnum().getHttpStatus();
         return this.handleExceptionInternal(ex, body, headers, status, request);
     }
 
-    /** 异常类的统一处理 */
+    /**
+     * 异常类的统一处理
+     */
     protected ResponseEntity<ResponseVO<?>> handleException(Exception ex, HttpHeaders headers, WebRequest request) {
         ResponseVO<?> body = ResponseVO.failure();
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;

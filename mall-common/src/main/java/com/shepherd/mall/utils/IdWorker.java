@@ -54,15 +54,14 @@ public class IdWorker {
     // 数据标识id部分
     private final long datacenterId;
 
-    public IdWorker(){
+    public IdWorker() {
         this.datacenterId = getDatacenterId(maxDatacenterId);
         this.workerId = getMaxWorkerId(datacenterId, maxWorkerId);
     }
+
     /**
-     * @param workerId
-     *            工作机器ID
-     * @param datacenterId
-     *            序列号
+     * @param workerId     工作机器ID
+     * @param datacenterId 序列号
      */
     public IdWorker(long workerId, long datacenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
@@ -74,6 +73,7 @@ public class IdWorker {
         this.workerId = workerId;
         this.datacenterId = datacenterId;
     }
+
     /**
      * 获取下一个ID
      *
@@ -165,8 +165,8 @@ public class IdWorker {
     public static void main(String[] args) {
         //推特  26万个不重复的ID
         //参数1 参数2 是在0 -31 之间
-        IdWorker idWorker = new IdWorker(0,1);
-        for (int i = 0; i <100 ; i++) {
+        IdWorker idWorker = new IdWorker(0, 1);
+        for (int i = 0; i < 100; i++) {
             System.out.println(idWorker.nextId());//用于生成唯一的ID
         }
     }

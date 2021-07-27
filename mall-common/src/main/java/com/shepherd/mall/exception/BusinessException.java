@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2020/6/24 14:08
  */
 @Data
-public class BusinessException extends RuntimeException{
+public class BusinessException extends RuntimeException {
 
     private String code;
     private ResponseStatusEnum responseStatusEnum;
