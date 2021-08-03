@@ -9,6 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="mall-product-service" />
         <module name="mall-base-service" />
+        <module name="mall-warehouse" />
+        <module name="mall-order-service" />
         <module name="mall-pay-service" />
         <module name="mall-user-service" />
         <module name="mall-search-service" />
@@ -20,7 +22,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mall-order-service" target="1.8" />
       <module name="mall-security" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -31,11 +32,13 @@
       <module name="mall-base-service" options="-parameters" />
       <module name="mall-common" options="-parameters" />
       <module name="mall-gateway" options="-parameters" />
+      <module name="mall-order-service" options="-parameters" />
       <module name="mall-pay-service" options="-parameters" />
       <module name="mall-product-service" options="-parameters" />
       <module name="mall-search-service" options="-parameters" />
       <module name="mall-swagger" options="-parameters" />
       <module name="mall-user-service" options="-parameters" />
+      <module name="mall-warehouse" options="-parameters" />
       <module name="shepherd-mall" options="-parameters" />
     </option>
   </component>
