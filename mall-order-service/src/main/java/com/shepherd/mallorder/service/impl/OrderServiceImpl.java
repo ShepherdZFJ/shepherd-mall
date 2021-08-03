@@ -19,6 +19,7 @@ import com.shepherd.mallorder.entity.OrderItem;
 import com.shepherd.mallorder.feign.UserService;
 import com.shepherd.mallorder.feign.ProductService;
 import com.shepherd.mallorder.feign.WareService;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -89,6 +90,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
     }
 
     @Override
+    @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     public void submitOrder(OrderSubmitDTO orderSubmit) {
         String orderToken = orderSubmit.getToken();
@@ -152,9 +154,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
         //6.保存订单
         orderDTO.setCreateTime(new Date());
         orderDTO.setUpdateTime(new Date());
-        int insert = orderDAO.insert(orderDTO);
+        Order order = MallBeanUtil.copy(orderDTO, Order.class);
+        int insert = orderDAO.insert(order);
         orderItemList.forEach(orderItem -> {
-            orderItem.setOrderId(orderDTO.getId());
+            orderItem.setOrderId(order.getId());
             orderItem.setCreateTime(new Date());
             orderItem.setUpdateTime(new Date());
         });
@@ -164,10 +167,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
 
         //7.扣库存
         orderDTO.setOrderItemList(orderItemList);
-        orderDTO.setOrderId(orderDTO.getId());
+        orderDTO.setOrderId(order.getId());
         ResponseVO responseVO = wareService.decreaseStock(orderDTO);
-        int j = 10;
-        int i = j/0;
+        Order test = null;
+        test.setOrderNo("111");
         //8.清楚已下订单的购物车商品数据
         //9.完成其他任务，eg：增加积分，成长值，生成操作记录供大数据使用等 todo
 
