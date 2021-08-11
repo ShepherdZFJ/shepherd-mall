@@ -20,7 +20,6 @@ import com.shepherd.mallorder.entity.OrderItem;
 import com.shepherd.mallorder.feign.UserService;
 import com.shepherd.mallorder.feign.ProductService;
 import com.shepherd.mallorder.feign.WareService;
-import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
@@ -92,7 +91,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
     }
 
     @Override
-    @GlobalTransactional
+//    @GlobalTransactional
     @Transactional(rollbackFor = Exception.class)
     public void submitOrder(OrderSubmitDTO orderSubmit) {
         String orderToken = orderSubmit.getToken();

@@ -25,27 +25,27 @@ spring:
     host: 10.10.0.18
     port: 6379
 
-seata:
-  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直
-  registry:
-    type: nacos
-    nacos:
-      server-addr: 10.10.0.14:8848
-      username: nacos
-      password: nacos
-      group: SEATA_GROUP
-  #      namespace: 6c990727-93b2-4081-a8c6-6b015c56eda2
-  config:
-    type: nacos
-    nacos:
-      server-addr: 10.10.0.14:8848
-      username: nacos
-      password: nacos
-      group: SEATA_GROUP
-  #      namespace: 51915a62-d2d6-43d4-8f45-86b159eb90f5   #2.2中配置所在命名空间ID，入未配置 默认public空间
-  service:
-    vgroup-mapping:
-      my_test_tx_group: default		# 这里要特别注意和nacos中配置的要保持一直
+#seata:
+#  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直
+#  registry:
+#    type: nacos
+#    nacos:
+#      server-addr: 10.10.0.14:8848
+#      username: nacos
+#      password: nacos
+#      group: SEATA_GROUP
+#  #      namespace: 6c990727-93b2-4081-a8c6-6b015c56eda2
+#  config:
+#    type: nacos
+#    nacos:
+#      server-addr: 10.10.0.14:8848
+#      username: nacos
+#      password: nacos
+#      group: SEATA_GROUP
+#  #      namespace: 51915a62-d2d6-43d4-8f45-86b159eb90f5   #2.2中配置所在命名空间ID，入未配置 默认public空间
+#  service:
+#    vgroup-mapping:
+#      my_test_tx_group: default		# 这里要特别注意和nacos中配置的要保持一直
 
 
 feign:
