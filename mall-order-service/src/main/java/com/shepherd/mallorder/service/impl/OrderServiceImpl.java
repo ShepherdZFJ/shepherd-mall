@@ -8,6 +8,7 @@ import com.shepherd.mall.utils.DateUtil;
 import com.shepherd.mall.utils.IdWorker;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mall.vo.ResponseVO;
+import com.shepherd.mallorder.Constant.OrderConstant;
 import com.shepherd.mallorder.api.service.CartService;
 import com.shepherd.mallorder.api.service.OrderItemService;
 import com.shepherd.mallorder.api.service.OrderService;
@@ -21,6 +22,8 @@ import com.shepherd.mallorder.feign.ProductService;
 import com.shepherd.mallorder.feign.WareService;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -28,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -60,6 +60,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
     private OrderItemDAO orderItemDAO;
     @Resource
     private OrderItemService orderItemService;
+    @Resource
+    private RabbitTemplate rabbitTemplate;
 
     private static final String USER_ORDER_TOKEN_PREFIX = "order:token:";
 
@@ -121,9 +123,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
         orderDTO.setReceiverCity(address.getCity());
         orderDTO.setReceiverRegion(address.getRegion());
         orderDTO.setReceiverDetailAddress(address.getDetailAddress());
-        orderDTO.setOrderStatus(0);
-        orderDTO.setDeliveryStatus(0);
-        orderDTO.setPayStatus(0);
+        orderDTO.setStatus(OrderConstant.ORDER_STATUS_NEW);
 
         //3.封装订单明细信息
         List<CartItem> checkCartItemList = cartService.getCheckCartItemList(userId);
@@ -168,11 +168,46 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
         //7.扣库存
         orderDTO.setOrderItemList(orderItemList);
         orderDTO.setOrderId(order.getId());
-        ResponseVO responseVO = wareService.decreaseStock(orderDTO);
-        Order test = null;
-        test.setOrderNo("111");
+        try {
+            ResponseVO responseVO = wareService.decreaseStock(orderDTO);
+            if (Objects.equals(responseVO.getCode(), 200)) {
+                //发送消息到订单延迟队列，判断过期订单
+                rabbitTemplate.convertAndSend("order-event-exchange","order.create.order", orderDTO);
+
+
+            } else {
+                throw new BusinessException("扣库存接口返回结果错误");
+            }
+        } catch (Exception e) {
+            log.error("调用扣库存接口失败: ", e);
+            throw new BusinessException("调用扣库存接口失败");
+        }
+
+//        Order test = null;
+//        test.setOrderNo("111");
         //8.清楚已下订单的购物车商品数据
         //9.完成其他任务，eg：增加积分，成长值，生成操作记录供大数据使用等 todo
+
+
+    }
+
+    @Override
+    public void closeOrder(OrderDTO orderDTO) {
+        Long orderId = orderDTO.getOrderId();
+        Order order = orderDAO.selectById(orderId);
+        //判断在投递消息之后到消息过期期间该订单状态有没有改变
+        if (Objects.equals(order.getStatus(), OrderConstant.ORDER_STATUS_NEW)) {
+            Order updateOrder = new Order();
+            updateOrder.setId(orderId);
+            updateOrder.setStatus(OrderConstant.ORDER_STATUS_CANCEL);
+            updateOrder.setUpdateTime(new Date());
+            updateOrder.setCloseTime(new Date());
+            int i = orderDAO.updateById(updateOrder);
+
+            //关单后发送消息通知其他服务进行关单相关的操作，如解锁库存
+            rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", orderDTO);
+
+        }
 
 
     }

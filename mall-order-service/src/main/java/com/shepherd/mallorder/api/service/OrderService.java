@@ -1,6 +1,7 @@
 package com.shepherd.mallorder.api.service;
 
 import com.shepherd.mallorder.dto.OrderConfirmDTO;
+import com.shepherd.mallorder.dto.OrderDTO;
 import com.shepherd.mallorder.dto.OrderSubmitDTO;
 
 /**
@@ -12,4 +13,6 @@ public interface OrderService {
     OrderConfirmDTO settlement(Long userId);
 
     void submitOrder(OrderSubmitDTO orderSubmit);
+
+    void closeOrder(OrderDTO orderDTO);
 }

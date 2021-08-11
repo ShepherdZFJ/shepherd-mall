@@ -20,6 +20,7 @@ spring:
     port: 5672
     username: guest
     password: guest
+    publisher-confirm-type: correlated
   redis:
     host: 10.10.0.18
     port: 6379
@@ -48,8 +49,9 @@ seata:
 
 
 feign:
-  #  hystrix:
-  #    enabled: true
+
+  hystrix:
+    enabled: true
   #  httpclient:
   #    connection-timeout: 10000
   client:

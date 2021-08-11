@@ -44,9 +44,7 @@ public class Order {
     private String receiverDetailAddress;
     private Integer sourceType;
     private String transactionId;
-    private Integer payStatus;
-    private Integer orderStatus;
-    private Integer deliveryStatus;
+    private Integer status;
     private Integer isDelete;
 
 }
