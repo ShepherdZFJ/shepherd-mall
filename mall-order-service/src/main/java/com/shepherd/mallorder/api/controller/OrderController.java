@@ -5,7 +5,9 @@ import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mall.vo.LoginVO;
 import com.shepherd.mallorder.api.service.OrderService;
 import com.shepherd.mallorder.api.vo.OrderSumbitVO;
+import com.shepherd.mallorder.api.vo.OrderVO;
 import com.shepherd.mallorder.dto.OrderConfirmDTO;
+import com.shepherd.mallorder.dto.OrderDTO;
 import com.shepherd.mallorder.dto.OrderSubmitDTO;
 import com.shepherd.mallorder.utils.UserUtil;
 import io.swagger.annotations.ApiOperation;
@@ -48,5 +50,11 @@ public class OrderController {
         Long userId = UserUtil.currentUser().getUserId();
         orderSubmitDTO.setUserId(userId);
         orderService.submitOrder(orderSubmitDTO);
+    }
+
+    @GetMapping("/orderNo/{orderNo}")
+    public OrderVO getOrderByOrderNo(@PathVariable("orderNo") String orderNo) {
+        OrderDTO orderDTO = orderService.getOrderByOrderNo(orderNo);
+        return MallBeanUtil.copy(orderDTO, OrderVO.class);
     }
 }

@@ -1,8 +1,11 @@
 package com.shepherd.mallorder.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.exception.BusinessException;
 import com.shepherd.mall.utils.DateUtil;
 import com.shepherd.mall.utils.IdWorker;
@@ -23,6 +26,8 @@ import com.shepherd.mallorder.feign.WareService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -61,8 +66,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
     private OrderItemService orderItemService;
     @Resource
     private RabbitTemplate rabbitTemplate;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     private static final String USER_ORDER_TOKEN_PREFIX = "order:token:";
+    private static final String CART_PREFIX = "cart:";
 
 
     @Override
@@ -170,7 +178,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
         try {
             ResponseVO responseVO = wareService.decreaseStock(orderDTO);
             if (Objects.equals(responseVO.getCode(), 200)) {
-                //发送消息到订单延迟队列，判断过期订单
+                //发送消息到订单延迟队列，方便后续自动关闭订单
                 rabbitTemplate.convertAndSend("order-event-exchange","order.create.order", orderDTO);
 
 
@@ -185,6 +193,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
 //        Order test = null;
 //        test.setOrderNo("111");
         //8.清楚已下订单的购物车商品数据
+        BoundHashOperations boundHashOperations = redisTemplate.boundHashOps(CART_PREFIX + userId);
+        orderItemList.forEach(orderItem -> {
+            boundHashOperations.delete(orderItem.getSkuId());
+        });
+
+
         //9.完成其他任务，eg：增加积分，成长值，生成操作记录供大数据使用等 todo
 
 
@@ -202,12 +216,33 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
             updateOrder.setUpdateTime(new Date());
             updateOrder.setCloseTime(new Date());
             int i = orderDAO.updateById(updateOrder);
-
             //关单后发送消息通知其他服务进行关单相关的操作，如解锁库存
             rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", orderDTO);
-
         }
 
 
+    }
+
+    @Override
+    public OrderDTO getOrderByOrderNo(String orderNo) {
+        LambdaQueryWrapper<Order> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Order::getOrderNo, orderNo);
+        queryWrapper.eq(Order::getIsDelete, CommonConstant.NOT_DEL);
+        Order order = orderDAO.selectOne(queryWrapper);
+        return toOrderDTO(order);
+    }
+
+
+
+
+
+
+    OrderDTO toOrderDTO(Order order) {
+        if (order == null) {
+            return null;
+        }
+        OrderDTO orderDTO = MallBeanUtil.copy(order, OrderDTO.class);
+        orderDTO.setOrderId(order.getId());
+        return orderDTO;
     }
 }

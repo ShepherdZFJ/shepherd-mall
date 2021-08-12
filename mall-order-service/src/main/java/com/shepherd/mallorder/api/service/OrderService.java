@@ -15,4 +15,6 @@ public interface OrderService {
     void submitOrder(OrderSubmitDTO orderSubmit);
 
     void closeOrder(OrderDTO orderDTO);
+
+    OrderDTO getOrderByOrderNo(String orderNo);
 }
