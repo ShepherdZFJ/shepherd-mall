@@ -13,5 +13,6 @@ import java.util.List;
 public class Order {
     private Long orderId;
     private String orderNo;
+    private Integer status;
     List<OrderItem> orderItemList;
 }

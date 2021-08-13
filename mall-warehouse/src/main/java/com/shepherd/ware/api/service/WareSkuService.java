@@ -2,6 +2,7 @@ package com.shepherd.ware.api.service;
 
 import com.shepherd.ware.dto.Order;
 import com.shepherd.ware.dto.WareInfoDTO;
+import com.shepherd.ware.dto.WareOrderTaskDTO;
 import com.shepherd.ware.dto.WareSkuDTO;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface WareSkuService {
     List<WareInfoDTO> getHasStockWare(Long skuId, Integer number);
 
     void decreaseStock(Order order);
+
+    void releaseStock(WareOrderTaskDTO wareOrderTaskDTO);
+
+    void releaseStock(Order order);
 }

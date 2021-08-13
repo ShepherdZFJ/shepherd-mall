@@ -5,4 +5,9 @@
     <update id="decreaseStock">
         update ware_sku set stock = stock - #{number} where ware_id=#{wareId} and sku_id=#{skuId} and stock >=#{number}
     </update>
+
+    <update id="increaseStock">
+        update ware_sku set stock = stock + #{number} where ware_id=#{wareId} and sku_id=#{skuId} and stock >=#{number}
+
+    </update>
 </mapper>
