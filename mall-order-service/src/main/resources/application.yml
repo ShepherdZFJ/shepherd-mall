@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-    url: jdbc:mysql://10.10.0.18:3306/mall?serverTimezone=UTC&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://10.10.0.18:3306/mall?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
   cloud:
     nacos:
       discovery:
@@ -20,10 +20,19 @@ spring:
     port: 5672
     username: guest
     password: guest
-    publisher-confirm-type: correlated
+    listener:
+      simple:
+        acknowledge-mode: manual
+#    publisher-confirm-type: correlated
+#    publisher-returns: true
+#    template:
+#      mandatory: true
   redis:
     host: 10.10.0.18
     port: 6379
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
 
 #seata:
 #  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直
@@ -50,15 +59,15 @@ spring:
 
 feign:
 
-  hystrix:
-    enabled: true
+#  hystrix:
+#    enabled: true
   #  httpclient:
   #    connection-timeout: 10000
   client:
     config:
       default: # 指定feignclients对应的名称 如果指定的是default 表示全局所有的client 的超时时间设置
-        connectTimeout: 10000
-        readTimeout: 10000
+        connectTimeout: 60000
+        readTimeout: 60000
 
 
 #hystrix 配置

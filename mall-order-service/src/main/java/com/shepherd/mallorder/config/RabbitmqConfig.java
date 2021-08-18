@@ -62,6 +62,7 @@ public class RabbitmqConfig {
 //             */
 //            @Override
 //            public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routeKey) {
+//                log.info("message={}, repayCode={}, replyText={}, exchange={}, routeKey={}", message, replyCode, replyText, exchange, routeKey);
 //
 //            }
 //        });

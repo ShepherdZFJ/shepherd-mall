@@ -192,11 +192,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
 
 //        Order test = null;
 //        test.setOrderNo("111");
-        //8.清楚已下订单的购物车商品数据
-        BoundHashOperations boundHashOperations = redisTemplate.boundHashOps(CART_PREFIX + userId);
-        orderItemList.forEach(orderItem -> {
-            boundHashOperations.delete(orderItem.getSkuId());
-        });
+        //8.清除已下订单的购物车商品数据
+//        BoundHashOperations boundHashOperations = redisTemplate.boundHashOps(CART_PREFIX + userId);
+//        orderItemList.forEach(orderItem -> {
+//            boundHashOperations.delete(orderItem.getSkuId());
+//        });
 
 
         //9.完成其他任务，eg：增加积分，成长值，生成操作记录供大数据使用等 todo
@@ -217,7 +217,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
             updateOrder.setCloseTime(new Date());
             int i = orderDAO.updateById(updateOrder);
             //关单后发送消息通知其他服务进行关单相关的操作，如解锁库存
-            rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", orderDTO);
+            rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", JSONObject.toJSONString(orderDTO));
         }
 
 

@@ -52,16 +52,42 @@ public class MallOrderServiceApplicationTests {
         cartItem.setName("苹果12pro");
         cartItem.setNumber(2);
         cartItem.setSpecValues(Lists.newArrayList("256G", "红色", "M1芯片"));
-        rabbitTemplate.convertAndSend("code-direct-exchange", "direct.key", cartItem);
+        rabbitTemplate.convertAndSend("code-direct-exchange", "direct.key.dfd", cartItem);
         log.info("消息对象发送完成：{}", cartItem);
-
-
     }
+
+    @Test
+    public void test1() {
+        CartItem cartItem = new CartItem();
+        cartItem.setName("苹果12pro");
+        cartItem.setNumber(2);
+        cartItem.setSpecValues(Lists.newArrayList("256G", "红色", "M1芯片"));
+        rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", cartItem);
+        log.info("消息对象发送完成：{}", cartItem);
+    }
+
+    @Test
+    public void test2() {
+        CartItem cartItem = new CartItem();
+        cartItem.setName("苹果12pro");
+        cartItem.setNumber(2);
+        cartItem.setSpecValues(Lists.newArrayList("256G", "红色", "M1芯片"));
+        rabbitTemplate.convertAndSend("order-event-exchange","order.create.order", cartItem);
+        log.info("消息对象发送完成：{}", cartItem);
+    }
+
+
+
+
+
+
 
 
     @Test
     public void contextLoads() {
     }
+
+
 
 
 }
