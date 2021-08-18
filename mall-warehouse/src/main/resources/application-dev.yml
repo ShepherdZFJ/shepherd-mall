@@ -29,7 +29,9 @@ spring:
     port: 5672
     username: guest
     password: guest
-    publisher-confirm-type: correlated
+    listener:
+      simple:
+        acknowledge-mode: manual
 
 #seata:
 #  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直

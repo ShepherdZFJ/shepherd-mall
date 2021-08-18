@@ -176,6 +176,7 @@ public class WareSkuServiceImpl implements WareSkuService {
 
             }
         } catch (Exception e) {
+            log.error("调用查询订单接口返回结果错误", e);
             throw new BusinessException("调用查询订单接口失败");
         }
 
