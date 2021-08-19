@@ -31,6 +31,9 @@ public class DateUtil {
 
     public static Date parseDate(String strDate, String format) {
         try {
+            if (StringUtils.isBlank(format)) {
+                format = FULL_DATE_FORMAT;
+            }
             SimpleDateFormat sf = new SimpleDateFormat(format);
             return sf.parse(strDate);
         } catch (Exception ex) {
