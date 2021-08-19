@@ -161,12 +161,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
         //6.保存订单
         orderDTO.setCreateTime(new Date());
         orderDTO.setUpdateTime(new Date());
+        orderDTO.setIsDelete(CommonConstant.NOT_DEL);
         Order order = MallBeanUtil.copy(orderDTO, Order.class);
         int insert = orderDAO.insert(order);
         orderItemList.forEach(orderItem -> {
             orderItem.setOrderId(order.getId());
             orderItem.setCreateTime(new Date());
             orderItem.setUpdateTime(new Date());
+            orderItem.setIsDelete(CommonConstant.NOT_DEL);
         });
         orderItemService.saveBatch(orderItemList);
 
@@ -232,9 +234,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderDAO, Order> implements Or
         return toOrderDTO(order);
     }
 
-
-
-
+    @Override
+    public void updateOrderStatus(String orderNo, Integer status, Integer payType) {
+        LambdaUpdateWrapper<Order> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(Order::getStatus, status);
+        updateWrapper.set(Order::getPayType, payType);
+        updateWrapper.set(Order::getPayTime, new Date());
+        updateWrapper.set(Order::getUpdateTime, new Date());
+        updateWrapper.eq(Order::getOrderNo, orderNo);
+        orderDAO.update(new Order(), updateWrapper);
+    }
 
 
     OrderDTO toOrderDTO(Order order) {

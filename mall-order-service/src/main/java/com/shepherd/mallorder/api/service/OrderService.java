@@ -17,4 +17,6 @@ public interface OrderService {
     void closeOrder(OrderDTO orderDTO);
 
     OrderDTO getOrderByOrderNo(String orderNo);
+
+    void updateOrderStatus(String orderNo, Integer status, Integer payType);
 }

@@ -57,4 +57,9 @@ public class OrderController {
         OrderDTO orderDTO = orderService.getOrderByOrderNo(orderNo);
         return MallBeanUtil.copy(orderDTO, OrderVO.class);
     }
+
+    @PutMapping("/status")
+    public void updateOrderStatus(@RequestParam("orderNo") String orderNo, @RequestParam("status") Integer status, @RequestParam("payType") Integer payType) {
+        orderService.updateOrderStatus(orderNo, status, payType);
+    }
 }
