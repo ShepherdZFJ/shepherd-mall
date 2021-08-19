@@ -7,8 +7,7 @@ import lombok.Getter;
  * Created by 廖师兄
  */
 @Getter
-public enum
-PayPlatformEnum {
+public enum PayPlatformEnum {
 
 	//1-支付宝,2-微信
 	ALIPAY(1),

@@ -15,7 +15,7 @@ public interface PayService {
     /**
      * 创建/发起支付
      */
-    PayResponse create(String orderNo, BigDecimal amount, BestPayTypeEnum bestPayTypeEnum);
+    PayResponse create(String orderNo, Integer payType);
 
     /**
      * 异步通知处理
@@ -25,8 +25,8 @@ public interface PayService {
 
     /**
      * 查询支付记录(通过订单号)
-     * @param orderId
+     * @param orderNo
      * @return
      */
-    PayInfoDTO queryByOrderId(String orderId);
+    PayInfoDTO getPayInfoByOrderNo(String orderNo);
 }

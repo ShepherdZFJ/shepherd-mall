@@ -20,20 +20,16 @@ public class PayInfo {
     @ApiModelProperty("主键")
     private Long id;
 
-    @ApiModelProperty("用户id")
-    private String userId;
-
     @ApiModelProperty("订单编号")
     private String  orderNo;
 
-    @ApiModelProperty("支付平台:1-支付宝,2-微信")
-    private Integer payPlatform;
+    private Long orderId;
 
     @ApiModelProperty("支付流水号")
-    private String platformNumber;
+    private String tradeNo;
 
     @ApiModelProperty("支付状态")
-    private String payStatus;
+    private Integer Status;
 
     @ApiModelProperty("支付金额")
     private BigDecimal payAmount;
@@ -48,4 +44,10 @@ public class PayInfo {
 
     @ApiModelProperty("删除标志位")
     private Integer isDelete;
+
+    private String subject;
+    private Date confirmTime;
+    private Date callbackTime;
+    private String callbackContent;
+    private Integer type;
 }
