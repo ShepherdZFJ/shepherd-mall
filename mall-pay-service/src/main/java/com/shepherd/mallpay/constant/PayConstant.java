@@ -8,4 +8,6 @@ package com.shepherd.mallpay.constant;
 public interface PayConstant {
     Integer TYPE_ALIPAY = 1;
     Integer TYPE_WXPAY = 2;
+
+    Integer IS_PAY = 1;
 }

@@ -85,8 +85,6 @@ public class PayServiceImpl implements PayService {
         log.info("异步通知 payResponse={}", payResponse);
 
         //2.插入付款记录
-
-
         if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {
             //4. 告诉微信不要再通知了
             return "<xml>\n" +
@@ -117,6 +115,11 @@ public class PayServiceImpl implements PayService {
         AlipayNotifyStatusEnum alipayNotifyStatusEnum = AlipayNotifyStatusEnum.getAlipayNotifyStatusEnum(tradeStatus);
         payInfo.setStatus(alipayNotifyStatusEnum.getStatus());
         payInfoDAO.insert(payInfo);
+        if (Objects.equals(payInfo.getStatus(), AlipayNotifyStatusEnum.TRADE_SUCCESS.getStatus()) ||
+        Objects.equals(payInfo.getStatus(), AlipayNotifyStatusEnum.TRADE_FINISHED.getStatus())) {
+            //这里可以改为消息队列
+            orderService.updateOrderStatus(payInfo.getOrderNo(), PayConstant.IS_PAY, PayConstant.TYPE_ALIPAY);
+        }
     }
 
     private void handWechatPayAsyncNotify(String notifyData) {
