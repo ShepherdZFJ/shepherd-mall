@@ -34,6 +34,7 @@
         <module>mall-base-service</module>
         <module>mall-gateway</module>
         <module>mall-warehouse</module>
+        <module>mall-seckill</module>
 
     </modules>
 

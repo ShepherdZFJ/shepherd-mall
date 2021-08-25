@@ -7,16 +7,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mall-product-service" />
-        <module name="mall-base-service" />
-        <module name="mall-warehouse" />
         <module name="mall-order-service" />
-        <module name="mall-pay-service" />
-        <module name="mall-user-service" />
-        <module name="mall-search-service" />
         <module name="mall-auth" />
         <module name="mall-common" />
         <module name="mall-swagger" />
+        <module name="mall-product-service" />
+        <module name="mall-base-service" />
+        <module name="mall-warehouse" />
+        <module name="mall-seckill" />
+        <module name="mall-pay-service" />
+        <module name="mall-user-service" />
+        <module name="mall-search-service" />
         <module name="mall-advertise-service" />
         <module name="mall-gateway" />
       </profile>
@@ -36,6 +37,7 @@
       <module name="mall-pay-service" options="-parameters" />
       <module name="mall-product-service" options="-parameters" />
       <module name="mall-search-service" options="-parameters" />
+      <module name="mall-seckill" options="-parameters" />
       <module name="mall-swagger" options="-parameters" />
       <module name="mall-user-service" options="-parameters" />
       <module name="mall-warehouse" options="-parameters" />

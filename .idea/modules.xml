@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/mall-warehouse-service.iml" filepath="$PROJECT_DIR$/mall-warehouse-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mall-seckill/mall-seckill.iml" filepath="$PROJECT_DIR$/mall-seckill/mall-seckill.iml" />
       <module fileurl="file://$PROJECT_DIR$/shepherd-mall.iml" filepath="$PROJECT_DIR$/shepherd-mall.iml" />
     </modules>
   </component>
