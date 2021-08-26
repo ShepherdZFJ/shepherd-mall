@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-    url: jdbc:mysql://10.10.0.18:3306/mall_warehouse?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://10.10.0.18:3306/mall_seckill?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
 
   redis:
     host: 10.10.0.18
@@ -103,29 +103,6 @@ swagger-web:
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.mall.seckill.api.controller"
 
-composite:
-  redis:
-    # 过期时间水位, 单位秒
-    preload-second-time: 180
-    # 刷新过期时间, 单位秒
-    refresh-expire-time: 600
-  caffeine:
-    # 本地缓存命中指标(最大命中数, 命中水位指标)
-    hits-count: 10
-    hits-count-min: 3
-    # 缓存读事件过期时间
-    access-expire-time: 60
-    # 缓存读事件过期时间单位
-    access-expire-unit: SECONDS
-    # jvm进程内存阈值比率
-    jvm-threshold-ratio: 0.1
-    # 本地最大缓存阈值比率
-    maximum-threshold-ratio: 0.6
-    # 本地初始缓存比率(相对于最大缓存)
-    initial-ratio: 0.3
-    # 本地缓存水位线比率
-    water-level-ratio: 0.4
-    thread-name-prefix: caffeine-worker-
 
 
 
@@ -136,6 +113,7 @@ composite:
 #  tx-service-group: mall_tx_group
 micro-server:
   mall-order: mall-order-service
+  mall-product: mall-product-service
 
 
 
