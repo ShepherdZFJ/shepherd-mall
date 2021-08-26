@@ -3,9 +3,7 @@ package com.shepherd.mall.utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,6 +60,34 @@ public class DateUtil {
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_YEAR, n);
         return cal.getTime();
+    }
+
+    /**
+     * 获取当天开始时间的 00:00:00 做起始时间
+     * @return
+     */
+
+    public static String getStartTime() {
+        LocalDate now = LocalDate.now();
+        LocalDateTime time = now.atTime(LocalTime.MIN);
+        String format = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return format;
+    }
+
+    //当前天数+2 23:59:59..
+    public static String getEndTime(Integer day) {
+        LocalDate now = LocalDate.now();
+        LocalDateTime time = now.plusDays(day).atTime(LocalTime.MAX);
+        String format = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return format;
+    }
+
+    public static void main(String[] args) {
+//        String startTime = getStartTime();
+//        System.out.println(startTime);
+        String endTime = getEndTime(2);
+        System.out.println(endTime);
+
     }
 
 
