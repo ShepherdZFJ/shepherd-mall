@@ -5,10 +5,14 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+//import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * 注意引入hystrix依赖就不能引入sentinel依赖
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan(basePackages = "com.shepherd.mall.seckill.dao")
@@ -16,6 +20,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients(basePackages = "com.shepherd.mall.seckill")
 @EnableRabbit
 @EnableScheduling
+//@EnableHystrix
 public class MallSeckillApplication {
 
     public static void main(String[] args) {

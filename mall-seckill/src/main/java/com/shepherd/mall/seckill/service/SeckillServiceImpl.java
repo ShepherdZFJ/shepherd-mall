@@ -172,6 +172,7 @@ public class SeckillServiceImpl implements SeckillService {
      * @param sessionIds
      * @return
      */
+
     List<SeckillSku> getSeckillSkuList(List<Long> sessionIds) {
         if (CollectionUtils.isEmpty(sessionIds)) {
             return new ArrayList<>();
@@ -233,6 +234,10 @@ public class SeckillServiceImpl implements SeckillService {
                 }
             });
         });
+    }
 
+    public String anotherBackMethod(Long skuId){
+        String s = "skuId"+skuId + "已经熔断降级了";
+        return s;
     }
 }

@@ -24,6 +24,10 @@ spring:
     nacos:
       discovery:
         server-addr: 10.10.0.14:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 10.10.0.14:8858
   rabbitmq:
     host: 10.10.0.18
     port: 5672
@@ -61,6 +65,8 @@ feign:
       default:
         connectTimeout: 60000
         readTimeout: 60000
+  hystrix:
+    enabled: true
 
 #mybatis
 mybatis-plus:
@@ -114,6 +120,8 @@ swagger-web:
 micro-server:
   mall-order: mall-order-service
   mall-product: mall-product-service
+
+
 
 
 

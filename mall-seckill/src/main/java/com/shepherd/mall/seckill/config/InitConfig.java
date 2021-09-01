@@ -1,8 +1,10 @@
 package com.shepherd.mall.seckill.config;
 
 import com.shepherd.mall.utils.IdWorker;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author fjzheng
@@ -15,5 +17,11 @@ public class InitConfig {
     @Bean
     public IdWorker idWorker() {
         return new IdWorker();
+    }
+
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
