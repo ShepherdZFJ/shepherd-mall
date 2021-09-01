@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shepherd.mall.constant.CommonConstant;
 import com.shepherd.mall.exception.BusinessException;
+import com.shepherd.mall.seckill.dto.SeckillOrder;
 import com.shepherd.mall.seckill.dto.SeckillSessionDTO;
 import com.shepherd.mall.seckill.api.service.SeckillService;
 import com.shepherd.mall.seckill.dao.SeckillSessionDAO;
@@ -15,12 +16,15 @@ import com.shepherd.mall.seckill.entity.SeckillSession;
 import com.shepherd.mall.seckill.entity.SeckillSku;
 import com.shepherd.mall.seckill.feign.ProductService;
 import com.shepherd.mall.utils.DateUtil;
+import com.shepherd.mall.utils.IdWorker;
 import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mall.vo.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RSemaphore;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.RedisClient;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -29,10 +33,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +55,10 @@ public class SeckillServiceImpl implements SeckillService {
     private RedissonClient redissonClient;
     @Resource
     private ProductService productService;
+    @Resource
+    private IdWorker idWorker;
+    @Resource
+    private RabbitTemplate rabbitTemplate;
 
     //K: SESSION_CACHE_PREFIX + startTime + "_" + endTime
     //V: sessionId+"-"+skuId的List
@@ -82,6 +88,71 @@ public class SeckillServiceImpl implements SeckillService {
         saveSeckillSessionToRedis(seckillSessionDTOS);
         saveSeckillSkuToRedis(seckillSessionDTOS);
 
+    }
+
+    @Override
+    public SeckillSessionDTO getCurrentSeckillSessionInfo() {
+        long currentTime = System.currentTimeMillis();
+        return null;
+        //todo :逻辑暂时不定
+    }
+
+    @Override
+    public String kill(String killId, String key, Integer num) {
+        BoundHashOperations<String, String, String> ops = redisTemplate.boundHashOps(SECKILL_SKU_CACHE);
+        String str = ops.get(killId);
+        String orderNo = null;
+        if (StringUtils.isNotBlank(str)){
+            SeckillSkuDTO seckillSkuDTO = JSON.parseObject(str, SeckillSkuDTO.class);
+            //1. 验证时效
+            long current = System.currentTimeMillis();
+            if (current >= seckillSkuDTO.getStartTime() && current <= seckillSkuDTO.getEndTime()) {
+                //2. 验证商品和商品随机码是否对应
+                String redisKey = seckillSkuDTO.getSessionId() + "-" + seckillSkuDTO.getSkuId();
+                if (redisKey.equals(killId) && seckillSkuDTO.getRandomCode().equals(key)) {
+                    //3. 验证当前用户是否购买过
+                   // MemberResponseVo memberResponseVo = LoginInterceptor.loginUser.get();
+                    long ttl = seckillSkuDTO.getEndTime() - System.currentTimeMillis();
+                    Long userId = 1l;
+                    //3.1 通过在redis中使用 用户id-skuId 来占位看是否买过
+                    Boolean flag = redisTemplate.opsForValue().setIfAbsent(userId +"-"+seckillSkuDTO.getSkuId(), num.toString(), ttl, TimeUnit.MILLISECONDS);
+                    //3.2 占位成功，说明该用户未秒杀过该商品，则继续
+                    if (flag){
+                        //4. 校验库存和购买量是否符合要求
+                        if (num <= seckillSkuDTO.getLimitNumber()) {
+                            //4.1 尝试获取库存信号量
+                            RSemaphore semaphore = redissonClient.getSemaphore(SKU_STOCK_SEMAPHORE + seckillSkuDTO.getRandomCode());
+                            boolean acquire = false;
+                            try {
+                                acquire = semaphore.tryAcquire(num,100, TimeUnit.MILLISECONDS);
+                            } catch (InterruptedException e) {
+                                log.error("redission获取库存信号量失败：", e);
+
+                            }
+                            //4.2 获取库存成功
+                            if (acquire) {
+                                //5. 发送消息创建订单
+                                long l = idWorker.nextId();
+                                String currentDateStr = DateUtil.formatDate(new Date(), "yyyyMMddHHmmssSS");
+                                orderNo = String.valueOf(l) + currentDateStr;
+                                //5.2 创建秒杀订单to
+                                SeckillOrder order = new SeckillOrder();
+                                order.setUserId(userId);
+                                order.setNumber(num);
+                                order.setOrderNo(orderNo);
+                                order.setSessionId(seckillSkuDTO.getSessionId());
+                                order.setSeckillPrice(seckillSkuDTO.getSeckillPrice());
+                                order.setSkuId(seckillSkuDTO.getSkuId());
+                                //5.3 发送创建订单的消息
+                                rabbitTemplate.convertAndSend("order-event-exchange", "order.seckill.order", order);
+                            }
+                        }
+                    }
+                }
+            }
+            return orderNo;
+        }
+        return null;
     }
 
     /**

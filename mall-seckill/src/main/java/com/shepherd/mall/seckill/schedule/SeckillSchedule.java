@@ -35,7 +35,7 @@ public class SeckillSchedule {
      */
 
 //    @Scheduled(cron = "0 0 3 * * ?")
-    @Scheduled(cron = "0 */1 * * * ?")
+//    @Scheduled(cron = "0 */1 * * * ?")
     public void uploadSeckillSkuLatest3Days() {
         //为避免分布式情况下多服务同时上架的情况，使用分布式锁
         RLock lock = redissonClient.getLock(upload_lock);
