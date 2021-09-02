@@ -27,7 +27,7 @@ spring:
     sentinel:
       transport:
         port: 8719
-        dashboard: 10.10.0.14:8858
+        dashboard: localhost:8858
   rabbitmq:
     host: 10.10.0.18
     port: 5672
@@ -65,8 +65,10 @@ feign:
       default:
         connectTimeout: 60000
         readTimeout: 60000
-  hystrix:
+  sentinel:
     enabled: true
+#  hystrix:
+#    enabled: true
 
 #mybatis
 mybatis-plus:
@@ -122,6 +124,13 @@ micro-server:
   mall-product: mall-product-service
 
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 
-
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN

@@ -30,9 +30,9 @@ import java.util.List;
  * 因为Fallback是通过Hystrix实现的， 所以需要开启Hystrix，spring boot application.properties文件配置feign.hystrix.enabled=true，这样就开启了Fallback
 
  */
-//@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product", fallback = ProductFeignFallback.class)
+@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product", fallback = ProductFeignFallback.class)
 //@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product", fallbackFactory = ProductFeignFactory.class)
-@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product")
+//@FeignClient(name = "${micro-server.mall-product}", path = "/api/mall/product")
 public interface ProductService {
 
     @GetMapping("/sku/{skuId}")
