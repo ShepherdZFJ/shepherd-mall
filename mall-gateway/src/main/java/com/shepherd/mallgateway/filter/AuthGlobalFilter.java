@@ -65,7 +65,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         String path = request.getURI().getPath();
 
         //如果是登录、放行
-        if (path.startsWith("/api/mall/user/login")) {
+        if (path.startsWith("/api/mall/user/login") || path.startsWith("/api/mall/product")) {
             //放行
             Mono<Void> filter = chain.filter(exchange);
             return filter;

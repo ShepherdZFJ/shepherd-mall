@@ -30,6 +30,10 @@ spring:
           uri: lb://mall-order-service
           predicates:
             - Path=/api/mall/order/**, /api/mall/cart/**
+        - id: mall-seckill
+          uri: lb://mall-seckill-service
+          predicates:
+            - Path=/api/mall/seckill/**
 
 
 #          filters:
@@ -37,6 +41,15 @@ spring:
     nacos:
       discovery:
         server-addr: 10.10.0.14:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8858
+#      scg:
+#        fallback:
+#          response-status: 400
+#          content-type: application/json
+#          response-body: 配置文件统一返回
   security:
     oauth2:
       resourceserver:
@@ -67,3 +80,7 @@ management: #开启SpringBoot Admin的监控
 logging:
   level:
     com.alibaba.nacos.client.*: WARN
+
+
+
+
