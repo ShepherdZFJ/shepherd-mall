@@ -28,6 +28,10 @@ spring:
     nacos:
       discovery:
         server-addr: 10.10.0.14:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8858
+        port: 8719
 
 feign:
   client:
@@ -105,6 +109,10 @@ composite:
     # 本地缓存水位线比率
     water-level-ratio: 0.4
     thread-name-prefix: caffeine-worker-
+
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN
 
 
 
