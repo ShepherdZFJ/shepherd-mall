@@ -54,5 +54,9 @@
         <appender-ref ref="fileErrorLog" />
     </root>
     <logger name="com.shepherd.mall.seckill.dao" level="DEBUG" />
+    <logger name="org.springframework.cloud.openfeign" level="DEBUG" />
+    <logger name="org.springframework.cloud.sleuth" level="DEBUG" />
+
+    <logger name="com.alibaba.nacos.client.config.impl" level="WARN" />
 
 </configuration>

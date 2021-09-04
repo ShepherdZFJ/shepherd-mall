@@ -32,6 +32,14 @@ spring:
       transport:
         dashboard: localhost:8858
         port: 8719
+  zipkin:
+    base-url: http://10.10.0.18:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
+    sleuth:
+      sampler:
+        probability: 1
 
 feign:
   client:

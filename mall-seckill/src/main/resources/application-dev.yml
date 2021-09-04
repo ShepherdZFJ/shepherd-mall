@@ -36,6 +36,15 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
+  zipkin:
+    base-url: http://10.10.0.18:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1
+
 
 #seata:
 #  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直
@@ -131,6 +140,8 @@ management:
         include: '*'
 
 
-logging:
-  level:
-    com.alibaba.nacos.client.config.impl: WARN
+#logging:
+#  level:
+#    - com.alibaba.nacos.client.config.impl: WARN
+#    - org.springframework.cloud.openfeign: debug
+#    - org.springframework.cloud.sleuth: debug
