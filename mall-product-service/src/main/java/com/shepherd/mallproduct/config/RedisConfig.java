@@ -3,12 +3,14 @@ package com.shepherd.mallproduct.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import com.shepherd.mallproduct.listener.RedisKeyExpiredListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.*;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.*;
 
 /**
@@ -77,5 +79,20 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
+
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(@Autowired RedisConnectionFactory redisConnectionFactory) {
+        RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+        redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
+        return redisMessageListenerContainer;
+    }
+
+    @Bean
+    public RedisKeyExpiredListener keyExpiredListener(@Autowired RedisConnectionFactory redisConnectionFactory) {
+        return new RedisKeyExpiredListener(this.redisMessageListenerContainer(redisConnectionFactory));
+    }
+
+
 
 }
