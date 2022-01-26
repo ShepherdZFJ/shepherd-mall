@@ -28,14 +28,14 @@ public class ThreadTest {
         // thread.start();
         // System.out.println("main......end.....");
 
-        // Runable01 runable01 = new Runable01();
-        // new Thread(runable01).start();
+        // Runnable01 runnable01 = new Runnable01();
+        // new Thread(runnable01).start();
 
         // FutureTask<Integer> futureTask = new FutureTask<>(new Callable01());
         // new Thread(futureTask).start();
         // System.out.println(futureTask.get());
 
-        // service.execute(new Runable01());
+        // service.execute(new Runnable01());
         // Future<Integer> submit = service.submit(new Callable01());
         // submit.get();
 
@@ -187,7 +187,7 @@ public class ThreadTest {
     }
 
 
-    public static class Runable01 implements Runnable {
+    public static class Runnable01 implements Runnable {
         @Override
         public void run() {
             System.out.println("当前线程：" + Thread.currentThread().getId());
