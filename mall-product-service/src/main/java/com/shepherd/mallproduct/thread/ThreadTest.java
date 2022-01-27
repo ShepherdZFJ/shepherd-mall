@@ -43,9 +43,9 @@ public class ThreadTest {
         System.out.println("主线程线程：" + Thread.currentThread().getName() + ": "+ Thread.currentThread().getId());
 //        testRunAsync();
 //        testSupplyAsync();
-//        testWhenCompleteAndExceptionally();
+        testWhenCompleteAndExceptionally();
 //        testHandle();
-        testThenApplyAsync();
+//        testThenApplyAsync();
 
     }
 
@@ -79,10 +79,11 @@ public class ThreadTest {
     /**
      * 测试whenComplete和exceptionally: 异步方法执行完的处理
      */
-    private static void testWhenCompleteAndExceptionally() {
+    private static void testWhenCompleteAndExceptionally() throws ExecutionException, InterruptedException {
          CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
              System.out.println("<======当前线程:" + Thread.currentThread().getName() + "=====线程id： " + Thread.currentThread().getId());
-             int i = 10 / 2;
+             Integer num = 10;
+             int i = num / 2;
              System.out.println("运行结果：" + i);
              return i;
          }, executor).whenComplete((res,exception) -> {
@@ -90,8 +91,12 @@ public class ThreadTest {
              System.out.println("<=====异步任务成功完成了=====结果是：" + res + "=======异常是：" + exception);
          }).exceptionally(throwable -> {
              //可以感知异常，同时返回默认值
+             System.out.println("<=====异步任务成功发生异常了======>");
              return 10;
          });
+        Integer result = future.get();
+        System.out.println("<=====最终返回结果result=" + result + "======>");
+
     }
 
     /**
