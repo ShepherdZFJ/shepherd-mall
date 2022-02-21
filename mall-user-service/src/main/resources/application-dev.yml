@@ -15,6 +15,7 @@ spring:
 #      port: 5672
 #      username: guest
 #      password: guest
+
 #  使用哨兵模式不能加以下两行配置，其他配置可以加
 #  redis:
 #    host: 10.10.0.18
