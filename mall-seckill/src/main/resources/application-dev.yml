@@ -36,14 +36,14 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
-  zipkin:
-    base-url: http://10.10.0.18:9411/
-    discovery-client-enabled: false
-    sender:
-      type: web
-  sleuth:
-    sampler:
-      probability: 1
+#  zipkin:
+#    base-url: http://10.10.0.18:9411/
+#    discovery-client-enabled: false
+#    sender:
+#      type: web
+#  sleuth:
+#    sampler:
+#      probability: 1
 
 
 #seata:
@@ -78,6 +78,14 @@ feign:
     enabled: true
 #  hystrix:
 #    enabled: true
+
+
+
+
+
+
+
+
 
 #mybatis
 mybatis-plus:
@@ -138,6 +146,7 @@ management:
     web:
       exposure:
         include: '*'
+
 
 
 #logging:

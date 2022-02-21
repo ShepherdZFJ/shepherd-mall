@@ -11,9 +11,12 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.Set;
+import java.util.UUID;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -23,6 +26,10 @@ public class MallOrderServiceApplicationTests {
     private AmqpAdmin amqpAdmin;
     @Resource
     private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    private RedisTemplate redisTemplate;
+    private static final String OPERATION_UUID = "operation_uuid";
 
     @Test
     public void createDirectExchange() {
@@ -74,6 +81,16 @@ public class MallOrderServiceApplicationTests {
         cartItem.setSpecValues(Lists.newArrayList("256G", "红色", "M1芯片"));
         rabbitTemplate.convertAndSend("order-event-exchange","order.create.order", cartItem);
         log.info("消息对象发送完成：{}", cartItem);
+    }
+
+    @Test
+    public void testRedisZset() {
+//        for(int i=0; i < 10; i++) {
+//            redisTemplate.opsForZSet().add(OPERATION_UUID, UUID.randomUUID().toString(), System.currentTimeMillis());
+//        }
+        Set<String> set = redisTemplate.opsForZSet().rangeByScore(OPERATION_UUID, 1635926445249d, 1635926445459d);
+        System.out.println(set);
+
     }
 
 
