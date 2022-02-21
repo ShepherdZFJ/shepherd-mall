@@ -1,5 +1,6 @@
 package com.shepherd.malluser.spel.aspectj;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
 import java.lang.reflect.Field;
@@ -24,6 +25,15 @@ public class LogRecordOperationSource {
         String success = logRecord.success();
         String detail = logRecord.detail();
         String bizNo = logRecord.bizNo();
+        LogRecordOps logOps = new LogRecordOps();
+        if (StringUtils.isNotBlank(logRecord.bizNo())) {
+            logOps.setAttr("bizNo");
+            logOps.setValue(logRecord.bizNo());
+        }
+        if (StringUtils.isNotBlank(logRecord.success())) {
+            logOps.setAttr("success");
+
+        }
         return null;
 
     }

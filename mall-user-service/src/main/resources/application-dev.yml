@@ -10,14 +10,19 @@ spring:
     username: root
     password: root
     url: jdbc:mysql://10.10.0.18:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-  #  rabbitmq:
-  #    host: 127.0.0.1
-  #    port: 5672
-  #    username: guest
-  #    password: guest
+#    rabbitmq:
+#      host: 127.0.0.1
+#      port: 5672
+#      username: guest
+#      password: guest
+# 使用哨兵模式不能加以下两行配置，其他配置可以加
+#  redis:
+#    host: 10.10.0.18
+#    port: 6379
   redis:
-    host: 10.10.0.18
-    port: 6379
+    sentinel:
+      master: mymaster
+      nodes: 10.10.0.34:26379
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -34,6 +39,7 @@ spring:
   cache:
     redis:
       time-to-live: 60000
+
 
 #mybatis
 mybatis-plus:
@@ -76,6 +82,9 @@ swagger-web:
   contact-url: "https://github.com/ICoder0"
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.malluser.api.controller"
+
+  # 使用哨兵模式不能加以下两行配置，其他配置可以加
+
 
 
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TestExpression {
-    @DistributeExceptionHandler(attachmentId = "修改了订单的配送员：从“#address.province”, 修改到“#address.detailAddress”")
+    @DistributeExceptionHandler(attachmentId = "#address.id")
     public void test(Address address){
         String city = address.getCity();
         int length = city.length();
