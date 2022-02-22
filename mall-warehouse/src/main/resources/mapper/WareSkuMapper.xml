@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shepherd.ware.dao.WareSkuDAO">
+
+    <update id="decreaseStock">
+        update ware_sku set stock = stock - #{number} where ware_id=#{wareId} and sku_id=#{skuId} and stock >=#{number}
+    </update>
+
+    <update id="increaseStock">
+        update ware_sku set stock = stock + #{number} where ware_id=#{wareId} and sku_id=#{skuId} and stock >=#{number}
+
+    </update>
+</mapper>

@@ -2,15 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.shepherd</groupId>
     <artifactId>mall-pay-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>mall-pay-service</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
-        <groupId>org.example</groupId>
+        <groupId>com.shepherd</groupId>
         <artifactId>shepherd-mall</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
@@ -21,6 +18,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.shepherd</groupId>
+            <artifactId>mall-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -74,6 +76,17 @@
             <groupId>cn.springboot</groupId>
             <artifactId>best-pay-sdk</artifactId>
             <version>1.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>2.2.3.RELEASE</version>
         </dependency>
     </dependencies>
 

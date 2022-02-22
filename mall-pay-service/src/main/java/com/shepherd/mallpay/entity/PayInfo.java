@@ -18,22 +18,18 @@ import java.util.Date;
 public class PayInfo {
     @TableId(type = IdType.AUTO)
     @ApiModelProperty("主键")
-    private Integer id;
-
-    @ApiModelProperty("用户id")
-    private Integer userId;
+    private Long id;
 
     @ApiModelProperty("订单编号")
-    private Long orderNo;
+    private String  orderNo;
 
-    @ApiModelProperty("支付平台:1-支付宝,2-微信")
-    private Integer payPlatform;
+    private Long orderId;
 
     @ApiModelProperty("支付流水号")
-    private String platformNumber;
+    private String tradeNo;
 
     @ApiModelProperty("支付状态")
-    private String payStatus;
+    private Integer Status;
 
     @ApiModelProperty("支付金额")
     private BigDecimal payAmount;
@@ -45,4 +41,13 @@ public class PayInfo {
     @ApiModelProperty("更新时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    @ApiModelProperty("删除标志位")
+    private Integer isDelete;
+
+    private String subject;
+    private Date confirmTime;
+    private Date callbackTime;
+    private String callbackContent;
+    private Integer type;
 }

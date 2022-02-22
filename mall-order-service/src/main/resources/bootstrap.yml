@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: mall-order-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.10.0.14:8848

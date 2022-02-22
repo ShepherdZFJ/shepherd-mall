@@ -40,6 +40,7 @@ public class PayConfig {
         aliPayConfig.setAliPayPublicKey(alipayProperties.getPublicKey());
         aliPayConfig.setNotifyUrl(alipayProperties.getNotifyUrl());
         aliPayConfig.setReturnUrl(alipayProperties.getReturnUrl());
+        aliPayConfig.setSandbox(alipayProperties.isSandbox());
         return aliPayConfig;
     }
 

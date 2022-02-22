@@ -2,6 +2,7 @@ package com.shepherd.mallpay.api.service;
 
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
+import com.shepherd.mallpay.dto.PayInfoDTO;
 
 import java.math.BigDecimal;
 
@@ -14,7 +15,7 @@ public interface PayService {
     /**
      * 创建/发起支付
      */
-    PayResponse create(String orderNo, BigDecimal amount, BestPayTypeEnum bestPayTypeEnum);
+    PayResponse create(String orderNo, Integer payType);
 
     /**
      * 异步通知处理
@@ -24,8 +25,8 @@ public interface PayService {
 
     /**
      * 查询支付记录(通过订单号)
-     * @param orderId
+     * @param orderNo
      * @return
      */
-    void queryByOrderId(String orderId);
+    PayInfoDTO getPayInfoByOrderNo(String orderNo);
 }

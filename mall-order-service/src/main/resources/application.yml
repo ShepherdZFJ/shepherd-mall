@@ -1,0 +1,130 @@
+server:
+  port: 18600
+
+spring:
+  application:
+    name: mall-order-service
+  web:
+    base-path: /api/mall/order
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://10.10.0.18:3306/mall?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
+  rabbitmq:
+    host: 10.10.0.18
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
+#    publisher-confirm-type: correlated
+#    publisher-returns: true
+#    template:
+#      mandatory: true
+  redis:
+    host: 10.10.0.18
+    port: 6379
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+#seata:
+#  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直
+#  registry:
+#    type: nacos
+#    nacos:
+#      server-addr: 10.10.0.14:8848
+#      username: nacos
+#      password: nacos
+#      group: SEATA_GROUP
+#  #      namespace: 6c990727-93b2-4081-a8c6-6b015c56eda2
+#  config:
+#    type: nacos
+#    nacos:
+#      server-addr: 10.10.0.14:8848
+#      username: nacos
+#      password: nacos
+#      group: SEATA_GROUP
+#  #      namespace: 51915a62-d2d6-43d4-8f45-86b159eb90f5   #2.2中配置所在命名空间ID，入未配置 默认public空间
+#  service:
+#    vgroup-mapping:
+#      my_test_tx_group: default		# 这里要特别注意和nacos中配置的要保持一直
+
+
+feign:
+
+#  hystrix:
+#    enabled: true
+  #  httpclient:
+  #    connection-timeout: 10000
+  client:
+    config:
+      default: # 指定feignclients对应的名称 如果指定的是default 表示全局所有的client 的超时时间设置
+        connectTimeout: 60000
+        readTimeout: 60000
+
+
+#hystrix 配置
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 10000
+#          strategy: THREAD
+
+
+micro-server:
+  mall-product: mall-product-service
+  mall-user: mall-user-service
+  mall-warehouse: mall-warehouse-service
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.shepherd.mallorder.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 2
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置
+    #key-generator: com.baomidou.springboot.xxx
+    #逻辑删除配置（下面3个配置）
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    #自定义SQL注入器
+    #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+    #自定义填充策略接口实现
+    #meta-object-handler: com.baomidou.springboot.xxx
+
+#logging:
+#  level:
+#    com.shepherd.mallorder.dao: debug
+
+#swagger
+swagger-web:
+  api-title: "Shepherd-mall Restful Apis"
+  api-description: "Shepherd-mall swagger-ui"
+  contact-name: "shepherd"
+  contact-url: "https://github.com/ICoder0"
+  contact-email: "1059959730@qq.com"
+  scan-package: "com.shepherd.mallorder.api.controller"
+
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN

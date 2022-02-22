@@ -1,0 +1,131 @@
+server:
+  port: 18200
+
+spring:
+  application:
+    name: mall-product-service
+  web:
+    base-path: /api/mall/product
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://10.10.0.18:3306/mall?&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+#  rabbitmq:
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
+  redis:
+    host: 10.10.0.18
+    port: 6379
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    #设置返回json数据null字段不显示
+    default-property-inclusion: non_null
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8858
+        port: 8719
+  zipkin:
+    base-url: http://10.10.0.18:9411/
+    discovery-client-enabled: false
+    sender:
+      type: web
+    sleuth:
+      sampler:
+        probability: 1
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.shepherd.mallproduct.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 2
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置
+    #key-generator: com.baomidou.springboot.xxx
+    #逻辑删除配置（下面3个配置）
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    #自定义SQL注入器
+    #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+    #自定义填充策略接口实现
+    #meta-object-handler: com.baomidou.springboot.xxx
+
+aliyun-sms:
+  accessKeyId: LTAI4GHpv2y35PBVWUt42fJ6
+  accessSecret: VoF8212psWmcsb424bKVeg7eMZkKzA
+  signName: shepherd
+  templateCode: SMS_193518103
+  expireTime: 10
+
+#logging:
+#  level:
+#    com.shepherd.mallproduct.dao: debug
+
+#swagger
+swagger-web:
+  api-title: "Shepherd-mall Restful Apis"
+  api-description: "Shepherd-mall swagger-ui"
+  contact-name: "shepherd"
+  contact-url:  "https://github.com/ICoder0"
+  contact-email: "1059959730@qq.com"
+  scan-package: "com.shepherd.mallproduct.api.controller"
+
+composite:
+  redis:
+    # 过期时间水位, 单位秒
+    preload-second-time: 180
+    # 刷新过期时间, 单位秒
+    refresh-expire-time: 600
+  caffeine:
+    # 本地缓存命中指标(最大命中数, 命中水位指标)
+    hits-count: 10
+    hits-count-min: 3
+    # 缓存读事件过期时间
+    access-expire-time: 60
+    # 缓存读事件过期时间单位
+    access-expire-unit: SECONDS
+    # jvm进程内存阈值比率
+    jvm-threshold-ratio: 0.1
+    # 本地最大缓存阈值比率
+    maximum-threshold-ratio: 0.6
+    # 本地初始缓存比率(相对于最大缓存)
+    initial-ratio: 0.3
+    # 本地缓存水位线比率
+    water-level-ratio: 0.4
+    thread-name-prefix: caffeine-worker-
+
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN
+
+
+
+
+
+
+
+

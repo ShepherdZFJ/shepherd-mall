@@ -22,4 +22,9 @@ public class AlipayProperties {
     private String notifyUrl;
 
     private String returnUrl;
+
+    /**
+     * 默认沙箱测试
+     */
+    private boolean sandbox = true;
 }

@@ -1,0 +1,47 @@
+server:
+  port: 18600
+spring:
+  application:
+    name: mall-search-service
+  elasticsearch:
+    rest:
+      uris: http://10.10.0.18:9200
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.0.14:8848
+feign:
+  hystrix:
+    enabled: true
+#超时配置
+ribbon:
+  ReadTimeout: 300000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+
+micro-server:
+  mall-product: mall-product-service
+
+
+#swagger
+swagger-web:
+  api-title: "Shepherd-mall Restful Apis"
+  api-description: "Shepherd-mall swagger-ui"
+  contact-name: "shepherd"
+  contact-url:  "https://github.com/ICoder0"
+  contact-email: "1059959730@qq.com"
+  scan-package: "com.shepherd.mallsearch.api.controller"
+
+#注意：这里写成user.name获取的本机电脑的名字shepherdmy，这里填写的meiying无效
+search:
+  user:
+    name: meiying
+    age: 25
+
