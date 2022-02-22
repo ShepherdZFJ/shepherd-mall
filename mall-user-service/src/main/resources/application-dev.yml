@@ -88,7 +88,6 @@ swagger-web:
   contact-email: "1059959730@qq.com"
   scan-package: "com.shepherd.malluser.api.controller"
 
-  # 使用哨兵模式不能加以下两行配置，其他配置可以加
 
 
 
