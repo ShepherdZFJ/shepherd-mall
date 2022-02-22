@@ -1,9 +1,9 @@
 server:
-  port: 18800
+  port: 10800
 
 spring:
   application:
-    name: mall-advertise-service
+    name: mall-advertise-service-local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -68,8 +68,8 @@ canal:
   client:
     instances:
       # exmaple
-      example:
-        host: 192.168.153.131
+      mall:
+        host: 10.10.0.18
         port: 11111
 
 

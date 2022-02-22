@@ -78,7 +78,7 @@ public class AdvListener {
      * @param eventType
      * @param rowData
      */
-    @ListenPoint(destination = "example", schema = "mall", table = {"advertise"}, eventType = {CanalEntry.EventType.UPDATE, CanalEntry.EventType.INSERT, CanalEntry.EventType.DELETE})
+    @ListenPoint(destination = "mall", schema = "mall", table = {"advertise"}, eventType = {CanalEntry.EventType.UPDATE, CanalEntry.EventType.INSERT, CanalEntry.EventType.DELETE})
     public void onEventCustomUpdate(CanalEntry.EventType eventType, CanalEntry.RowData rowData) {
         String type = getColumnValue(eventType, rowData);
         List<AdvertiseDTO> advertiseDTOList = advertiseService.getAdvertiseList(Integer.valueOf(type));

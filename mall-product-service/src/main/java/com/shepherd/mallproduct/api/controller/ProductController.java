@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author fjZheng
@@ -131,8 +132,10 @@ public class ProductController {
 
     @GetMapping("/sku/{skuId}")
     @ApiOperation("查询商品sku信息")
-    public ProductSkuDTO getProductSku(@PathVariable("skuId") Long skuId) {
+    public ProductSkuDTO getProductSku(@PathVariable("skuId") Long skuId) throws InterruptedException {
         ProductSkuDTO productSku = productService.getProductSku(skuId);
+        //TimeUnit.SECONDS.sleep(10);
+        TimeUnit.MILLISECONDS.sleep(10000);
         return productSku;
     }
 

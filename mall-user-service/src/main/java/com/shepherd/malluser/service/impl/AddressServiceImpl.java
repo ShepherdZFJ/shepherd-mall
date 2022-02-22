@@ -8,6 +8,7 @@ import com.shepherd.malluser.dao.AddressDAO;
 import com.shepherd.malluser.dto.AddressDTO;
 import com.shepherd.malluser.entity.Address;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,6 +40,13 @@ public class AddressServiceImpl implements AddressService {
     public AddressDTO getAddressDetail(Long id) {
         Address address = addressDAO.selectById(id);
         return toAddressDTO(address);
+    }
+
+
+    @Cacheable(value = "user-address-cache", key = "#userId")
+    public List<AddressDTO> testSpringCache(Long userId) {
+        log.info("执行查询用户地址address了");
+        return getAddressList(userId);
     }
 
     AddressDTO toAddressDTO(Address address) {

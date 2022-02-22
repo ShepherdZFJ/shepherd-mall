@@ -2,7 +2,10 @@ package com.shepherd.malluser.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author fjzheng
@@ -10,6 +13,9 @@ import lombok.Data;
  * @date 2021/7/18 10:56
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     @TableId(type = IdType.AUTO)
     private Long id;

@@ -1,9 +1,9 @@
 server:
-  port: 18800
+  port: 10800
 
 spring:
   application:
-    name: mall-advertise-service
+    name: mall-advertise-service-local
   profiles:
     active: dev
   datasource:

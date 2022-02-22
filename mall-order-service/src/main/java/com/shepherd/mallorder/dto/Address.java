@@ -1,6 +1,9 @@
 package com.shepherd.mallorder.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author fjzheng
@@ -8,6 +11,9 @@ import lombok.Data;
  * @date 2021/7/22 00:19
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     private Long id;
     private Long userId;
