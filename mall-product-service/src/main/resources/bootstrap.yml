@@ -5,3 +5,7 @@ spring:
     nacos:
       config:
         server-addr: 10.10.0.14:8848
+        file-extension: yaml
+        namespace: 92d02ff4-3e0b-4363-8421-95b20d9bf618
+  profiles:
+    active: dev
