@@ -43,20 +43,23 @@ public class ThreadTest {
         System.out.println("主线程线程：" + Thread.currentThread().getName() + ": "+ Thread.currentThread().getId());
 //        testRunAsync();
 //        testSupplyAsync();
-        testWhenCompleteAndExceptionally();
+//        testWhenCompleteAndExceptionally();
 //        testHandle();
-//        testThenApplyAsync();
+        testThenApplyAsync();
+        System.out.println("main......end.....");
 
     }
 
 
     /**
-     * 测试方法CompletableFuture.runAsync：无返回值
+     * 测试方法CompletableFuture.runAsync：无返回值,
      */
     private static void testRunAsync() {
         CompletableFuture.runAsync(() ->{
             System.out.println("<======当前线程:" + Thread.currentThread().getName() + "=====线程id： " + Thread.currentThread().getId());
             int result = 10/2;
+            // 这里并不会报错
+            String s = String.valueOf(null);
             System.out.println("计算结果为："+ result);
         }, fixedThreadPool);
     }
@@ -84,6 +87,7 @@ public class ThreadTest {
              System.out.println("<======当前线程:" + Thread.currentThread().getName() + "=====线程id： " + Thread.currentThread().getId());
              Integer num = 10;
              int i = num / 2;
+             String s = String.valueOf(null);
              System.out.println("运行结果：" + i);
              return i;
          }, executor).whenComplete((res,exception) -> {
@@ -91,7 +95,7 @@ public class ThreadTest {
              System.out.println("<=====异步任务成功完成了=====结果是：" + res + "=======异常是：" + exception);
          }).exceptionally(throwable -> {
              //可以感知异常，同时返回默认值
-             System.out.println("<=====异步任务成功发生异常了======>");
+             System.out.println("<=====异步任务成功发生异常了======"+throwable);
              return 10;
          });
         Integer result = future.get();
