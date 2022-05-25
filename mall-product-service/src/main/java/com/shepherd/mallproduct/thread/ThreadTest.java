@@ -2,6 +2,7 @@ package com.shepherd.mallproduct.thread;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
+import java.util.Random;
 import java.util.concurrent.*;
 
 /**
@@ -22,7 +23,7 @@ public class ThreadTest {
             new LinkedBlockingQueue<Runnable>(Runtime.getRuntime().availableProcessors() * 20),
             namedThreadFactory);
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         // System.out.println("main......start.....");
         // Thread thread = new Thread01();
         // thread.start();
@@ -45,7 +46,9 @@ public class ThreadTest {
 //        testSupplyAsync();
 //        testWhenCompleteAndExceptionally();
 //        testHandle();
-        testThenApplyAsync();
+//        testThenApplyAsync();
+        testNotExecute();
+        thenCombine();
         System.out.println("main......end.....");
 
     }
@@ -57,6 +60,7 @@ public class ThreadTest {
     private static void testRunAsync() {
         CompletableFuture.runAsync(() ->{
             System.out.println("<======当前线程:" + Thread.currentThread().getName() + "=====线程id： " + Thread.currentThread().getId());
+            System.out.println("supplyAsync 是否为守护线程 " + Thread.currentThread().isDaemon());
             int result = 10/2;
             // 这里并不会报错
             String s = String.valueOf(null);
@@ -156,9 +160,112 @@ public class ThreadTest {
         CompletableFuture.allOf(future1, future2, future3).get();
         System.out.println("=======测试结束");
 
+    }
 
+    private static void testNotExecute() {
+        CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("<======当前线程:" + Thread.currentThread().getName() + "=====线程id： " + Thread.currentThread().getId());
+            System.out.println("supplyAsync 是否为守护线程 " + Thread.currentThread().isDaemon());
+            int i = 10 / 2;
+            System.out.println("运行结果：" + i);
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("return之前的打印");
+            return i;
+        });
+    }
+
+    private static void thenCombine() throws Exception {
+        CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> "hello1", fixedThreadPool);
+        CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> "hello2", fixedThreadPool);
+        CompletableFuture<String> result = future1.thenCombine(future2, (t, u) -> t+" "+u);
+        System.out.println(result.get());
+    }
+
+    private static void thenAcceptBoth() throws Exception {
+        CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() -> {
+            int t = new Random().nextInt(3);
+            try {
+                TimeUnit.SECONDS.sleep(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("f1="+t);
+            return t;
+        },fixedThreadPool);
+
+        CompletableFuture<Integer> f2 = CompletableFuture.supplyAsync(() -> {
+            int t = new Random().nextInt(3);
+            try {
+                TimeUnit.SECONDS.sleep(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("f2="+t);
+            return t;
+        },fixedThreadPool);
+    }
+
+    private static void applyToEither() throws Exception {
+        CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() -> {
+            int t = new Random().nextInt(3);
+            try {
+                TimeUnit.SECONDS.sleep(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("f1="+t);
+            return t;
+        },fixedThreadPool);
+        CompletableFuture<Integer> f2 = CompletableFuture.supplyAsync(() -> {
+            int t = new Random().nextInt(3);
+            try {
+                TimeUnit.SECONDS.sleep(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("f2="+t);
+            return t;
+        },fixedThreadPool);
+
+        CompletableFuture<Integer> result = f1.applyToEither(f2, t -> {
+            System.out.println("applyEither:"+t);
+            return t * 2;
+        });
 
     }
+
+    private static void acceptEither() throws Exception {
+        CompletableFuture<Integer> f1 = CompletableFuture.supplyAsync(() -> {
+            int t = new Random().nextInt(3);
+            try {
+                TimeUnit.SECONDS.sleep(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("f1="+t);
+            return t;
+        },fixedThreadPool);
+        CompletableFuture<Integer> f2 = CompletableFuture.supplyAsync(() -> {
+            int t = new Random().nextInt(3);
+            try {
+                TimeUnit.SECONDS.sleep(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("f2="+t);
+            return t;
+        },fixedThreadPool);
+
+        CompletableFuture<Void> result = f1.acceptEither(f2, t -> {
+            System.out.println("acceptEither:"+t);
+        });
+
+    }
+
 
 
 
