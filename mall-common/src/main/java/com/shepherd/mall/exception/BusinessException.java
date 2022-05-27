@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class BusinessException extends RuntimeException {
 
-    private String code;
+    private Integer code;
     private ResponseStatusEnum responseStatusEnum;
 
     public BusinessException() {
@@ -24,7 +24,7 @@ public class BusinessException extends RuntimeException {
         // TODO Auto-generated constructor stub
     }
 
-    public BusinessException(String code, String message) {
+    public BusinessException(Integer code, String message) {
         super(message);
         this.code = code;
     }

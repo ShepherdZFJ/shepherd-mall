@@ -3,6 +3,8 @@ package com.shepherd.mallproduct.api.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -14,7 +16,9 @@ import java.util.List;
 public class BrandVO {
 
     private Long brandId;
+    @NotNull(message = "categoryId不能为空")
     private Long categoryId;
+    @NotBlank(message = "name不能为空")
     private String name;
     private String image;
     private String description;

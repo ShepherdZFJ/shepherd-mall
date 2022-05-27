@@ -7,6 +7,7 @@ import com.shepherd.mallproduct.api.vo.BrandVO;
 import com.shepherd.mallproduct.dto.BrandDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,9 +29,10 @@ public class BrandController {
 
     @PostMapping
     @ApiOperation("添加品牌")
-    public void addBrand (@RequestBody BrandVO brandVO) {
+    public String addBrand (@RequestBody @Validated BrandVO brandVO) {
         BrandDTO brandDTO = MallBeanUtil.copy(brandVO, BrandDTO.class);
         brandService.addBrand(brandDTO);
+        return "success";
     }
 
     @GetMapping("/category/{categoryId}")

@@ -74,16 +74,16 @@ public class ResponseResultBodyAdvice implements ResponseBodyAdvice<Object> {
      * @param ex      the target exception
      * @param request the current request
      */
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ResponseVO<?>> exceptionHandler(Exception ex, WebRequest request) {
-        log.error("ExceptionHandler: {}", ex);
-        HttpHeaders headers = new HttpHeaders();
-        if (ex instanceof BusinessException) {
-            ((BusinessException) ex).setResponseStatusEnum(ResponseStatusEnum.BAD_REQUEST);
-            return this.handleBusinessException((BusinessException) ex, headers, request);
-        }
-        return this.handleException(ex, headers, request);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public final ResponseEntity<ResponseVO<?>> exceptionHandler(Exception ex, WebRequest request) {
+//        log.error("ExceptionHandler: {}", ex);
+//        HttpHeaders headers = new HttpHeaders();
+//        if (ex instanceof BusinessException) {
+//            ((BusinessException) ex).setResponseStatusEnum(ResponseStatusEnum.BAD_REQUEST);
+//            return this.handleBusinessException((BusinessException) ex, headers, request);
+//        }
+//        return this.handleException(ex, headers, request);
+//    }
 
     /**
      * 对BusinessException类返回返回结果的处理
