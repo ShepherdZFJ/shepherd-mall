@@ -48,7 +48,7 @@ public class ThreadTest {
 //        testHandle();
 //        testThenApplyAsync();
         testNotExecute();
-        thenCombine();
+//        thenCombine();
         System.out.println("main......end.....");
 
     }
@@ -173,6 +173,7 @@ public class ThreadTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // 下面不打印
             System.out.println("return之前的打印");
             return i;
         });
