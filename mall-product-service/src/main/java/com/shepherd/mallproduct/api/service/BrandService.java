@@ -1,6 +1,7 @@
 package com.shepherd.mallproduct.api.service;
 
 import com.shepherd.mallproduct.dto.BrandDTO;
+import com.shepherd.mallproduct.query.BrandQuery;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface BrandService {
     BrandDTO getBrandDetail(Long brandId);
 
     List<BrandDTO> getBrandList(List<Long> brandIds);
+
+    List<BrandDTO> getList(BrandQuery query);
 }

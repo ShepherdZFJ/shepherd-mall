@@ -5,6 +5,7 @@ import com.shepherd.mall.utils.MallBeanUtil;
 import com.shepherd.mallproduct.api.service.BrandService;
 import com.shepherd.mallproduct.api.vo.BrandVO;
 import com.shepherd.mallproduct.dto.BrandDTO;
+import com.shepherd.mallproduct.query.BrandQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +40,12 @@ public class BrandController {
     @ApiOperation("根据分类id查询品牌")
     public List<BrandDTO> getBrandList(@PathVariable("categoryId") Long categoryId) {
         return brandService.getBrandList(categoryId);
+    }
+
+    @GetMapping
+    @ApiOperation("查询品牌列表")
+    public List<BrandDTO> getList(BrandQuery query) {
+        return brandService.getList(query);
     }
 
     @GetMapping("/{brandId}")

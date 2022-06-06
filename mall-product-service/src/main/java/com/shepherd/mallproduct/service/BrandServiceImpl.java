@@ -8,7 +8,10 @@ import com.shepherd.mallproduct.api.service.BrandService;
 import com.shepherd.mallproduct.dao.BrandDAO;
 import com.shepherd.mallproduct.dto.BrandDTO;
 import com.shepherd.mallproduct.entity.Brand;
+import com.shepherd.mallproduct.query.BrandQuery;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -29,6 +32,7 @@ public class BrandServiceImpl implements BrandService {
     private BrandDAO brandDAO;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addBrand(BrandDTO brandDTO) {
         brandDTO.setIsDelete(CommonConstant.NOT_DEL);
         brandDTO.setCreateTime(new Date());
@@ -58,6 +62,22 @@ public class BrandServiceImpl implements BrandService {
         }
         LambdaQueryWrapper<Brand> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(Brand::getId, brandIds);
+        List<BrandDTO> brandDTOList = brandDAO.selectList(queryWrapper).stream().map(brand -> toBrandDTO(brand)).collect(Collectors.toList());
+        return brandDTOList;
+    }
+
+    @Override
+    public List<BrandDTO> getList(BrandQuery query) {
+        LambdaQueryWrapper<Brand> queryWrapper = new LambdaQueryWrapper<>();
+        if (query.getCategoryId() != null) {
+            queryWrapper.eq(Brand::getCategoryId, query.getCategoryId());
+        }
+        if (StringUtils.isNotBlank(query.getLetter())) {
+            queryWrapper.eq(Brand::getLetter, query.getLetter());
+        }
+        if (StringUtils.isNotBlank(query.getName())) {
+            queryWrapper.likeRight(Brand::getName, query.getName());
+        }
         List<BrandDTO> brandDTOList = brandDAO.selectList(queryWrapper).stream().map(brand -> toBrandDTO(brand)).collect(Collectors.toList());
         return brandDTOList;
     }
