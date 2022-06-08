@@ -1,7 +1,6 @@
 server:
   port: 18600
 
-
 spring:
   application:
     name: mall-order-service
@@ -24,18 +23,16 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
-#    publisher-confirm-type: correlated
-#    publisher-returns: true
-#    template:
-#      mandatory: true
+  #    publisher-confirm-type: correlated
+  #    publisher-returns: true
+  #    template:
+  #      mandatory: true
   redis:
     host: 10.10.0.18
     port: 6379
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
-  profiles:
-    active: dev
 
 #seata:
 #  tx-service-group: my_test_tx_group		#这里要特别注意和nacos中配置的要保持一直
@@ -62,8 +59,8 @@ spring:
 
 feign:
 
-#  hystrix:
-#    enabled: true
+  #  hystrix:
+  #    enabled: true
   #  httpclient:
   #    connection-timeout: 10000
   client:
