@@ -8,6 +8,7 @@ import com.shepherd.mallproduct.dto.BrandDTO;
 import com.shepherd.mallproduct.query.BrandQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * @version 1.0
  * @date 2021/2/2 18:50
  */
+@Slf4j
 @RestController
 @ResponseResultBody
 @RequestMapping("/api/mall/product/brand")
@@ -45,6 +47,7 @@ public class BrandController {
     @GetMapping
     @ApiOperation("查询品牌列表")
     public List<BrandDTO> getList(BrandQuery query) {
+        log.info("测试日志打印");
         return brandService.getList(query);
     }
 
